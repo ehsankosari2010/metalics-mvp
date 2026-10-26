@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>г «бнШ” (METALICS) | Бб Ё—г еж‘гдѕ ’д«нЏ Ёб“н ж ёЎЏеЭ”«“н</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Vazirmatn', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between">
+
+    <!-- Header -->
+    <header class="bg-slate-950 border-b border-slate-800 py-4 px-6 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <span class="bg-blue-600 text-white font-black px-3 py-1 rounded text-xl tracking-wider">METALICS</span>
+                <span class="text-xs text-slate-400 border border-slate-700 px-2 py-0.5 rounded">д”ќе MVP ’дЏ н</span>
+            </div>
+            <nav class="hidden md:flex gap-6 text-sm text-slate-300">
+                <a href="#about" class="hover:text-blue-400 transition">ѕ—»«—е г «бнШ”</a>
+                <a href="#supplier" class="hover:text-blue-400 transition">Ћ» Эд«г  жбнѕШддѕР«д</a>
+                <a href="#order" class="hover:text-blue-400 transition">Ћ»  ”Ё«—‘ / «” Џб«г</a>
+            </nav>
+            <div>
+                <a href="#order" class="bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold px-4 py-2 rounded-lg transition shadow-lg shadow-blue-600/20">ж—жѕ »е Бдб /  ”  ¬“г«н‘н</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="py-20 px-6 max-w-5xl mx-auto text-center">
+        <div class="inline-block bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs px-3 py-1.5 rounded-full mb-6 font-medium">
+            «жбнд «Шж”н” г ѕнћн «б гѕн—н  “дћн—е  √гнд ж ”«ќ  ёЎЏ«  Ёб“н ѕ— «н—«д
+        </div>
+        <h1 class="text-4xl md:text-6xl font-black mb-6 leading-tight">
+            ”Ё«—‘ЭР–«—н еж‘гдѕ ж ”«ќ   ќ’’н ”«“еЭе«н Ёб“н
+        </h1>
+        <p class="text-slate-400 text-lg md:text-xl max-w-3xl mx-auto mb-10 leading-relaxed">
+            г «бнШ” »« Ќ–Ё ж«”ЎеЭе«°  Ќбнб ќжѕШ«— дё‘еЭе«н гедѕ”н° «дЎ»«ё ѕёнё »« ў—Ён  ќ«бн Ш«—Р«еЭе« ж  ÷гнд Б—ѕ«ќ  «г«дн (Escrow)° «” Џб«г ж ”«ќ  ёЎЏ«  ’дЏ н —« «гд° ‘Ё«Ё ж ”—нЏ гнЭШдѕ.
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <a href="#supplier" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-8 py-3.5 rounded-xl transition shadow-lg shadow-emerald-600/20">
+                Ћ» Эд«г »е Џдж«д  жбнѕШддѕе / Ш«—Р«е
+            </a>
+            <a href="#order" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold px-8 py-3.5 rounded-xl transition">
+                Ћ»  ”Ё«—‘ ’дЏ н (Ш«—Ё—г«)
+            </a>
+        </div>
+    </section>
+
+    <!-- Supplier Onboarding Form -->
+    <section id="supplier" class="bg-slate-950 py-16 px-6 border-t border-slate-800">
+        <div class="max-w-3xl mx-auto bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-xl">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-white">Ћ» Эд«г «жбне Ш«—Р«еЭе« ж  жбнѕШддѕР«д Ёб“н</h2>
+                <p class="text-slate-400 text-sm mt-2">»е ‘»Ше гбн  √гнд г «бнШ” »Бнждѕнѕ ж »е Б—жОеЭе«н ’дЏ н ”—«”— Ш‘ж— ѕ” —”н Бнѕ« Шднѕ.</p>
+            </div>
+            <form onsubmit="alert('«Ўб«Џ«  Ш«—Р«е ‘г« »« гжЁён  ѕ— Б«нР«е ѕ«ѕе ¬“г«н‘н г «бнШ” Ћ»  ‘ѕ!'); return false;" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">д«г Ш«—Р«е / ‘—Ш </label>
+                        <input type="text" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-sm text-white focus:border-blue-500 focus:outline-none" placeholder="гЋ«б: г«‘ндЭ”«“н Б«—” Ш—г«д">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">д«г г”∆жб Ёдн / гѕн—</label>
+                        <input type="text" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-sm text-white focus:border-blue-500 focus:outline-none" placeholder="гЋ«б: гедѕ” Ќ”ндн">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">‘г«—е  г«” (гж»«нб)</label>
+                        <input type="tel" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-sm text-white focus:border-blue-500 focus:outline-none" placeholder="0912...">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">«” «д / ‘е— «” ё—«—</label>
+                        <input type="text" required class="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-sm text-white focus:border-blue-500 focus:outline-none" placeholder="гЋ«б: Ш—г«д / ‘н—«“">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1"> ћен“«  ж г«‘ндЭ¬б«  «’бн Ш«—Р«е</label>
+                    <textarea rows="3" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-sm text-white focus:border-blue-500 focus:outline-none" placeholder="гЋ«б: »—‘ бн“— Ё«н»—° Б—” »—Ш ???  д° ѕ” Р«е ћж‘ “н—Бжѕ—н° ћ—Ћёнб ”ёЁн ??  д..."></textarea>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-lg transition"> «ннѕ ж «—”«б г‘ќ’«  Ш«—Р«е</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Order Intake & Test Panel Section -->
+    <section id="order" class="py-16 px-6 max-w-3xl mx-auto">
+        <div class="bg-slate-950 border border-slate-800 rounded-2xl p-8 shadow-xl">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-white"> ”  ¬“г«н‘н Бдб Ћ»  ”Ё«—‘ ж «” Џб«г</h2>
+                <p class="text-slate-400 text-sm mt-2">‘»неЭ”«“ еж‘гдѕ Ш«—Ё—г«н«д »—«н Ћ»  ѕ—ќж«”  ”«ќ  ёЎЏе ’дЏ н</p>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">‘—Ќ ёЎЏе н« ”«“е ’дЏ н</label>
+                    <input type="text" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-sm text-white" placeholder="гЋ«б: ”«ќ  ‘«”н Ёб“н ѕ” Р«е ’дЏ н »« ж—ё ST37">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">¬Ббжѕ дё‘е Ёдн (PDF / DWG / STEP)</label>
+                    <input type="file" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500">
+                </div>
+                <button onclick="alert('”Ё«—‘ ‘г« ѕ— ”н” г Ћ»  ‘ѕ ж »е “жѕн  ж”Ў гж ж—  Ў»нё еж‘гдѕ г «бнШ” »е  √гндЭШддѕР«д «—”«б гнЭР—ѕѕ.')" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-lg transition">Ћ»  ”Ё«—‘ ж «—ћ«Џ »е «” Џб«г ёнг </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 border-t border-slate-800 py-8 text-center text-xs text-slate-500">
+        <p> г«гн Ќёжё «нд ”«г«де г Џбё »е «” «— «Б г «бнШ” (METALICS) гнЭ»«‘ѕ. © 2026</p>
+    </footer>
+
+</body>
+</html>
