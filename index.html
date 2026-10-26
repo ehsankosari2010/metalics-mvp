@@ -1,122 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>METALICS | Industrial B2B Marketplace & Smart Fabrication</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>METALICS | Industrial B2B Marketplace &amp; Smart Fabrication</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: Arial, Helvetica, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.6; }
+  a { text-decoration: none; }
+
+  header { background: #0b1220; border-bottom: 1px solid #1e293b; padding: 14px 24px; }
+  .header-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+  .logo { font-size: 22px; font-weight: bold; color: #ffffff; letter-spacing: 2px; }
+  .logo span { color: #3b82f6; }
+  .badge { font-size: 11px; color: #94a3b8; border: 1px solid #334155; padding: 3px 8px; border-radius: 4px; }
+  nav a { color: #cbd5e1; margin-left: 20px; font-size: 14px; }
+  nav a:hover { color: #ffffff; }
+
+  .hero { max-width: 1100px; margin: 0 auto; padding: 70px 24px 50px; text-align: center; }
+  .hero h1 { font-size: 40px; color: #ffffff; margin-bottom: 16px; }
+  .hero p { color: #94a3b8; max-width: 640px; margin: 0 auto 28px; font-size: 17px; }
+  .btn { display: inline-block; padding: 12px 28px; border-radius: 6px; font-weight: bold; font-size: 15px; }
+  .btn-primary { background: #2563eb; color: #ffffff; }
+  .btn-outline { border: 1px solid #475569; color: #e2e8f0; margin-left: 12px; }
+  .btn-primary:hover { background: #1d4ed8; }
+
+  .section { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+  .section-title { text-align: center; font-size: 28px; color: #ffffff; margin-bottom: 36px; }
+  .cards { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+  .card { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 24px; width: 300px; }
+  .card .num { color: #3b82f6; font-size: 13px; font-weight: bold; }
+  .card h3 { color: #ffffff; font-size: 18px; margin: 8px 0 10px; }
+  .card p { color: #94a3b8; font-size: 14px; }
+
+  .rfq { background: #0b1220; border-top: 1px solid #1e293b; }
+  .rfq-box { max-width: 640px; margin: 0 auto; background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 32px; }
+  .rfq-box h2 { color: #ffffff; margin-bottom: 8px; }
+  .rfq-box > p { color: #94a3b8; font-size: 14px; margin-bottom: 20px; }
+  label { display: block; font-size: 13px; color: #cbd5e1; margin: 14px 0 6px; }
+  input, textarea, select { width: 100%; background: #0f172a; border: 1px solid #334155; color: #e2e8f0; padding: 10px; border-radius: 6px; font-size: 14px; font-family: inherit; }
+  .rfq-box .btn-primary { width: 100%; border: none; margin-top: 22px; cursor: pointer; }
+
+  footer { border-top: 1px solid #1e293b; padding: 24px; text-align: center; color: #64748b; font-size: 13px; }
+  #rfqMsg { display: none; margin-top: 16px; color: #4ade80; font-size: 14px; text-align: center; }
+</style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between">
+<body>
 
-    <!-- Header -->
-    <header class="bg-slate-950 border-b border-slate-800 py-4 px-6 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <span class="bg-blue-600 text-white font-black px-3 py-1 rounded text-xl tracking-wider">METALICS</span>
-                <span class="text-xs text-slate-400 border border-slate-700 px-2 py-0.5 rounded">MVP Platform</span>
-            </div>
-            <nav class="hidden md:flex gap-6 text-sm text-slate-300">
-                <a href="#features" class="hover:text-blue-400 transition">Features</a>
-                <a href="#suppliers" class="hover:text-blue-400 transition">Supplier Onboarding</a>
-                <a href="#rfq" class="hover:text-blue-400 transition">Instant RFQ</a>
-            </nav>
-            <div>
-                <a href="#rfq" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition shadow-lg shadow-blue-600/20">Get a Quote</a>
-            </div>
-        </div>
-    </header>
+<header>
+  <div class="header-inner">
+    <div>
+      <span class="logo">METAL<span>ICS</span></span>
+      <span class="badge">MVP Platform</span>
+    </div>
+    <nav>
+      <a href="#features">Features</a>
+      <a href="#rfq">Submit RFQ</a>
+      <a href="#rfq">Become a Supplier</a>
+    </nav>
+  </div>
+</header>
 
-    <!-- Hero Section -->
-    <section class="max-w-7xl mx-auto px-6 py-16 md:py-24 text-center">
-        <div class="inline-block bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs px-3 py-1 rounded-full mb-6">
-            Smart Supply Chain & Industrial Fabrication Ecosystem
-        </div>
-        <h1 class="text-4xl md:text-6xl font-bold tracking-tight mb-6 leading-tight">
-            Digital B2B Marketplace <span class="text-blue-500">METALICS</span>
-        </h1>
-        <p class="text-slate-400 text-lg max-w-2xl mx-auto mb-10">
-            Connecting industrial buyers with certified metal fabrication shops through secure escrow, automated RFQ matching, and engineering quality assurance.
-        </p>
-        <div class="flex flex-col sm:flex-row justify-center gap-4">
-            <a href="#rfq" class="bg-blue-600 hover:bg-blue-500 text-white font-medium px-8 py-3 rounded-xl transition">Submit RFQ</a>
-            <a href="#suppliers" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-medium px-8 py-3 rounded-xl transition">Join as Supplier</a>
-        </div>
-    </section>
+<section class="hero">
+  <h1>Digital B2B Marketplace for Metal Fabrication</h1>
+  <p>Connecting industrial buyers with certified metal fabrication shops through secure escrow, automated RFQ matching, and engineering quality assurance.</p>
+  <a href="#rfq" class="btn btn-primary">Submit RFQ</a>
+  <a href="#rfq" class="btn btn-outline">Join as Supplier</a>
+</section>
 
-    <!-- Features Grid -->
-    <section id="features" class="bg-slate-950/50 border-y border-slate-800/80 py-16 px-6">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl">
-                <div class="w-12 h-12 bg-blue-600/10 border border-blue-500/20 rounded-xl flex items-center justify-center text-blue-400 mb-4 text-xl font-bold">01</div>
-                <h3 class="text-xl font-semibold mb-2">AI-Powered RFQ Matching</h3>
-                <p class="text-slate-400 text-sm">Automated analysis of CAD drawings and technical specifications for rapid multi-vendor bidding.</p>
-            </div>
-            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl">
-                <div class="w-12 h-12 bg-blue-600/10 border border-blue-500/20 rounded-xl flex items-center justify-center text-blue-400 mb-4 text-xl font-bold">02</div>
-                <h3 class="text-xl font-semibold mb-2">Escrow Protection</h3>
-                <p class="text-slate-400 text-sm">Secure milestone-based payment processing ensuring financial safety for both buyers and fabricators.</p>
-            </div>
-            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl">
-                <div class="w-12 h-12 bg-blue-600/10 border border-blue-500/20 rounded-xl flex items-center justify-center text-blue-400 mb-4 text-xl font-bold">03</div>
-                <h3 class="text-xl font-semibold mb-2">Supervised Quality Control</h3>
-                <p class="text-slate-400 text-sm">Rigorous First Article Inspection (FAI) and professional engineering oversight throughout production.</p>
-            </div>
-        </div>
-    </section>
+<section class="section" id="features">
+  <h2 class="section-title">Why METALICS</h2>
+  <div class="cards">
+    <div class="card">
+      <div class="num">01</div>
+      <h3>AI-Powered RFQ Matching</h3>
+      <p>Automated analysis of CAD drawings and technical specifications for rapid multi-vendor bidding.</p>
+    </div>
+    <div class="card">
+      <div class="num">02</div>
+      <h3>Escrow Protection</h3>
+      <p>Secure milestone-based payment processing ensuring financial safety for both buyers and fabricators.</p>
+    </div>
+    <div class="card">
+      <div class="num">03</div>
+      <h3>Supervised Quality Control</h3>
+      <p>Rigorous First Article Inspection (FAI) and professional engineering oversight throughout production.</p>
+    </div>
+  </div>
+</section>
 
-    <!-- RFQ & Supplier Section -->
-    <section id="rfq" class="max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 lg:grid-cols-2 gap-12">
-        <!-- RFQ Panel -->
-        <div class="bg-slate-950 border border-slate-800 p-8 rounded-3xl">
-            <h2 class="text-2xl font-bold mb-4">Request For Quote (RFQ)</h2>
-            <p class="text-slate-400 text-sm mb-6">Submit your project details to broadcast to certified metal fabricators.</p>
-            <form class="space-y-4" onsubmit="event.preventDefault(); alert('RFQ successfully submitted and queued for review.');">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Project Title / Part Name</label>
-                    <input type="text" required class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-blue-500" placeholder="e.g., Industrial Steel Structure Platform">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Technical Specs & Material</label>
-                    <textarea rows="3" required class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-blue-500" placeholder="Steel grade, thickness, tolerances..."></textarea>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">WhatsApp / Mobile Number</label>
-                    <input type="tel" required class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-blue-500" placeholder="0912...">
-                </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 rounded-xl transition shadow-lg shadow-blue-600/20">Submit RFQ</button>
-            </form>
-        </div>
+<section class="section rfq" id="rfq">
+  <div class="rfq-box">
+    <h2>Request For Quote (RFQ)</h2>
+    <p>Submit your project details to broadcast to certified metal fabricators.</p>
+    <form onsubmit="document.getElementById('rfqMsg').style.display='block'; return false;">
+      <label>Project Title / Part Name</label>
+      <input type="text" placeholder="e.g. Industrial Steel Structure Brackets">
+      <label>Material</label>
+      <select>
+        <option>Carbon Steel (St37)</option>
+        <option>Stainless Steel (304/316)</option>
+        <option>Aluminum</option>
+        <option>Brass / Copper</option>
+        <option>Other</option>
+      </select>
+      <label>Quantity</label>
+      <input type="text" placeholder="e.g. 250 units">
+      <label>Technical Description</label>
+      <textarea rows="4" placeholder="Describe dimensions, tolerances, standards, and attach drawing references..."></textarea>
+      <button type="submit" class="btn btn-primary">Submit Request</button>
+      <div id="rfqMsg">Your request has been recorded in this demo. Backend integration coming soon.</div>
+    </form>
+  </div>
+</section>
 
-        <!-- Supplier Onboarding Panel -->
-        <div id="suppliers" class="bg-slate-950 border border-slate-800 p-8 rounded-3xl">
-            <h2 class="text-2xl font-bold mb-4">Supplier Onboarding</h2>
-            <p class="text-slate-400 text-sm mb-6">Join the METALICS fabrication network and receive industrial orders.</p>
-            <form class="space-y-4" onsubmit="event.preventDefault(); alert('Supplier application successfully received.');">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Workshop / Company Name</label>
-                    <input type="text" required class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-blue-500" placeholder="e.g., Aria Metal Industries">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Core Specialization</label>
-                    <input type="text" required class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-blue-500" placeholder="Laser Cutting, Welding, CNC Machining...">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">City / Location</label>
-                    <input type="text" required class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-blue-500" placeholder="Tehran, Isfahan, Shiraz, Kerman...">
-                </div>
-                <button type="submit" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold py-3 rounded-xl transition">Register Workshop</button>
-            </form>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-slate-950 border-t border-slate-800 py-8 px-6 text-center text-xs text-slate-500">
-        <p>&copy; 2026 <span class="text-slate-400 font-semibold">METALICS</span> Industrial Startup. All rights reserved.</p>
-    </footer>
+<footer>
+  METALICS &copy; 2026 &mdash; Smart Supply Chain &amp; Industrial Fabrication Ecosystem &mdash; Iran
+</footer>
 
 </body>
 </html>
