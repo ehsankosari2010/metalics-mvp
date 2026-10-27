@@ -1,16 +1,10 @@
-
-
-```html
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>METALICS | Industrial B2B Custom Manufacturing</title>
-  <meta name="description" content="METALICS — Industrial B2B network for custom metal fabrication, CNC, laser cutting, and heavy steel structures. Upload CAD files and get quotes fast." />
-  <meta name="theme-color" content="#0b1220" />
-
-  <!-- Tailwind CDN (single-file MVP) -->
+  <title>METALICS | Industrial B2B Custom Fabrication Platform</title>
+  <meta name="description" content="METALICS is a modern industrial B2B marketplace for custom metal fabrication, CNC machining, welding, laser cutting, and RFQ management." />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -18,536 +12,533 @@
         extend: {
           colors: {
             brand: {
-              50:  "#eef7ff",
-              100: "#d9ecff",
-              200: "#b9dcff",
-              300: "#88c4ff",
-              400: "#4ea4ff",
-              500: "#1f7cff",
-              600: "#165fe6",
-              700: "#124ac0",
-              800: "#123f9a",
-              900: "#12377d",
-              950: "#0a1f49"
+              50: '#eef6ff',
+              100: '#d9ebff',
+              200: '#bcdcfe',
+              300: '#8fc4fe',
+              400: '#5aa2fb',
+              500: '#357df5',
+              600: '#245fe9',
+              700: '#1d4bd6',
+              800: '#1f3fad',
+              900: '#1d377f'
             },
-            ink: {
-              900: "#0b1220",
-              800: "#0f172a",
-              700: "#111c33"
+            accent: {
+              500: '#22c55e',
+              600: '#16a34a'
+            },
+            steel: {
+              50: '#f8fafc',
+              100: '#f1f5f9',
+              200: '#e2e8f0',
+              300: '#cbd5e1',
+              400: '#94a3b8',
+              500: '#64748b',
+              600: '#475569',
+              700: '#334155',
+              800: '#1e293b',
+              900: '#0f172a'
             }
           },
           boxShadow: {
-            soft: "0 12px 36px rgba(2,6,23,.18)",
-            glow: "0 0 0 6px rgba(31,124,255,.18)"
+            glow: '0 10px 40px rgba(37, 99, 235, 0.18)',
+            soft: '0 12px 30px rgba(15, 23, 42, 0.08)'
+          },
+          backgroundImage: {
+            grid: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.08) 1px, transparent 0)'
           }
         }
       }
     }
   </script>
-
   <style>
-    /* Subtle industrial background grid */
-    .grid-dots {
-      background-image:
-        radial-gradient(rgba(148,163,184,.22) 1px, transparent 1px);
-      background-size: 18px 18px;
+    html {
+      scroll-behavior: smooth;
     }
-    /* Accessible focus ring */
-    .focus-ring:focus-visible {
-      outline: none;
-      box-shadow: 0 0 0 4px rgba(31,124,255,.25);
-      border-color: rgba(31,124,255,.65);
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    .page-section {
+      display: none;
+    }
+    .page-section.active {
+      display: block;
+    }
+    .nav-link.active {
+      color: #245fe9;
+      font-weight: 700;
+    }
+    .mobile-link.active {
+      background: #dbeafe;
+      color: #1d4ed8;
+      font-weight: 700;
     }
   </style>
 </head>
+<body class="bg-slate-50 text-slate-900">
 
-<body class="bg-slate-950 text-slate-100 antialiased">
-  <!-- Top Bar -->
-  <header class="sticky top-0 z-50 border-b border-white/10 bg-slate-950/70 backdrop-blur">
+  <!-- Header -->
+  <header class="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div class="flex h-16 items-center justify-between gap-3">
-        <!-- Brand -->
-        <a href="#" data-nav="home" class="group inline-flex items-center gap-3">
-          <div class="grid h-10 w-10 place-items-center rounded-xl bg-brand-600 text-white shadow-soft">
-            <span class="font-black">M</span>
+      <div class="flex h-20 items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-brand-700 to-brand-500 text-xl font-extrabold text-white shadow-lg">M</div>
+          <div>
+            <h1 class="text-2xl font-extrabold tracking-tight text-slate-950">METALICS</h1>
+            <p class="text-xs uppercase tracking-[0.18em] text-brand-700">Industrial B2B Network</p>
           </div>
-          <div class="leading-tight">
-            <div class="text-lg font-extrabold tracking-wide">METALICS</div>
-            <div class="text-[11px] uppercase tracking-widest text-slate-300/80">Industrial B2B Network</div>
-          </div>
-        </a>
+        </div>
 
-        <!-- Nav -->
-        <nav class="hidden items-center gap-2 md:flex" aria-label="Primary">
-          <button class="nav-btn focus-ring rounded-xl px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-white/5"
-                  data-nav="home" aria-current="page">Home</button>
-
-          <button class="nav-btn focus-ring rounded-xl px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-white/5"
-                  data-nav="buyer">Buyer Portal</button>
-
-          <button class="nav-btn focus-ring rounded-xl px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-white/5"
-                  data-nav="manufacturer">Manufacturer Portal</button>
-
-          <button class="nav-btn focus-ring rounded-xl px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-white/5"
-                  data-nav="admin">Admin</button>
+        <nav class="hidden items-center gap-8 md:flex">
+          <button class="nav-link text-sm font-medium text-slate-700 transition hover:text-brand-600 active" data-page="home">Home</button>
+          <button class="nav-link text-sm font-medium text-slate-700 transition hover:text-brand-600" data-page="buyer">Buyer Portal</button>
+          <button class="nav-link text-sm font-medium text-slate-700 transition hover:text-brand-600" data-page="manufacturer">Manufacturer Portal</button>
+          <button class="nav-link text-sm font-medium text-slate-700 transition hover:text-brand-600" data-page="admin">Admin</button>
         </nav>
 
-        <!-- Actions -->
-        <div class="flex items-center gap-2">
-          <button id="btnSignIn" class="focus-ring hidden rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-slate-100 hover:bg-white/10 sm:inline-flex">
+        <div class="hidden items-center gap-3 md:flex">
+          <button class="rounded-xl border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-brand-300 hover:text-brand-700">
             Sign In
           </button>
-          <button data-goto="buyer" class="focus-ring inline-flex items-center gap-2 rounded-xl bg-brand-600 px-4 py-2 text-sm font-bold text-white shadow-soft hover:bg-brand-500">
-            <span>Get Instant Quote</span>
-            <span aria-hidden="true">→</span>
-          </button>
-
-          <!-- Mobile Menu -->
-          <button id="btnMobile" class="focus-ring inline-flex rounded-xl border border-white/10 bg-white/5 p-2 md:hidden" aria-label="Open menu">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-            </svg>
+          <button id="headerQuoteBtn" class="rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-glow transition hover:bg-brand-700">
+            Get Instant Quote
           </button>
         </div>
-      </div>
-    </div>
 
-    <!-- Mobile Drawer -->
-    <div id="mobileDrawer" class="hidden border-t border-white/10 bg-slate-950/95">
-      <div class="mx-auto max-w-7xl px-4 py-3">
-        <div class="grid gap-2">
-          <button class="nav-btn focus-ring rounded-xl px-3 py-2 text-left text-sm font-semibold text-slate-100 hover:bg-white/5" data-nav="home">Home</button>
-          <button class="nav-btn focus-ring rounded-xl px-3 py-2 text-left text-sm font-semibold text-slate-100 hover:bg-white/5" data-nav="buyer">Buyer Portal</button>
-          <button class="nav-btn focus-ring rounded-xl px-3 py-2 text-left text-sm font-semibold text-slate-100 hover:bg-white/5" data-nav="manufacturer">Manufacturer Portal</button>
-          <button class="nav-btn focus-ring rounded-xl px-3 py-2 text-left text-sm font-semibold text-slate-100 hover:bg-white/5" data-nav="admin">Admin</button>
+        <button id="mobileMenuBtn" class="inline-flex items-center justify-center rounded-xl border border-slate-300 p-2 text-slate-700 md:hidden">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+
+      <div id="mobileMenu" class="hidden border-t border-slate-200 py-3 md:hidden">
+        <div class="flex flex-col gap-2">
+          <button class="mobile-link rounded-xl px-4 py-3 text-left text-sm font-medium text-slate-700 active" data-page="home">Home</button>
+          <button class="mobile-link rounded-xl px-4 py-3 text-left text-sm font-medium text-slate-700" data-page="buyer">Buyer Portal</button>
+          <button class="mobile-link rounded-xl px-4 py-3 text-left text-sm font-medium text-slate-700" data-page="manufacturer">Manufacturer Portal</button>
+          <button class="mobile-link rounded-xl px-4 py-3 text-left text-sm font-medium text-slate-700" data-page="admin">Admin</button>
+          <button class="mt-2 rounded-xl bg-brand-600 px-4 py-3 text-sm font-semibold text-white" id="mobileQuoteBtn">Get Instant Quote</button>
         </div>
       </div>
     </div>
   </header>
 
-  <!-- Main -->
-  <main class="min-h-screen">
-    <!-- HOME -->
-    <section id="view-home" class="view">
-      <div class="relative overflow-hidden">
-        <div class="absolute inset-0 grid-dots opacity-60"></div>
-        <div class="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-950/70 to-slate-950"></div>
+  <!-- HOME -->
+  <main id="home" class="page-section active">
+    <section class="relative overflow-hidden bg-slate-950">
+      <div class="absolute inset-0 bg-grid bg-[size:18px_18px] opacity-40"></div>
+      <div class="absolute inset-0 bg-gradient-to-br from-brand-900/40 via-slate-950 to-slate-900"></div>
 
-        <div class="relative mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-          <div class="grid items-center gap-10 lg:grid-cols-2">
-            <!-- Left -->
-            <div>
-              <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-200">
-                <span class="rounded-full bg-brand-600/20 px-2 py-0.5 text-brand-200">AI-Powered</span>
-                <span>Industrial B2B Marketplace</span>
-              </div>
-
-              <h1 class="mt-5 text-4xl font-black leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-                On-Demand Custom<br />
-                <span class="text-brand-400">Metal Fabrication</span> & CNC
-              </h1>
-
-              <p class="mt-4 max-w-xl text-base leading-relaxed text-slate-200/90 sm:text-lg">
-                Upload CAD drawings (DWG, STEP, PDF) and connect instantly with verified manufacturers,
-                steel fabricators, and precision workshops.
-              </p>
-
-              <div class="mt-7 flex flex-col gap-3 sm:flex-row">
-                <button data-goto="buyer" class="focus-ring inline-flex items-center justify-center gap-2 rounded-2xl bg-brand-600 px-5 py-3 text-sm font-extrabold text-white shadow-soft hover:bg-brand-500">
-                  <span>Upload Part & RFQ</span>
-                  <span aria-hidden="true">↑</span>
-                </button>
-
-                <button data-goto="manufacturer" class="focus-ring inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-extrabold text-slate-100 hover:bg-white/10">
-                  <span>Join as Manufacturer</span>
-                  <span aria-hidden="true">→</span>
-                </button>
-              </div>
-
-              <div class="mt-8 grid max-w-xl grid-cols-2 gap-3 sm:grid-cols-4">
-                <div class="rounded-2xl border border-white/10 bg-white/5 p-3">
-                  <div class="text-xs text-slate-300">Supported</div>
-                  <div class="mt-1 text-sm font-bold">DWG / STEP</div>
-                </div>
-                <div class="rounded-2xl border border-white/10 bg-white/5 p-3">
-                  <div class="text-xs text-slate-300">Materials</div>
-                  <div class="mt-1 text-sm font-bold">ST37 · ST52</div>
-                </div>
-                <div class="rounded-2xl border border-white/10 bg-white/5 p-3">
-                  <div class="text-xs text-slate-300">Processes</div>
-                  <div class="mt-1 text-sm font-bold">Laser · CNC</div>
-                </div>
-                <div class="rounded-2xl border border-white/10 bg-white/5 p-3">
-                  <div class="text-xs text-slate-300">B2B</div>
-                  <div class="mt-1 text-sm font-bold">Escrow Ready</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Right Card -->
-            <div class="rounded-3xl border border-white/10 bg-gradient-to-b from-white/10 to-white/5 p-6 shadow-soft">
-              <div class="flex items-center justify-between">
-                <div class="text-sm font-extrabold">Instant RFQ & File Analysis</div>
-                <div class="rounded-full border border-emerald-300/20 bg-emerald-400/10 px-3 py-1 text-xs font-bold text-emerald-200">
-                  Secure B2B
-                </div>
-              </div>
-
-              <div class="mt-5 rounded-2xl border border-white/10 bg-slate-900/40 p-4">
-                <div class="text-xs font-bold tracking-widest text-slate-300">SUPPORTED FORMATS</div>
-                <div class="mt-3 flex flex-wrap gap-2">
-                  <span class="rounded-xl border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold">.STEP / .STP</span>
-                  <span class="rounded-xl border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold">.DWG / .DXF</span>
-                  <span class="rounded-xl border border-amber-300/30 bg-amber-400/10 px-3 py-1 text-xs font-semibold text-amber-100">.PDF (2D)</span>
-                  <span class="rounded-xl border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold">.ZIP</span>
-                </div>
-
-                <div class="mt-4 grid gap-3 sm:grid-cols-2">
-                  <div class="rounded-2xl border border-white/10 bg-white/5 p-3">
-                    <div class="text-xs text-slate-300">Material Grades</div>
-                    <div class="mt-1 text-sm font-bold">ST37, ST52, A36</div>
-                  </div>
-                  <div class="rounded-2xl border border-white/10 bg-white/5 p-3">
-                    <div class="text-xs text-slate-300">Processes</div>
-                    <div class="mt-1 text-sm font-bold">Laser, CNC, Welding</div>
-                  </div>
-                </div>
-
-                <button data-goto="buyer" class="focus-ring mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-600 px-4 py-3 text-sm font-extrabold text-white hover:bg-brand-500">
-                  <span>Launch RFQ Wizard</span>
-                  <span aria-hidden="true">→</span>
-                </button>
-              </div>
-
-              <div class="mt-5 grid gap-3 sm:grid-cols-3">
-                <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <div class="text-xs text-slate-300">Lead Time</div>
-                  <div class="mt-1 text-lg font-black">24–72h</div>
-                  <div class="mt-1 text-xs text-slate-300">for initial quotes</div>
-                </div>
-                <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <div class="text-xs text-slate-300">Quality</div>
-                  <div class="mt-1 text-lg font-black">FAI Ready</div>
-                  <div class="mt-1 text-xs text-slate-300">inspection-first</div>
-                </div>
-                <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <div class="text-xs text-slate-300">Coverage</div>
-                  <div class="mt-1 text-lg font-black">Nationwide</div>
-                  <div class="mt-1 text-xs text-slate-300">verified workshops</div>
-                </div>
-              </div>
-            </div>
+      <div class="relative mx-auto grid max-w-7xl gap-14 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-24">
+        <div class="flex flex-col justify-center">
+          <div class="mb-6 inline-flex w-fit items-center rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white/90 shadow-soft">
+            AI-Powered Industrial B2B Marketplace
           </div>
 
-          <!-- Capabilities -->
-          <div class="mt-14">
-            <div class="flex items-end justify-between gap-4">
-              <div>
-                <h2 class="text-2xl font-black">Industrial Manufacturing Capabilities</h2>
-                <p class="mt-2 max-w-2xl text-sm text-slate-300">
-                  From precision laser cutting to heavy structural steel fabrication frameworks.
-                </p>
-              </div>
-              <button data-goto="manufacturer" class="focus-ring hidden rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold hover:bg-white/10 md:inline-flex">
-                View Workshop Network →
-              </button>
-            </div>
+          <h2 class="max-w-xl text-5xl font-black leading-tight tracking-tight text-white sm:text-6xl">
+            On-Demand Custom
+            <span class="bg-gradient-to-r from-brand-400 via-sky-300 to-cyan-300 bg-clip-text text-transparent">Metal Fabrication</span>
+            & CNC
+          </h2>
 
-            <div class="mt-6 grid gap-4 md:grid-cols-3">
-              <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
-                <div class="text-sm font-extrabold">Laser & Plasma Cutting</div>
-                <p class="mt-2 text-sm leading-relaxed text-slate-300">
-                  High-precision cutting for carbon steel (ST37/ST52), stainless steel, and aluminum up to 40mm.
-                </p>
-              </div>
-              <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
-                <div class="text-sm font-extrabold">CNC Machining & Milling</div>
-                <p class="mt-2 text-sm leading-relaxed text-slate-300">
-                  Multi-axis milling and turning for industrial parts, flanges, gearboxes, and custom components.
-                </p>
-              </div>
-              <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
-                <div class="text-sm font-extrabold">Heavy Steel Structures</div>
-                <p class="mt-2 text-sm leading-relaxed text-slate-300">
-                  Certified fabrication for heavy welded box girders, industrial sheds, and multi-story structures.
-                </p>
-              </div>
-            </div>
+          <p class="mt-6 max-w-2xl text-xl leading-9 text-slate-300">
+            Upload your CAD drawings (DWG, STEP, PDF) and connect instantly with verified industrial manufacturers,
+            steel fabricators, and precision machining workshops.
+          </p>
+
+          <div class="mt-10 flex flex-wrap gap-4">
+            <button class="go-buyer rounded-2xl bg-brand-600 px-8 py-4 text-base font-bold text-white shadow-glow transition hover:bg-brand-700">
+              Upload Part & RFQ
+            </button>
+            <button class="go-manufacturer rounded-2xl border border-white/15 bg-white/5 px-8 py-4 text-base font-bold text-white transition hover:bg-white/10">
+              Join as Manufacturer
+            </button>
           </div>
 
-          <!-- Footer mini -->
-          <div class="mt-14 flex flex-col items-start justify-between gap-3 border-t border-white/10 pt-8 sm:flex-row sm:items-center">
-            <div class="text-sm text-slate-300">
-              © <span id="year"></span> METALICS. MVP UI Prototype (Single File).
+          <div class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+              <p class="text-sm text-slate-400">Supported Files</p>
+              <p class="mt-2 text-xl font-bold text-white">DWG, STEP, PDF, ZIP</p>
             </div>
-            <div class="flex flex-wrap gap-2 text-xs text-slate-400">
-              <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1">RFQ</span>
-              <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1">CNC</span>
-              <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1">DWG/STEP</span>
-              <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1">Escrow</span>
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+              <p class="text-sm text-slate-400">Core Services</p>
+              <p class="mt-2 text-xl font-bold text-white">Laser, CNC, Welding</p>
             </div>
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+              <p class="text-sm text-slate-400">Industrial Focus</p>
+              <p class="mt-2 text-xl font-bold text-white">Steel & Custom Parts</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center">
+          <div class="w-full rounded-3xl border border-white/10 bg-slate-900/80 p-6 shadow-2xl backdrop-blur">
+            <div class="mb-5 flex items-center justify-between border-b border-white/10 pb-4">
+              <div class="flex items-center gap-3">
+                <div class="h-10 w-10 rounded-xl bg-brand-600/20 flex items-center justify-center text-brand-300">⬢</div>
+                <div>
+                  <h3 class="text-xl font-bold text-white">Instant RFQ & File Analysis</h3>
+                  <p class="text-sm text-slate-400">Smart intake for industrial buyers</p>
+                </div>
+              </div>
+              <span class="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-bold text-emerald-300">Secure B2B</span>
+            </div>
+
+            <div class="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
+              <p class="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Supported Formats</p>
+              <div class="flex flex-wrap gap-3">
+                <span class="rounded-lg border border-brand-500/30 bg-brand-500/10 px-4 py-2 text-sm font-semibold text-brand-200">.STEP / .STP</span>
+                <span class="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-4 py-2 text-sm font-semibold text-cyan-200">.DWG / .DXF</span>
+                <span class="rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm font-semibold text-amber-200">.PDF (2D)</span>
+                <span class="rounded-lg border border-fuchsia-500/30 bg-fuchsia-500/10 px-4 py-2 text-sm font-semibold text-fuchsia-200">.ZIP</span>
+              </div>
+            </div>
+
+            <div class="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div class="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
+                <p class="text-sm text-slate-400">Material Grades</p>
+                <p class="mt-2 text-2xl font-bold text-white">ST37, ST52, A36</p>
+              </div>
+              <div class="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
+                <p class="text-sm text-slate-400">Processes</p>
+                <p class="mt-2 text-2xl font-bold text-white">Laser, CNC, Welding</p>
+              </div>
+            </div>
+
+            <button class="go-buyer mt-5 w-full rounded-2xl bg-brand-600 px-6 py-4 text-lg font-bold text-white transition hover:bg-brand-700">
+              Launch RFQ Wizard →
+            </button>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- BUYER -->
-    <section id="view-buyer" class="view hidden">
-      <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-        <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-          <div>
-            <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-200">
-              Buyer Dashboard
-            </div>
-            <h2 class="mt-3 text-3xl font-black">RFQ Center</h2>
-            <p class="mt-2 max-w-2xl text-sm text-slate-300">
-              Create a new custom part request, upload drawings, and generate a structured RFQ package.
-              (Prototype UI — no real backend yet.)
-            </p>
-          </div>
+    <section class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+      <div class="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p class="text-sm font-bold uppercase tracking-[0.2em] text-brand-700">Capabilities</p>
+          <h3 class="mt-3 text-4xl font-black tracking-tight text-slate-950">Industrial Manufacturing Capabilities</h3>
+          <p class="mt-4 max-w-3xl text-lg leading-8 text-slate-600">
+            From precision laser cutting to heavy steel fabrication for industrial sheds, box girders, machine components, and structural assemblies.
+          </p>
+        </div>
+      </div>
 
-          <div class="grid w-full gap-3 sm:max-w-xl sm:grid-cols-3">
-            <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-              <div class="text-xs text-slate-300">Active Company</div>
-              <div class="mt-1 text-sm font-bold">Pouya Novin Sazeh</div>
-            </div>
-            <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-              <div class="text-xs text-slate-300">Escrow</div>
-              <div class="mt-1 text-sm font-bold text-emerald-200">Enabled</div>
-            </div>
-            <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-              <div class="text-xs text-slate-300">RFQ SLA</div>
-              <div class="mt-1 text-sm font-bold">24–72h</div>
-            </div>
-          </div>
+      <div class="grid gap-6 md:grid-cols-3">
+        <div class="rounded-3xl border border-slate-200 bg-white p-8 shadow-soft">
+          <div class="mb-5 inline-flex rounded-2xl bg-brand-50 px-4 py-3 text-brand-700">✦</div>
+          <h4 class="text-2xl font-bold text-slate-900">Laser & Plasma Cutting</h4>
+          <p class="mt-4 text-base leading-8 text-slate-600">
+            High-precision cutting for carbon steel, stainless steel, and aluminum sheets with production-grade repeatability.
+          </p>
         </div>
 
-        <div class="mt-8 grid gap-6 lg:grid-cols-3">
-          <!-- Intake -->
-          <div class="lg:col-span-2 rounded-3xl border border-white/10 bg-gradient-to-b from-white/10 to-white/5 p-6 shadow-soft">
-            <div class="flex items-center justify-between gap-3">
-              <h3 class="text-lg font-extrabold">New Part RFQ & Technical Intake</h3>
-              <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-300">Wizard</span>
+        <div class="rounded-3xl border border-slate-200 bg-white p-8 shadow-soft">
+          <div class="mb-5 inline-flex rounded-2xl bg-cyan-50 px-4 py-3 text-cyan-700">⚙</div>
+          <h4 class="text-2xl font-bold text-slate-900">CNC Machining & Milling</h4>
+          <p class="mt-4 text-base leading-8 text-slate-600">
+            Multi-axis machining for flanges, shafts, gear housings, connection plates, and custom industrial parts.
+          </p>
+        </div>
+
+        <div class="rounded-3xl border border-slate-200 bg-white p-8 shadow-soft">
+          <div class="mb-5 inline-flex rounded-2xl bg-emerald-50 px-4 py-3 text-emerald-700">▣</div>
+          <h4 class="text-2xl font-bold text-slate-900">Heavy Steel Structures</h4>
+          <p class="mt-4 text-base leading-8 text-slate-600">
+            Certified fabrication for welded box girders, industrial sheds, multi-story steel frames, and heavy assemblies.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- BUYER -->
+  <main id="buyer" class="page-section">
+    <section class="border-b border-slate-200 bg-gradient-to-br from-white via-brand-50/50 to-cyan-50/50">
+      <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+        <div class="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p class="text-sm font-bold uppercase tracking-[0.18em] text-brand-700">Buyer Dashboard</p>
+            <h2 class="mt-3 text-4xl font-black tracking-tight text-slate-950">RFQ Center & Technical Intake</h2>
+            <p class="mt-4 max-w-3xl text-lg text-slate-600">
+              Submit new fabrication requests, upload drawings, compare supplier bids, and manage active industrial orders.
+            </p>
+          </div>
+          <div class="rounded-2xl border border-brand-200 bg-white px-5 py-4 shadow-soft">
+            <p class="text-sm text-slate-500">Active Company</p>
+            <p class="text-xl font-bold text-slate-900">Pouya Novin Sazeh</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div class="grid gap-8 lg:grid-cols-3">
+        <div class="lg:col-span-2 rounded-3xl border border-slate-200 bg-white p-8 shadow-soft">
+          <div class="mb-6 flex items-center justify-between">
+            <div>
+              <h3 class="text-2xl font-bold text-slate-950">New Part RFQ & File Upload</h3>
+              <p class="mt-2 text-slate-600">Create a detailed RFQ package for verified workshops and manufacturers.</p>
             </div>
+            <span class="rounded-full bg-brand-100 px-3 py-1 text-xs font-bold text-brand-700">Interactive Demo</span>
+          </div>
 
-            <div class="mt-5 grid gap-4 md:grid-cols-2">
-              <label class="block">
-                <span class="text-xs font-bold text-slate-300">Project / Part Name</span>
-                <input id="rfqPartName" class="focus-ring mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-sm text-slate-100 placeholder:text-slate-500"
-                       placeholder="e.g., Baseplate ST52 — Shiraz" />
-              </label>
-
-              <label class="block">
-                <span class="text-xs font-bold text-slate-300">Quantity</span>
-                <input id="rfqQty" type="number" min="1" class="focus-ring mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-sm text-slate-100 placeholder:text-slate-500"
-                       placeholder="e.g., 120" />
-              </label>
-
-              <label class="block">
-                <span class="text-xs font-bold text-slate-300">Process</span>
-                <select id="rfqProcess" class="focus-ring mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-sm text-slate-100">
+          <form id="rfqForm" class="space-y-6">
+            <div class="grid gap-5 md:grid-cols-2">
+              <div>
+                <label class="mb-2 block text-sm font-semibold text-slate-700">Project / Part Name</label>
+                <input id="partName" type="text" placeholder="e.g. Baseplate ST52 - Shiraz Plant" class="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100" />
+              </div>
+              <div>
+                <label class="mb-2 block text-sm font-semibold text-slate-700">Process Type</label>
+                <select id="processType" class="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100">
                   <option>Laser Cutting</option>
                   <option>CNC Machining</option>
-                  <option>Welding / Heavy Fabrication</option>
-                  <option>Plasma Cutting</option>
-                  <option>Drilling</option>
-                  <option>Surface Treatment</option>
+                  <option>Heavy Welding</option>
+                  <option>Steel Fabrication</option>
+                  <option>Assembly & Finishing</option>
                 </select>
-              </label>
+              </div>
+            </div>
 
-              <label class="block">
-                <span class="text-xs font-bold text-slate-300">Material Grade</span>
-                <select id="rfqMaterial" class="focus-ring mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-sm text-slate-100">
+            <div class="grid gap-5 md:grid-cols-3">
+              <div>
+                <label class="mb-2 block text-sm font-semibold text-slate-700">Material</label>
+                <select id="materialType" class="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100">
                   <option>ST37</option>
                   <option>ST52</option>
                   <option>A36</option>
-                  <option>Stainless Steel 304</option>
-                  <option>Aluminum 6061</option>
+                  <option>Stainless Steel</option>
+                  <option>Aluminum</option>
                 </select>
-              </label>
-
-              <label class="block md:col-span-2">
-                <span class="text-xs font-bold text-slate-300">Notes / Tolerances</span>
-                <textarea id="rfqNotes" rows="4"
-                          class="focus-ring mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/40 px-4 py-3 text-sm text-slate-100 placeholder:text-slate-500"
-                          placeholder="e.g., Tolerance ±0.2mm, deburr edges, primer coat, deliver in 10 days..."></textarea>
-              </label>
-            </div>
-
-            <!-- Upload -->
-            <div class="mt-5 rounded-3xl border border-white/10 bg-slate-950/30 p-5">
-              <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <div class="text-sm font-extrabold">File Upload</div>
-                  <div class="text-xs text-slate-300">DWG / DXF / STEP / STP / PDF / ZIP</div>
-                </div>
-                <div class="text-xs text-slate-400">Prototype: files are not uploaded to a server</div>
               </div>
-
-              <div id="dropZone" class="mt-4 rounded-3xl border-2 border-dashed border-white/15 bg-white/5 p-6">
-                <div class="flex flex-col items-center justify-center gap-2 text-center">
-                  <div class="text-sm font-black text-slate-100">Drag & drop CAD/PDF files here</div>
-                  <div class="text-xs text-slate-300">or</div>
-                  <label class="focus-ring cursor-pointer rounded-2xl bg-brand-600 px-4 py-2 text-sm font-extrabold text-white hover:bg-brand-500">
-                    Browse files
-                    <input id="fileInput" type="file" class="hidden" multiple
-                           accept=".dwg,.dxf,.step,.stp,.pdf,.zip,application/pdf,application/zip" />
-                  </label>
-                </div>
+              <div>
+                <label class="mb-2 block text-sm font-semibold text-slate-700">Quantity</label>
+                <input id="quantity" type="number" min="1" value="100" class="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100" />
               </div>
-
-              <div class="mt-4">
-                <div class="text-xs font-bold text-slate-300">Selected files</div>
-                <ul id="fileList" class="mt-2 space-y-2"></ul>
+              <div>
+                <label class="mb-2 block text-sm font-semibold text-slate-700">Delivery City</label>
+                <input id="deliveryCity" type="text" placeholder="e.g. Shiraz" class="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100" />
               </div>
             </div>
 
-            <div class="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div class="text-xs text-slate-400">
-                When backend is connected, this will generate an RFQ package + notify verified workshops.
+            <div>
+              <label class="mb-2 block text-sm font-semibold text-slate-700">Technical Description</label>
+              <textarea id="description" rows="5" placeholder="Include thickness, tolerances, welding class, surface finish, inspection requirements, delivery notes, etc." class="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100"></textarea>
+            </div>
+
+            <div class="rounded-3xl border-2 border-dashed border-brand-200 bg-brand-50/60 p-8">
+              <div class="flex flex-col items-center justify-center text-center">
+                <div class="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-600 text-2xl text-white shadow-glow">⇪</div>
+                <h4 class="text-lg font-bold text-slate-900">Drag and drop CAD/PDF files here</h4>
+                <p class="mt-2 max-w-xl text-slate-600">Supported file types: DWG, DXF, STEP, STP, PDF, ZIP. This demo simulates the upload workflow for the frontend UI.</p>
+                <label class="mt-5 inline-flex cursor-pointer items-center rounded-2xl bg-white px-5 py-3 font-semibold text-brand-700 shadow-soft transition hover:bg-brand-100">
+                  <input id="fileInput" type="file" class="hidden" multiple />
+                  Browse Files
+                </label>
+                <div id="fileList" class="mt-5 w-full max-w-2xl space-y-2"></div>
               </div>
-              <button id="btnGenerateRFQ" class="focus-ring inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-500 px-5 py-3 text-sm font-extrabold text-emerald-950 hover:bg-emerald-400">
-                <span>Generate RFQ Package (Demo)</span>
-                <span aria-hidden="true">→</span>
+            </div>
+
+            <div class="flex flex-wrap gap-4">
+              <button type="submit" class="rounded-2xl bg-brand-600 px-8 py-4 text-base font-bold text-white shadow-glow transition hover:bg-brand-700">
+                Submit RFQ
+              </button>
+              <button type="button" id="previewSummaryBtn" class="rounded-2xl border border-slate-300 bg-white px-8 py-4 text-base font-bold text-slate-700 transition hover:border-brand-300 hover:text-brand-700">
+                Preview Summary
               </button>
             </div>
+          </form>
+        </div>
 
-            <!-- Demo Result -->
-            <div id="rfqResult" class="mt-5 hidden rounded-3xl border border-emerald-300/20 bg-emerald-400/10 p-5 text-emerald-100"></div>
+        <div class="space-y-6">
+          <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-soft">
+            <h3 class="text-xl font-bold text-slate-950">Active RFQ Status</h3>
+            <div class="mt-5 space-y-4">
+              <div class="rounded-2xl border border-slate-200 p-4">
+                <div class="flex items-start justify-between gap-3">
+                  <div>
+                    <p class="font-bold text-slate-900">Baseplate ST52 - Shiraz</p>
+                    <p class="mt-1 text-sm text-slate-500">Process: Laser Cutting | Qty: 120 pcs</p>
+                  </div>
+                  <span class="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-700">Bidding</span>
+                </div>
+                <p class="mt-4 text-sm text-slate-600">Quotes Received: <span class="font-bold text-slate-900">4 Bids</span></p>
+              </div>
+
+              <div class="rounded-2xl border border-slate-200 p-4">
+                <div class="flex items-start justify-between gap-3">
+                  <div>
+                    <p class="font-bold text-slate-900">Industrial Shed Box Girders</p>
+                    <p class="mt-1 text-sm text-slate-500">Process: Heavy Welding | Qty: 15 tons</p>
+                  </div>
+                  <span class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-700">In Production</span>
+                </div>
+                <p class="mt-4 text-sm text-slate-600">Progress: <span class="font-bold text-slate-900">65% (FAI Done)</span></p>
+              </div>
+            </div>
           </div>
 
-          <!-- Status / Active RFQs -->
-          <div class="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <div class="flex items-center justify-between">
-              <h3 class="text-lg font-extrabold">Active RFQ Status</h3>
-              <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-300">Live View</span>
+          <div class="rounded-3xl border border-slate-200 bg-slate-900 p-6 text-white shadow-soft">
+            <h3 class="text-xl font-bold">Escrow Protected</h3>
+            <p class="mt-3 leading-8 text-slate-300">
+              All financial transactions are protected in escrow until inspection and approval milestones are completed.
+            </p>
+            <div class="mt-5 rounded-2xl bg-white/10 p-4">
+              <p class="text-sm text-slate-300">Protection Level</p>
+              <p class="mt-2 text-2xl font-black text-white">100% Secure B2B</p>
             </div>
+          </div>
 
-            <div class="mt-4 space-y-3">
-              <div class="rounded-2xl border border-white/10 bg-slate-950/30 p-4">
-                <div class="text-sm font-bold">Baseplate ST52 — Shiraz</div>
-                <div class="mt-1 text-xs text-slate-300">Process: Laser Cutting · Qty: 120 pcs</div>
-                <div class="mt-3 flex items-center justify-between">
-                  <span class="rounded-full bg-amber-400/10 px-3 py-1 text-xs font-bold text-amber-200">Bidding</span>
-                  <button class="focus-ring rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-bold hover:bg-white/10">View Offers →</button>
-                </div>
-              </div>
+          <div id="summaryCard" class="hidden rounded-3xl border border-brand-200 bg-brand-50 p-6 shadow-soft">
+            <h3 class="text-xl font-bold text-brand-900">RFQ Preview Summary</h3>
+            <div id="summaryContent" class="mt-4 space-y-2 text-sm leading-7 text-slate-700"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 
-              <div class="rounded-2xl border border-white/10 bg-slate-950/30 p-4">
-                <div class="text-sm font-bold">Industrial Shed Box Girders</div>
-                <div class="mt-1 text-xs text-slate-300">Process: Heavy Welding · Qty: 15 tons</div>
-                <div class="mt-3 flex items-center justify-between">
-                  <span class="rounded-full bg-emerald-400/10 px-3 py-1 text-xs font-bold text-emerald-200">In Production</span>
-                  <button class="focus-ring rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-bold hover:bg-white/10">Track →</button>
-                </div>
-              </div>
-
-              <div class="rounded-2xl border border-white/10 bg-slate-950/30 p-4">
-                <div class="text-sm font-bold">Escrow Protected</div>
-                <div class="mt-1 text-xs text-slate-300">
-                  Transactions are protected until First Article Inspection (FAI) approval.
-                </div>
-                <div class="mt-3 rounded-2xl border border-emerald-300/20 bg-emerald-400/10 p-3 text-xs text-emerald-100">
-                  100% Secure B2B Guarantee (demo)
-                </div>
-              </div>
-            </div>
-
-            <div class="mt-5 border-t border-white/10 pt-4 text-xs text-slate-400">
-              Tip: Use the top menu to switch back to Home or other portals.
-            </div>
+  <!-- MANUFACTURER -->
+  <main id="manufacturer" class="page-section">
+    <section class="border-b border-slate-200 bg-gradient-to-br from-slate-950 via-slate-900 to-brand-950 text-white">
+      <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+        <div class="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p class="text-sm font-bold uppercase tracking-[0.18em] text-brand-300">Manufacturer Portal</p>
+            <h2 class="mt-3 text-4xl font-black tracking-tight">Workshop Operations & Quote Desk</h2>
+            <p class="mt-4 max-w-3xl text-lg text-slate-300">
+              Review incoming RFQs, submit competitive quotes, manage capacity, and monitor ongoing production status.
+            </p>
+          </div>
+          <div class="rounded-2xl border border-white/10 bg-white/5 px-5 py-4">
+            <p class="text-sm text-slate-400">Workshop ID</p>
+            <p class="text-xl font-bold text-white">IR-MHF-8820</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- MANUFACTURER -->
-    <section id="view-manufacturer" class="view hidden">
-      <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-        <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-          <div>
-            <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-200">
-              Manufacturer Portal
-            </div>
-            <h2 class="mt-3 text-3xl font-black">Workshop Dashboard</h2>
-            <p class="mt-2 max-w-2xl text-sm text-slate-300">
-              Browse incoming RFQs, submit quotes, and manage production slots. (Prototype UI)
-            </p>
-          </div>
+    <section class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div class="grid gap-6 md:grid-cols-4">
+        <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-soft">
+          <p class="text-sm text-slate-500">Open RFQ Pool</p>
+          <p class="mt-3 text-4xl font-black text-slate-950">24</p>
+          <p class="mt-2 text-sm text-emerald-600">+4 today</p>
+        </div>
+        <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-soft">
+          <p class="text-sm text-slate-500">Submitted Bids</p>
+          <p class="mt-3 text-4xl font-black text-slate-950">11</p>
+          <p class="mt-2 text-sm text-slate-500">Awaiting buyer review</p>
+        </div>
+        <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-soft">
+          <p class="text-sm text-slate-500">Active Production</p>
+          <p class="mt-3 text-4xl font-black text-slate-950">8</p>
+          <p class="mt-2 text-sm text-emerald-600">On schedule</p>
+        </div>
+        <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-soft">
+          <p class="text-sm text-slate-500">Workshop Rating</p>
+          <p class="mt-3 text-4xl font-black text-slate-950">4.9</p>
+          <p class="mt-2 text-sm text-slate-500">Based on 42 orders</p>
+        </div>
+      </div>
 
-          <div class="grid w-full gap-3 sm:max-w-xl sm:grid-cols-4">
-            <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-              <div class="text-xs text-slate-300">Workshop ID</div>
-              <div class="mt-1 text-sm font-bold">IR-MHF-8820</div>
-            </div>
-            <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-              <div class="text-xs text-slate-300">Open RFQs</div>
-              <div class="mt-1 text-sm font-bold">+4 today</div>
-            </div>
-            <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-              <div class="text-xs text-slate-300">Workshop Rating</div>
-              <div class="mt-1 text-sm font-bold">4.9 / 5.0</div>
-            </div>
-            <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-              <div class="text-xs text-slate-300">On-time</div>
-              <div class="mt-1 text-sm font-bold text-emerald-200">On Schedule</div>
-            </div>
+      <div class="mt-8 rounded-3xl border border-slate-200 bg-white p-8 shadow-soft">
+        <div class="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h3 class="text-2xl font-bold text-slate-950">Available RFQs for Quotation</h3>
+            <p class="mt-2 text-slate-600">Review buyer requests and submit fast, competitive manufacturing offers.</p>
           </div>
+          <button class="rounded-2xl bg-brand-600 px-6 py-3 font-bold text-white transition hover:bg-brand-700">Refresh RFQ Pool</button>
         </div>
 
-        <div class="mt-8 grid gap-6 lg:grid-cols-3">
-          <div class="lg:col-span-2 rounded-3xl border border-white/10 bg-gradient-to-b from-white/10 to-white/5 p-6 shadow-soft">
-            <div class="flex items-center justify-between">
-              <h3 class="text-lg font-extrabold">Available RFQs for Quotation</h3>
-              <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-300">RFQ Pool</span>
-            </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-slate-200">
+            <thead>
+              <tr class="text-left text-sm text-slate-500">
+                <th class="pb-4 pr-4 font-semibold">Project / Part</th>
+                <th class="pb-4 pr-4 font-semibold">Process</th>
+                <th class="pb-4 pr-4 font-semibold">Material</th>
+                <th class="pb-4 pr-4 font-semibold">Quantity</th>
+                <th class="pb-4 pr-4 font-semibold">Location</th>
+                <th class="pb-4 pr-4 font-semibold">Action</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-sm">
+              <tr>
+                <td class="py-4 pr-4 font-semibold text-slate-900">CNC Steel Flanges 8"</td>
+                <td class="py-4 pr-4 text-slate-600">CNC Machining</td>
+                <td class="py-4 pr-4 text-slate-600">ST52</td>
+                <td class="py-4 pr-4 text-slate-600">200 pcs</td>
+                <td class="py-4 pr-4 text-slate-600">Isfahan</td>
+                <td class="py-4 pr-4">
+                  <button class="quote-btn rounded-xl bg-brand-600 px-4 py-2 font-semibold text-white transition hover:bg-brand-700" data-project='CNC Steel Flanges 8"'>
+                    Submit Quote
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td class="py-4 pr-4 font-semibold text-slate-900">Laser Cut Gusset Plates</td>
+                <td class="py-4 pr-4 text-slate-600">Laser Cutting</td>
+                <td class="py-4 pr-4 text-slate-600">ST37 (15mm)</td>
+                <td class="py-4 pr-4 text-slate-600">500 pcs</td>
+                <td class="py-4 pr-4 text-slate-600">Tehran</td>
+                <td class="py-4 pr-4">
+                  <button class="quote-btn rounded-xl bg-brand-600 px-4 py-2 font-semibold text-white transition hover:bg-brand-700" data-project="Laser Cut Gusset Plates">
+                    Submit Quote
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td class="py-4 pr-4 font-semibold text-slate-900">Heavy Box Girder Assembly</td>
+                <td class="py-4 pr-4 text-slate-600">Heavy Welding</td>
+                <td class="py-4 pr-4 text-slate-600">ST52</td>
+                <td class="py-4 pr-4 text-slate-600">18 tons</td>
+                <td class="py-4 pr-4 text-slate-600">Shiraz</td>
+                <td class="py-4 pr-4">
+                  <button class="quote-btn rounded-xl bg-brand-600 px-4 py-2 font-semibold text-white transition hover:bg-brand-700" data-project="Heavy Box Girder Assembly">
+                    Submit Quote
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-            <div class="mt-5 overflow-hidden rounded-2xl border border-white/10">
-              <table class="w-full text-left text-sm">
-                <thead class="bg-white/5 text-xs uppercase tracking-wider text-slate-300">
-                  <tr>
-                    <th class="px-4 py-3">Project / Part</th>
-                    <th class="px-4 py-3">Process</th>
-                    <th class="px-4 py-3">Material</th>
-                    <th class="px-4 py-3">Qty</th>
-                    <th class="px-4 py-3">Location</th>
-                    <th class="px-4 py-3">Action</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-white/10">
-                  <tr class="hover:bg-white/5">
-                    <td class="px-4 py-3 font-bold">CNC Steel Flanges 8"</td>
-                    <td class="px-4 py-3">CNC Machining</td>
-                    <td class="px-4 py-3">ST52</td>
-                    <td class="px-4 py-3">200 pcs</td>
-                    <td class="px-4 py-3">Isfahan</td>
-                    <td class="px-4 py-3">
-                      <button class="focus-ring rounded-xl bg-brand-600 px-3 py-2 text-xs font-extrabold hover:bg-brand-500">Submit Quote</button>
-                    </td>
-                  </tr>
-                  <tr class="hover:bg-white/5">
-                    <td class="px-4 py-3 font-bold">Laser Cut Gusset Plates</td>
-                    <td class="px-4 py-3">Laser Cutting</td>
-                    <td class="px-4 py-3">ST37 (15mm)</td>
-                    <td class="px-4 py-3">500 pcs</td>
-                    <td class="px-4 py-3">Tehran</td>
-                    <td class="px-4 py-3">
-                      <button class="focus-ring rounded-xl bg-brand-600 px-3 py-2 text-xs font-extrabold hover:bg-brand-500">Submit Quote</button>
-                    </td>
-                  </tr>
-                  <tr class="hover:bg-white/5">
-                    <td class="px-4 py-3 font-bold">Box Girder Web Plates</td>
-                    <td class="px-4 py-3">Plasma Cutting</td>
-                    <td class="px-4 py-3">ST52 (30mm)</td>
-                    <td class="px-4 py-3">80 pcs</td>
-                    <td class="px-4 py-3">Shiraz</td>
-                    <td class="px-4 py-3">
-                      <button class="focus-ring rounded-xl bg-brand-600 px-3 py-2 text-xs font-extrabold hover:bg-brand-500">Submit Quote</button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+        <div id="quotePanel" class="mt-8 hidden rounded-3xl border border-brand-200 bg-brand-50 p-6">
+          <h4 class="text-xl font-bold text-brand-900">Quote Submission Panel</h4>
+          <p id="quoteTarget" class="mt-2 text-slate-700"></p>
+          <div class="mt-5 grid gap-4 md:grid-cols-3">
+            <input type="number" placeholder="Price (USD or local basis)" class="rounded-2xl border border-slate-300 px-4 py-3 outline-none focus:border-brand-500" />
+            <input type="number" placeholder="Lead Time (days)" class="rounded-2xl border border-slate-300 px-4 py-3 outline-none focus:border-brand-500" />
+            <select class="rounded-2xl border border-slate-300 px-4 py-3 outline-none focus:border-brand-500">
+              <option>Capacity Available</option>
+              <option>Limited Capacity</option>
+              <option>Priority Slot</option>
+            </select>
+          </div>
+          <button class="mt-5 rounded-2xl bg-brand-600 px-6 py-3 font-bold text-white transition hover:bg-brand-700">Send Quote</button>
+        </div>
+      </div>
+    </section>
+  </main>
 
-            <div class="mt-5 rounded-2xl border border-white/10 bg-slate-950/30 p-4 text-xs text-slate-300">
-              Next step (backend): quotation submission, m
+  <!-- ADMIN -->
+  <main id="admin" class="page-section">
+    <section class="border-b border-slate-200 bg-gradient-to-br from-slate-100 via-white to-brand-50">
+      <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+        <p class="text-sm font-bold uppercase tracking-[0.18em] text-brand-700">Admin Control Center</p>
+        <h2 class="mt-3 text-4xl font-black tracking-tight text-slate-950">Platform Monitoring & Operations</h2>
+        <p class="mt-4 max-w-3xl text-lg text-slate-600">
+          Oversee buyer activity, manufacturer onboarding, active orders, quote flow, compliance checks, and platform growth metrics.
+        </p>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+        <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-soft">
+          <p class="text-sm text-slate-500">Registered Buyers</p>
+          <p class="mt-3 text-4xl font-black text-slate-950">148</p>
+          <p class="mt-2 text-sm text-emerald-
