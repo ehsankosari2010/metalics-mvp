@@ -6,6 +6,8 @@
 <title>METALICS | Industrial B2B Custom Manufacturing & CNC</title>
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 .tab-content { display: none; }
 .tab-content.active { display: block; }
@@ -13,314 +15,202 @@
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen flex flex-col selection:bg-cyan-500 selection:text-slate-950">
 
-<!-- Navbar -->
-<header class="sticky top-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-<div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('home')">
-<div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
-<i class="fa-solid fa-cube text-white text-lg"></i>
-</div>
-<div>
-<span class="text-xl font-black tracking-wider bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">METALICS</span>
-<span class="block text-[10px] text-slate-400 uppercase tracking-widest font-semibold">Industrial B2B Network</span>
-</div>
-</div>
+    <!-- Header Navigation -->
+    <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <div class="w-10 h-10 rounded-lg bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center font-bold text-xl text-slate-950">M</div>
+                <span class="text-xl font-black tracking-wider bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">METALICS</span>
+            </div>
+            <nav class="hidden md:flex space-x-8 space-x-reverse text-sm font-medium">
+                <button onclick="switchTab('home')" class="text-cyan-400 hover:text-cyan-300 transition nav-btn" data-target="home">صفحه اصلی</button>
+                <button onclick="switchTab('buyer')" class="text-slate-400 hover:text-cyan-300 transition nav-btn" data-target="buyer">ثبت استعلام (RFQ)</button>
+                <button onclick="switchTab('supplier')" class="text-slate-400 hover:text-cyan-300 transition nav-btn" data-target="supplier">پنل تأمین‌کنندگان</button>
+            </nav>
+        </div>
+    </header>
 
-<!-- Navigation Tabs -->
-<nav class="hidden md:flex items-center space-x-1 bg-slate-950/60 p-1.5 rounded-full border border-slate-800">
-<button onclick="switchTab('home')" id="nav-home" class="px-5 py-2 text-xs font-bold rounded-full transition-all text-cyan-400 bg-slate-800 shadow">Home</button>
-<button onclick="switchTab('buyer')" id="nav-buyer" class="px-5 py-2 text-xs font-bold rounded-full transition-all text-slate-400 hover:text-white">Buyer Portal</button>
-<button onclick="switchTab('manufacturer')" id="nav-manufacturer" class="px-5 py-2 text-xs font-bold rounded-full transition-all text-slate-400 hover:text-white">Manufacturer</button>
-<button onclick="switchTab('admin')" id="nav-admin" class="px-5 py-2 text-xs font-bold rounded-full transition-all text-slate-400 hover:text-white">Admin</button>
-</nav>
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
 
-<div class="flex items-center space-x-3">
-<button onclick="switchTab('buyer')" class="hidden sm:inline-flex px-4 py-2 text-xs font-bold rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 transition-colors">Sign In</button>
-<button onclick="switchTab('buyer')" class="px-4 py-2 text-xs font-bold rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 transition-colors shadow-lg shadow-cyan-500/20">Get Instant Quote</button>
-</div>
-</div>
-</header>
+        <!-- Home Tab -->
+        <div id="home" class="tab-content active space-y-12">
+            <div class="text-center py-16 space-y-6">
+                <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight">شبکه تخصصی ساخت و تولید صنعتی <span class="text-cyan-400">متالیکس</span></h1>
+                <p class="max-w-2xl mx-auto text-slate-400 text-lg">پلتفرم هوشمند B2B برای برون‌سپاری قطعات فلزی، ماشین‌کاری CNC و سازه‌های سنگین فلزی.</p>
+                <div class="flex justify-center gap-4">
+                    <button onclick="switchTab('buyer')" class="px-6 py-3 rounded-xl bg-cyan-500 text-slate-950 font-bold hover:bg-cyan-400 transition shadow-lg shadow-cyan-500/20">ثبت سفارش / استعلام قیمت</button>
+                </div>
+            </div>
+        </div>
 
-<!-- Main Dynamic Views -->
-<main class="flex-grow">
+        <!-- Buyer Portal & RFQ Form Tab -->
+        <div id="buyer" class="tab-content space-y-8">
+            <div class="max-w-3xl mx-auto bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-10 shadow-2xl">
+                <h2 class="text-2xl font-bold mb-6 text-cyan-400 flex items-center gap-3">
+                    <i class="fa-solid fa-file-invoice-dollar"></i> فرم استعلام قیمت و ثبت سفارش (RFQ)
+                </h2>
 
-<!-- 1. HOME TAB -->
-<section id="tab-home" class="tab-content active">
-<!-- Hero -->
-<div class="relative overflow-hidden py-20 lg:py-28 border-b border-slate-800/60 bg-gradient-to-b from-slate-900/50 to-slate-950">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-<div class="lg:col-span-7 space-y-6">
-<div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-semibold">
-<i class="fa-solid fa-bolt"></i>
-<span>AI-Powered Industrial B2B Marketplace</span>
-</div>
-<h1 class="text-4xl sm:text-6xl font-black tracking-tight leading-tight">
-On-Demand Custom <span class="bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 bg-clip-text text-transparent">Metal Fabrication</span> & CNC
-</h1>
-<p class="text-slate-400 text-base sm:text-lg max-w-2xl leading-relaxed">
-Upload your CAD drawings (DWG, STEP, PDF) and connect instantly with verified Iranian industrial manufacturers, steel fabricators, and precision workshops.
-</p>
-<div class="flex flex-col sm:flex-row items-stretch sm:items-center space-y-3 sm:space-y-0 sm:space-x-4 pt-4">
-<button onclick="switchTab('buyer')" class="px-8 py-4 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition-all shadow-xl shadow-cyan-500/20 text-center">
-Upload Part & RFQ
-</button>
-<button onclick="switchTab('manufacturer')" class="px-8 py-4 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white font-bold text-sm transition-all text-center">
-Join as Manufacturer
-</button>
-</div>
-</div>
+                <form id="rfq-form" class="space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">نام شرکت / متقاضی</label>
+                            <input type="text" id="company_name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 focus:outline-none focus:border-cyan-500" placeholder="مثال: پویا نوین سازه">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">شماره تماس</label>
+                            <input type="tel" id="phone" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 focus:outline-none focus:border-cyan-500" placeholder="09120000000">
+                        </div>
+                    </div>
 
-<!-- Hero Card Widget -->
-<div class="lg:col-span-5 bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-2xl relative">
-<div class="absolute -top-3 right-6 bg-cyan-500 text-slate-950 text-[10px] font-black uppercase px-3 py-1 rounded-full tracking-wider shadow">
-Instant RFQ & File Analysis
-</div>
-<div class="space-y-4 pt-2">
-<div class="border-2 border-dashed border-slate-700 rounded-xl p-6 text-center hover:border-cyan-500 transition-colors cursor-pointer bg-slate-950/40">
-<i class="fa-solid fa-cloud-arrow-up text-3xl text-cyan-400 mb-2"></i>
-<p class="text-sm font-bold text-slate-200">Drag & drop CAD files here</p>
-<p class="text-xs text-slate-500 mt-1">.STEP, .STP, .DWG, .DXF, .PDF up to 100MB</p>
-</div>
-<div class="grid grid-cols-2 gap-3 text-xs">
-<div class="bg-slate-950 p-3 rounded-lg border border-slate-800">
-<span class="text-slate-500 block">Material Grades</span>
-<span class="font-bold text-slate-300">ST37, ST52, A36</span>
-</div>
-<div class="bg-slate-950 p-3 rounded-lg border border-slate-800">
-<span class="text-slate-500 block">Processes</span>
-<span class="font-bold text-slate-300">Laser, CNC, Welding</span>
-</div>
-</div>
-<button onclick="switchTab('buyer')" class="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold text-xs uppercase tracking-wider shadow-lg hover:opacity-95">
-Launch RFQ Wizard
-</button>
-</div>
-</div>
-</div>
-</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">گرید متریال</label>
+                            <select id="material_grade" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 focus:outline-none focus:border-cyan-500">
+                                <option value="ST37">ST37 / A36</option>
+                                <option value="ST52">ST52 / S355</option>
+                                <option value="Hardox">هاردوکس (Hardox)</option>
+                                <option value="Stainless">استنلس استیل ۳۰۴ / ۳۱۶</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">پوشش نهایی</label>
+                            <select id="coating_specs" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 focus:outline-none focus:border-cyan-500">
+                                <option value="None">بدون پوشش (خام)</option>
+                                <option value="Sandblast_Primer">سندبلاست + آستر زینک ریچ</option>
+                                <option value="HotDipGalv">گالوانیزه گرم</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">الزام MTC (گواهی متریال)</label>
+                            <select id="mtc_required" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 focus:outline-none focus:border-cyan-500">
+                                <option value="yes">بله، الزامی است</option>
+                                <option value="no">خیر</option>
+                            </select>
+                        </div>
+                    </div>
 
-<!-- Capabilities Grid -->
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-<div class="text-center max-w-3xl mx-auto mb-16">
-<h2 class="text-3xl font-black tracking-tight sm:text-4xl mb-4">Industrial Manufacturing Capabilities</h2>
-<p class="text-slate-400 text-sm sm:text-base">From precision laser cutting to 15-story heavy structural steel fabrication frameworks.</p>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-<div class="bg-slate-900/60 border border-slate-800 p-8 rounded-2xl hover:border-cyan-500/50 transition-colors">
-<div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-xl mb-6">
-<i class="fa-solid fa-fire-burner"></i>
-</div>
-<h3 class="text-lg font-bold mb-3">Laser & Plasma Cutting</h3>
-<p class="text-sm text-slate-400 leading-relaxed">High-precision sheet metal cutting for carbon steel (ST37/ST52), stainless steel, and aluminum sheets up to 40mm.</p>
-</div>
-<div class="bg-slate-900/60 border border-slate-800 p-8 rounded-2xl hover:border-cyan-500/50 transition-colors">
-<div class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl mb-6">
-<i class="fa-solid fa-gears"></i>
-</div>
-<h3 class="text-lg font-bold mb-3">CNC Machining & Milling</h3>
-<p class="text-sm text-slate-400 leading-relaxed">Multi-axis CNC milling and turning for complex industrial parts, flanges, gearboxes, and custom mechanical components.</p>
-</div>
-<div class="bg-slate-900/60 border border-slate-800 p-8 rounded-2xl hover:border-cyan-500/50 transition-colors">
-<div class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xl mb-6">
-<i class="fa-solid fa-building-shield"></i>
-</div>
-<h3 class="text-lg font-bold mb-3">Heavy Steel Structures</h3>
-<p class="text-sm text-slate-400 leading-relaxed">Certified workshop fabrication for heavy welded box girders, I-beams, industrial sheds, and multi-story structures.</p>
-</div>
-</div>
-</div>
-</section>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">شرح قطعه، تلرانس‌ها و مقادیر</label>
+                        <textarea id="project_specs" rows="4" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 focus:outline-none focus:border-cyan-500" placeholder="جزئیات ابعادی، تعداد قطعات و تلرانس‌های حساس را وارد کنید..."></textarea>
+                    </div>
 
-<!-- 2. BUYER PORTAL TAB -->
-<section id="tab-buyer" class="tab-content">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-<div class="flex flex-col md:flex-row md:items-center justify-between pb-8 mb-8 border-b border-slate-800">
-<div>
-<h2 class="text-2xl font-black">Buyer Dashboard & RFQ Center</h2>
-<p class="text-xs text-slate-400 mt-1">Submit new custom fabrication requests, upload technical drawings, and compare quotes.</p>
-</div>
-<div class="mt-4 md:mt-0 flex items-center space-x-3">
-<span class="text-xs px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 font-semibold text-slate-300">Active Company: <strong class="text-cyan-400">Pouya Novin Sazeh</strong></span>
-</div>
-</div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">فایل نقشه / CAD (اختیاری)</label>
+                        <input type="file" id="cad_file" class="w-full text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-cyan-500 file:text-slate-950 hover:file:bg-cyan-400">
+                    </div>
 
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-<!-- New RFQ Form simulation -->
-<div class="lg:col-span-2 bg-slate-900/60 border border-slate-800 p-6 rounded-2xl space-y-6">
-<h3 class="text-lg font-bold">New Part RFQ & Technical Intake</h3>
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-<div>
-<label class="block text-slate-400 font-semibold mb-2">Project / Part Name</label>
-<input type="text" placeholder="e.g. Baseplate ST52" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500">
-</div>
-<div>
-<label class="block text-slate-400 font-semibold mb-2">Manufacturing Process</label>
-<select class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500">
-<option>Laser Cutting</option>
-<option>CNC Machining</option>
-<option>Heavy Welding & Box Girders</option>
-</select>
-</div>
-<div>
-<label class="block text-slate-400 font-semibold mb-2">Material Specification</label>
-<select class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500">
-<option>ST37-2 (Carbon Steel)</option>
-<option>ST52-3 (High Tensile)</option>
-<option>Stainless Steel 304</option>
-</select>
-</div>
-<div>
-<label class="block text-slate-400 font-semibold mb-2">Required Quantity (pcs / tons)</label>
-<input type="number" placeholder="120" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-500">
-</div>
-</div>
-<button onclick="alert('RFQ Successfully Submitted to Verified Workshops!')" class="w-full py-4 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs uppercase tracking-wider shadow-lg shadow-cyan-500/20 transition-all">
-Broadcast RFQ to Network
-</button>
-</div>
+                    <button type="submit" id="submit-btn" class="w-full py-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-bold hover:opacity-90 transition shadow-lg shadow-cyan-500/20">
+                        ثبت نهایی و ارسال استعلام به دیتابیس
+                    </button>
 
-<!-- Active RFQs -->
-<div class="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl space-y-4">
-<h3 class="text-md font-bold">Active RFQ Status</h3>
-<div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
-<div class="flex justify-between items-center text-xs">
-<span class="font-bold text-white">Baseplate ST52 - Shiraz</span>
-<span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 text-[10px] font-bold">Bidding</span>
-</div>
-<p class="text-[11px] text-slate-400">Process: Laser Cutting | Qty: 120 pcs</p>
-<div class="pt-2 flex justify-between items-center text-xs border-t border-slate-900">
-<span class="text-slate-500">Quotes Received: <strong>4 Bids</strong></span>
-<button class="text-cyan-400 hover:underline font-bold">View Offers →</button>
-</div>
-</div>
+                    <div id="form-status" class="text-center text-sm font-medium mt-4"></div>
+                </form>
+            </div>
+        </div>
 
-<div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
-<div class="flex justify-between items-center text-xs">
-<span class="font-bold text-white">Industrial Shed Box Girders</span>
-<span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 text-[10px] font-bold">In Production</span>
-</div>
-<p class="text-[11px] text-slate-400">Process: Heavy Welding | Qty: 15 tons</p>
-<div class="pt-2 flex justify-between items-center text-xs border-t border-slate-900">
-<span class="text-slate-500">Progress: <strong>65% (FAI Done)</strong></span>
-<button class="text-cyan-400 hover:underline font-bold">Track →</button>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
+        <!-- Supplier Portal Tab -->
+        <div id="supplier" class="tab-content space-y-6">
+            <div class="text-center py-12 space-y-4">
+                <h2 class="text-3xl font-bold">پنل تأمین‌کنندگان و کارخانجات همکار</h2>
+                <p class="text-slate-400">به‌زودی امکان دسترسی به استعلام‌های باز، مناقصات ورق‌کاری و تراشکاری فراهم می‌شود.</p>
+            </div>
+        </div>
 
-<!-- 3. MANUFACTURER PORTAL TAB -->
-<section id="tab-manufacturer" class="tab-content">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-<div class="flex flex-col md:flex-row md:items-center justify-between pb-8 mb-8 border-b border-slate-800">
-<div>
-<h2 class="text-2xl font-black">Manufacturer & Workshop Portal</h2>
-<p class="text-xs text-slate-400 mt-1">Browse incoming RFQs, submit quotes, and manage production slots.</p>
-</div>
-<div class="mt-4 md:mt-0">
-<span class="text-xs px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 font-semibold text-slate-300">Workshop ID: <strong class="text-cyan-400">IR-MHF-8820</strong></span>
-</div>
-</div>
+    </main>
 
-<div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-8">
-<div class="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl">
-<span class="text-slate-400 text-xs block">Open RFQ Pool</span>
-<span class="text-2xl font-black text-white mt-1 block">24 <span class="text-xs text-cyan-400 font-normal">+4 today</span></span>
-</div>
-<div class="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl">
-<span class="text-slate-400 text-xs block">Submitted Bids</span>
-<span class="text-2xl font-black text-white mt-1 block">7</span>
-</div>
-<div class="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl">
-<span class="text-slate-400 text-xs block">Active Production</span>
-<span class="text-2xl font-black text-emerald-400 mt-1 block">3 Orders</span>
-</div>
-<div class="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl">
-<span class="text-slate-400 text-xs block">Workshop Rating</span>
-<span class="text-2xl font-black text-amber-400 mt-1 block">4.9 / 5.0</span>
-</div>
-</div>
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 py-6 text-center text-sm text-slate-500">
+        &copy; 2026 METALICS Industrial Network. All rights reserved.
+    </footer>
 
-<!-- Live RFQ Feed -->
-<div class="bg-slate-900/60 border border-slate-800 rounded-2xl overflow-hidden">
-<div class="p-6 border-b border-slate-800 flex justify-between items-center">
-<h3 class="text-md font-bold">Available RFQs for Quotation</h3>
-<span class="text-xs text-slate-400">Showing verified industrial inquiries</span>
-</div>
-<div class="divide-y divide-slate-800 text-xs">
-<div class="p-4 flex items-center justify-between hover:bg-slate-900/40">
-<div>
-<span class="font-bold text-white block text-sm">CNC Steel Flanges 8"</span>
-<span class="text-slate-400">Process: CNC Machining | Material: ST52 | Qty: 200 pcs | Location: Isfahan</span>
-</div>
-<button onclick="alert('Quote submission window opened!')" class="px-4 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold transition-all">Submit Quote</button>
-</div>
-<div class="p-4 flex items-center justify-between hover:bg-slate-900/40">
-<div>
-<span class="font-bold text-white block text-sm">Laser Cut Gusset Plates</span>
-<span class="text-slate-400">Process: Laser Cutting | Material: ST37 (15mm) | Qty: 500 pcs | Location: Tehran</span>
-</div>
-<button onclick="alert('Quote submission window opened!')" class="px-4 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold transition-all">Submit Quote</button>
-</div>
-</div>
-</div>
-</div>
-</section>
+    <!-- Script Logic & Supabase Integration -->
+    <script>
+        // تب‌بندی صفحات
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-cyan-400');
+                btn.classList.add('text-slate-400');
+            });
+            document.getElementById(tabId).classList.add('active');
+            const activeBtn = document.querySelector(`[data-target="${tabId}"]`);
+            if(activeBtn) {
+                activeBtn.classList.remove('text-slate-400');
+                activeBtn.classList.add('text-cyan-400');
+            }
+        }
 
-<!-- 4. ADMIN TAB -->
-<section id="tab-admin" class="tab-content">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-<div class="pb-8 mb-8 border-b border-slate-800">
-<h2 class="text-2xl font-black">Platform Admin & Operations Control</h2>
-<p class="text-xs text-slate-400 mt-1">System oversight, user verification, and escrow transaction management.</p>
-</div>
-<div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-<div class="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl">
-<span class="text-xs text-slate-400 block font-semibold">Total Verified Workshops</span>
-<span class="text-3xl font-black text-white mt-2 block">142</span>
-</div>
-<div class="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl">
-<span class="text-xs text-slate-400 block font-semibold">Active Escrow Volume</span>
-<span class="text-3xl font-black text-cyan-400 mt-2 block">4.8B Tomans</span>
-</div>
-<div class="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl">
-<span class="text-xs text-slate-400 block font-semibold">Pending Workshop Approvals</span>
-<span class="text-3xl font-black text-amber-400 mt-2 block">6</span>
-</div>
-</div>
-</div>
-</section>
+        // اتصال به Supabase
+        const SUPABASE_URL = 'https://gndxhgtgnuefmwqdzdss.supabase.co';
+        const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_9lmT4IxeqEix7mMQjd07_A_cYeHr...'; // کلید اصلی شما
 
-</main>
+        const { createClient } = supabase;
+        const _supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-<!-- Footer -->
-<footer class="bg-slate-900 border-t border-slate-800 py-8 text-center text-xs text-slate-500">
-<p>&copy; 2026 METALICS B2B Industrial Platform. All rights reserved. Pouya Novin Sazeh.</p>
-</footer>
+        // مدیریت ارسال فرم RFQ
+        document.getElementById('rfq-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = document.getElementById('submit-btn');
+            const statusDiv = document.getElementById('form-status');
 
-<!-- Tab Switcher Script -->
-<script>
-function switchTab(tabId) {
-// Hide all tabs
-document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-// Remove active classes from nav buttons
-['home', 'buyer', 'manufacturer', 'admin'].forEach(id => {
-const btn = document.getElementById('nav-' + id);
-if(btn) {
-btn.className = "px-5 py-2 text-xs font-bold rounded-full transition-all text-slate-400 hover:text-white";
-}
-});
-// Show target tab
-const target = document.getElementById('tab-' + tabId);
-if(target) target.classList.add('active');
-// Highlight active nav button
-const activeBtn = document.getElementById('nav-' + tabId);
-if(activeBtn) {
-activeBtn.className = "px-5 py-2 text-xs font-bold rounded-full transition-all text-cyan-400 bg-slate-800 shadow";
-}
-window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-</script>
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'در حال ارسال و ذخیره در دیتابیس...';
+            statusDiv.textContent = '';
+            statusDiv.className = 'text-center text-sm font-medium mt-4 text-cyan-400';
+
+            try {
+                let fileUrl = null;
+                const fileInput = document.getElementById('cad_file');
+
+                // آپلود فایل در صورت انتخاب
+                if (fileInput.files.length > 0) {
+                    const file = fileInput.files[0];
+                    const fileName = `${Date.now()}_${file.name}`;
+                    const { data: uploadData, error: uploadError } = await _supabase.storage
+                        .from('rfq-files')
+                        .upload(fileName, file);
+
+                    if (uploadError) throw uploadError;
+                    
+                    const { data: publicUrlData } = _supabase.storage
+                        .from('rfq-files')
+                        .getPublicUrl(fileName);
+                    
+                    fileUrl = publicUrlData.publicUrl;
+                }
+
+                // درج رکورد در جدول rfqs (مطابق دیتابیس شما)
+                const { error: insertError } = await _supabase
+                    .from('rfqs')
+                    .insert([
+                        {
+                            company_name: document.getElementById('company_name').value,
+                            phone: document.getElementById('phone').value,
+                            material_grade: document.getElementById('material_grade').value,
+                            coating_specs: document.getElementById('coating_specs').value,
+                            mtc_required: document.getElementById('mtc_required').value === 'yes',
+                            project_specs: document.getElementById('project_specs').value,
+                            file_url: fileUrl,
+                            status: 'pending'
+                        }
+                    ]);
+
+                if (insertError) throw insertError;
+
+                statusDiv.textContent = 'استعلام شما با موفقیت در پایگاه داده متالیکس ثبت شد!';
+                statusDiv.className = 'text-center text-sm font-medium mt-4 text-emerald-400';
+                document.getElementById('rfq-form').reset();
+
+            } catch (err) {
+                console.error(err);
+                statusDiv.textContent = 'خطا در ثبت اطلاعات: ' + (err.message || 'لطفاً مجدد تلاش کنید.');
+                statusDiv.className = 'text-center text-sm font-medium mt-4 text-rose-400';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'ثبت نهایی و ارسال استعلام به دیتابیس';
+            }
+        });
+    </script>
 </body>
 </html>
