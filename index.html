@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>METALICS | پلتفرم هوشمند صنایع فلزی و ساخت قطعات</title>
+    <title>METALICS | پلتفرم هوشمند صنایع فلزی و ساخت قطعات صنعتی</title>
     <!-- Vazirmatn Font -->
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <!-- Tailwind CSS -->
@@ -36,11 +36,11 @@
             </div>
             <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
                 <a href="#" class="hover:text-blue-600 transition">صفحه اصلی</a>
-                <a href="#services" class="hover:text-blue-600 transition">خدمات صنعتی</a>
-                <a href="#rfq" class="text-blue-600 font-bold">ثبت استعلام (RFQ) تأمین‌کنندگان و کارخانجات</a>
+                <a href="#services" class="hover:text-blue-600 transition">خدمات صنعتی و برش‌کاری</a>
+                <a href="#rfq" class="text-blue-600 font-bold">ثبت استعلام (RFQ) و تأمین</a>
             </nav>
             <div>
-                <a href="#rfq" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-bold shadow-sm transition text-sm">شروع استعلام</a>
+                <a href="#rfq" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-bold shadow-sm transition text-sm">شروع استعلام آنلاین</a>
             </div>
         </div>
     </header>
@@ -50,29 +50,50 @@
         
         <!-- Hero Section -->
         <div class="text-center mb-12">
-            <h1 class="text-3xl sm:text-4xl font-black text-slate-900 mb-4">شبکه هوشمند تأمین و ساخت قطعات صنعتی</h1>
-            <p class="text-slate-600 text-lg max-w-2xl mxk-auto">استعلام قیمت آنلاین، برون‌سپاری تخصصی ورق‌کاری، جوشکاری سنگین و ماشین‌کاری صنعتی با بالاترین دقت.</p>
+            <h1 class="text-3xl sm:text-4xl font-black text-slate-900 mb-4">شبکه هوشمند تأمین و ساخت قطعات فلزی صنعتی</h1>
+            <p class="text-slate-600 text-lg max-w-2xl mx-auto">استعلام قیمت آنلاین، برون‌سپاری تخصصی ورق‌کاری، جوشکاری سنگین و ماشین‌کاری با بالاترین استانداردهای مهندسی.</p>
         </div>
 
         <!-- RFQ Form Card -->
-        <section id="rfq" class="bg-white rounded-2xl shadow-xl border border-slate-200/80 p-6 sm:p-10">
+        <section id="rfq" class="bg-white rounded-2xl shadow-xl border border-slate-200/80 p-6 sm:p-10 mb-12">
             <div class="border-b border-slate-100 pb-6 mb-6">
                 <h2 class="text-xl font-bold text-slate-900">ثبت استعلام خرید یا ساخت قطعه (RFQ)</h2>
-                <p class="text-sm text-slate-500 mt-1">مشخصات فنی قطعه یا پروژه خود را وارد کنید تا به کارخانجات برتر متصل شوید.</p>
+                <p class="text-sm text-slate-500 mt-1">مشخصات فنی قطعه، آلیاژ و نقشه‌های مهندسی خود را وارد کنید تا به کارخانجات برتر متصل شوید.</p>
             </div>
 
             <form id="rfqForm" class="space-y-6">
-                <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2">شرح نیاز فنی یا مشخصات پروژه:</label>
-                    <textarea id="projectDesc" rows="4" required class="w-full rounded-xl border border-slate-300 p-4 text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none transition" placeholder="مثال: ساخت ۲۲ عدد ورق فولادی با مشخصات داخل فایل و از کاویان اهواز..."></textarea>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">نام شرکت / متقاضی:</label>
+                        <input type="text" id="companyName" required class="w-full rounded-xl border border-slate-300 p-3.5 text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none transition text-sm" placeholder="مثال: پویا نوین سازه">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">شماره تماس (جهت پیگیری):</label>
+                        <input type="tel" id="mobile" required class="w-full rounded-xl border border-slate-300 p-3.5 text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none transition text-sm" placeholder="مثال: 09123456789">
+                    </div>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2">فایل نقشه / CAD (اختیاری):</label>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">شرح نیاز فنی یا مشخصات پروژه:</label>
+                    <textarea id="projectDesc" rows="4" required class="w-full rounded-xl border border-slate-300 p-4 text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none transition" placeholder="مثال: ساخت ۲۲ عدد ورق فولادی با مشخصات داخل فایل و از کاویان اهواز، گرید ST52..."></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">فایل نقشه / CAD / مستندات (اختیاری - DWG, STEP, PDF):</label>
                     <input type="file" id="rfqFile" class="w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition cursor-pointer border border-slate-300 rounded-xl p-2 bg-slate-50"/>
                 </div>
 
                 <div id="statusMessage" class="hidden p-4 rounded-xl text-sm font-medium"></div>
+
+                <!-- Success Tracking Receipt Box (Hidden initially) -->
+                <div id="receiptBox" class="hidden bg-emerald-50 border border-emerald-200 rounded-2xl p-6 text-emerald-900 space-y-3">
+                    <div class="flex items-center justify-between border-b border-emerald-200/60 pb-3">
+                        <span class="font-black text-emerald-800 flex items-center gap-2">✓ استعلام شما با موفقیت ثبت شد</span>
+                        <span id="trackingCodeBadge" class="bg-emerald-600 text-white text-xs px-3 py-1 rounded-full font-mono font-bold"></span>
+                    </div>
+                    <p class="text-xs text-emerald-700">اطلاعات پروژه شما با موفقیت در پایگاه‌داده متالیکس ذخیره شد و کارشناسان و کارخانجات همکار جهت ارسال پیش‌فاکتور با شما تماس خواهند گرفت.</p>
+                    <div class="text-xs pt-1 text-emerald-800 font-medium">کد رهگیری خود را یادداشت فرمایید.</div>
+                </div>
 
                 <button type="submit" id="submitBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-6 rounded-xl shadow-lg transition duration-200 flex items-center justify-center gap-2">
                     ثبت نهایی و ارسال استعلام به دیتابیس
@@ -89,24 +110,26 @@
     <!-- Supabase Integration Script -->
     <script>
         const SUPABASE_URL = 'https://gndxhgtgnuefmwqdzdss.supabase.co';
-        // کلید امن و معتبر پروژه‌تان
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImduZHhoZ3RnbnVlZm13cWR6ZHNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyMzQ1NjcsImV4cCI6MjA1NjgxMDU2N30.OGzB-VwN_...'; // (با کلید کامل Legacy Anon شما جایگزین شد)
+        const SUPABASE_ANON_KEY = 'GAPGPTMASKTOKENfp3aojdkesX0X...'; // کلید معتبر پروژه‌تان
 
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const form = document.getElementById('rfqForm');
         const submitBtn = document.getElementById('submitBtn');
         const statusMessage = document.getElementById('statusMessage');
+        const receiptBox = document.getElementById('receiptBox');
+        const trackingCodeBadge = document.getElementById('trackingCodeBadge');
 
-        form.addEventListener('submit async', async (e) => {}); // placeholder
-        
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             submitBtn.disabled = true;
-            submitBtn.textContent = 'در حال ارسال اطلاعات به سرور...';
+            submitBtn.textContent = 'در حال ارسال اطلاعات به دیتابیس...';
             statusMessage.classList.add('hidden');
+            receiptBox.classList.add('hidden');
 
             try {
+                const company = document.getElementById('companyName').value;
+                const mobile = document.getElementById('mobile').value;
                 const desc = document.getElementById('projectDesc').value;
                 const fileInput = document.getElementById('rfqFile');
                 let filePath = null;
@@ -115,7 +138,7 @@
                 if (fileInput.files.length > 0) {
                     const file = fileInput.files[0];
                     const fileExt = file.name.split('.').pop();
-                    const fileName = `${Date.now()}_${Math.random().toString(36.substring(2))}.${fileExt}`;
+                    const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
                     
                     const { data: uploadData, error: uploadError } = await supabaseClient.storage
                         .from('rfq-files')
@@ -125,17 +148,21 @@
                     filePath = uploadData.path;
                 }
 
+                // Generate Unique Tracking Code
+                const trackingCode = 'MTX-' + Math.floor(100000 + Math.random() * 900000);
+
                 // 2. Insert RFQ Record into Table
+                const fullDescription = `شرکت/متقاضی: ${company} | موبایل: ${mobile} | کد رهگیری: ${trackingCode}\n\nشرح پروژه:\n${desc}`;
+                
                 const { error: insertError } = await supabaseClient
                     .from('rfqs')
-                    .insert([{ description: desc, file_path: filePath }]);
+                    .insert([{ description: fullDescription, file_path: filePath }]);
 
                 if (insertError) throw insertError;
 
-                // Success
-                statusMessage.className = 'p-4 rounded-xl text-sm font-medium bg-emerald-50 text-emerald-800 border border-emerald-200';
-                statusMessage.textContent = 'استعلام صنعتی شما با موفقیت ثبت شد و به کارخانجات ارسال گردید.';
-                statusMessage.classList.remove('hidden');
+                // Success & Receipt Display
+                trackingCodeBadge.textContent = `کد رهگیری: ${trackingCode}`;
+                receiptBox.classList.remove('hidden');
                 form.reset();
 
             } catch (err) {
