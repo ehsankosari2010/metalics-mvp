@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>METALICS | پلتفرم هوشمند صنایع فلزی و ساخت قطعات صنعتی</title>
-    <!-- Vazirmatn Font -->
+    <title>METALICS | پلتفرم مدیریت‌شده ساخت و تأمین قطعات فلزی سفارشی</title>
+    <!-- Vazirmatn Font CDN -->
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -14,103 +14,263 @@
                 extend: {
                     fontFamily: {
                         sans: ['Vazirmatn', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            900: '#0c4a6e',
+                        }
                     }
                 }
             }
         }
     </script>
-    <!-- Supabase JS SDK -->
+    <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between">
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-sky-500 selection:text-white">
 
-    <!-- Header Navigation -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+    <!-- نوار ناوبری اصلی (Header) -->
+    <header class="bg-white/95 backdrop-blur border-b border-slate-200 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-11 h-11 bg-blue-600 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-md">M</div>
+                <div class="w-11 h-11 bg-slate-900 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-md border border-slate-700">M</div>
                 <div>
-                    <span class="text-2xl font-extrabold tracking-tight text-slate-900">METALICS</span>
-                    <span class="block text-xs text-slate-500 font-medium">Industrial B2B Ecosystem</span>
+                    <span class="text-2xl font-black tracking-tight text-slate-900">METALICS</span>
+                    <span class="block text-xs text-sky-600 font-bold uppercase tracking-wider">اکوسیستم هوشمند صنایع فلزی</span>
                 </div>
             </div>
-            <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
-                <a href="#" class="hover:text-blue-600 transition">صفحه اصلی</a>
-                <a href="#services" class="hover:text-blue-600 transition">خدمات صنعتی و برش‌کاری</a>
-                <a href="#rfq" class="text-blue-600 font-bold">ثبت استعلام (RFQ) و تأمین</a>
+            
+            <nav class="hidden md:flex items-center gap-8 text-sm font-bold text-slate-600">
+                <a href="#about" class="hover:text-sky-600 transition">درباره متالیکس</a>
+                <a href="#services" class="hover:text-sky-600 transition">خدمات ساخت و فرآوری</a>
+                <a href="#ecosystem" class="hover:text-sky-600 transition">ارکان پلتفرم</a>
+                <a href="#workflow" class="hover:text-sky-600 transition">مراحل استعلام تا تحویل</a>
             </nav>
-            <div>
-                <a href="#rfq" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-bold shadow-sm transition text-sm">شروع استعلام آنلاین</a>
+
+            <div class="flex items-center gap-3">
+                <a href="#rfq" class="bg-sky-600 hover:bg-sky-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm transition flex items-center gap-2">
+                    <span>ثبت استعلام (RFQ)</span>
+                    <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </a>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="max-w-4xl mx-auto px-4 py-12 flex-grow w-full">
-        
-        <!-- Hero Section -->
+    <!-- بخش معرفی و ارزش پیشنهادی (Hero Section) -->
+    <section class="relative bg-white border-b border-slate-200 py-16 sm:py-24 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-sky-50 border border-sky-100 text-sky-700 text-xs font-bold mb-6">
+                <span class="w-2 h-2 rounded-full bg-sky-600 animate-pulse"></span>
+                نخستین بازارگاه مدیریت‌شده و مهندسی‌شده ساخت قطعات فولادی در ایران
+            </div>
+            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 leading-tight sm:leading-tight mb-6 max-w-4xl mx-auto">
+                پایان ریسک انطباق کیفی و تأخیر در <span class="text-sky-600">تأمین و ساخت قطعات صنعتی</span>
+            </h1>
+            <p class="text-slate-600 text-base sm:text-lg max-w-3xl mx-auto leading-relaxed mb-8">
+                متالیکس صرفاً یک تابلوی آگهی نیست؛ تکیه‌گاه فنی و حقوقی شما در برش لیزر، جوشکاری سنگین، خم‌کاری و ماشین‌کاری دقیق CNC با گارانتی متالورژیک، حساب امانی (Escrow) و بازرسی مستقل مهندسی است.
+            </p>
+            <div class="flex flex-wrap items-center justify-center gap-4">
+                <a href="#rfq" class="bg-slate-900 hover:bg-slate-800 text-white px-8 py-3.5 rounded-xl font-bold text-base shadow-lg transition">شروع استعلام آنلاین و آپلود نقشه</a>
+                <a href="#ecosystem" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-8 py-3.5 rounded-xl font-bold text-base transition">آشنایی با پنل کارشناسان و سازندگان</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ویژگی‌ها و ارکان پلتفرم (Ecosystem Badges) -->
+    <section id="ecosystem" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-            <h1 class="text-3xl sm:text-4xl font-black text-slate-900 mb-4">شبکه هوشمند تأمین و ساخت قطعات فلزی صنعتی</h1>
-            <p class="text-slate-600 text-lg max-w-2xl mx-auto">استعلام قیمت آنلاین، برون‌سپاری تخصصی ورق‌کاری، جوشکاری سنگین و ماشین‌کاری با بالاترین استانداردهای مهندسی.</p>
+            <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mb-3">زنجیره سهنده‌ای متالیکس: ۳ قطب در یک اکوسیستم</h2>
+            <p class="text-slate-500 text-sm sm:text-base">ارتباط شفاف، نظارت‌شده و دارای تضمین حقوقی میان بازیگران صنعتی</p>
         </div>
 
-        <!-- RFQ Form Card -->
-        <section id="rfq" class="bg-white rounded-2xl shadow-xl border border-slate-200/80 p-6 sm:p-10 mb-12">
-            <div class="border-b border-slate-100 pb-6 mb-6">
-                <h2 class="text-xl font-bold text-slate-900">ثبت استعلام خرید یا ساخت قطعه (RFQ)</h2>
-                <p class="text-sm text-slate-500 mt-1">مشخصات فنی قطعه، آلیاژ و نقشه‌های مهندسی خود را وارد کنید تا به کارخانجات برتر متصل شوید.</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- کارت سفارش‌دهندگان -->
+            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                <div class="w-12 h-12 bg-sky-100 text-sky-700 rounded-xl flex items-center justify-center font-black text-xl mb-5">01</div>
+                <h3 class="text-lg font-black text-slate-900 mb-2">سفارش‌دهندگان صنعتی (Buyers)</h3>
+                <p class="text-slate-600 text-sm leading-relaxed mb-4">شرکت‌های EPC، کارخانجات سیمان، معدن، نفت و گاز و انبوه‌سازان ساختمانی که نیازمند دقت بالا، صدور فاکتور رسمی سامانه مودیان و حذف اتلاف زمان هستند.</p>
+                <div class="text-xs font-bold text-sky-600 bg-sky-50 py-1.5 px-3 rounded-lg inline-block">تضمین کیفیت با حساب امانی (Escrow)</div>
+            </div>
+
+            <!-- کارت سازندگان و کارخانجات -->
+            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                <div class="w-12 h-12 bg-indigo-100 text-indigo-700 rounded-xl flex items-center justify-center font-black text-xl mb-5">02</div>
+                <h3 class="text-lg font-black text-slate-900 mb-2">کارخانجات و سازندگان تخصصی</h3>
+                <p class="text-slate-600 text-sm leading-relaxed mb-4">کارگاه‌های مجهز به برش لیزر، گیوتین، نورد، پلاسما و سالن‌های ماشین‌کاری و ساخت اسکلت که به دنبال سفارشات نقدی بدون دغدغه وصول مطالبات هستند.</p>
+                <div class="text-xs font-bold text-indigo-600 bg-indigo-50 py-1.5 px-3 rounded-lg inline-block">تسویه قطعی و استعلام‌های بدون واسطه</div>
+            </div>
+
+            <!-- کارت شبکه کارشناسان و ممیزان -->
+            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                <div class="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center font-black text-xl mb-5">03</div>
+                <h3 class="text-lg font-black text-slate-900 mb-2">کارشناسان فنی و بازرسان مستقل</h3>
+                <p class="text-slate-600 text-sm leading-relaxed mb-4">مهندسان متالورژی، مکانیک و عمران ناظر بر نمونه‌سازی اولیه (FAI)، کنترل ابعادی نقشه‌ها، تست جوش و ارزیابی عیوب جهت داوری بی‌طرفانه.</p>
+                <div class="text-xs font-bold text-emerald-600 bg-emerald-50 py-1.5 px-3 rounded-lg inline-block">ممیزی دومرحلهه‌ای (Four-Eyes Principle)</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- مراحل کار (Workflow) -->
+    <section id="workflow" class="bg-slate-100/70 border-y border-slate-200 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mb-3">فرآیند استعلام و ساخت در متالیکس چگونه است؟</h2>
+                <p class="text-slate-500 text-sm">از ارسال نقشه تا تحویل محموله در محل پروژه با بارنامه رسمی و کد تحویل</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+                <div class="bg-white p-6 rounded-xl border border-slate-200/80">
+                    <div class="text-sky-600 font-black text-2xl mb-2">۱. ثبت استعلام (RFQ)</div>
+                    <p class="text-xs text-slate-600">بارگذاری فایل نقشه‌های DWG یا STEP و تعیین گرید متریال (ST37, ST52, Hardox)</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl border border-slate-200/80">
+                    <div class="text-sky-600 font-black text-2xl mb-2">۲. استعلام مناقصه‌ای کور</div>
+                    <p class="text-xs text-slate-600">ارسال مشخصات نقشه واترمارک‌شده به تولیدکنندگان واجد صلاحیت و استخراج بهترین پیشنهاد</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl border border-slate-200/80">
+                    <div class="text-sky-600 font-black text-2xl mb-2">۳. قفل وجه در اسکرو</div>
+                    <p class="text-xs text-slate-600">واریز وجه سفارش نزد متالیکس تا زمان ساخت، آزمون FAI و تطابق کیفی با نقشه</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl border border-slate-200/80">
+                    <div class="text-sky-600 font-black text-2xl mb-2">۴. حمل و تحویل با OTP</div>
+                    <p class="text-xs text-slate-600">رهگیری ناوگان و تحویل قطعی به انباردار سفارش‌دهنده از طریق کد یکبار مصرف</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- بخش اصلی: فرم ثبت استعلام مهندسی (RFQ Section) -->
+    <section id="rfq" class="py-16 max-w-4xl mx-auto px-4 sm:px-6 w-full">
+        <div class="bg-white rounded-3xl shadow-xl border border-slate-200/90 p-6 sm:p-10">
+            <div class="border-b border-slate-100 pb-6 mb-8 text-center sm:text-right">
+                <div class="inline-block bg-sky-50 text-sky-700 text-xs font-bold px-3 py-1 rounded-md mb-2">سامانه Intake استعلام</div>
+                <h2 class="text-2xl font-black text-slate-900">ثبت استعلام خرید و ساخت قطعه صنعتی</h2>
+                <p class="text-sm text-slate-500 mt-1">مشخصات مهندسی درخواست خود را ثبت کنید؛ سیستم بلافاصله به شما کد پیگیری ارائه می‌دهد.</p>
             </div>
 
             <form id="rfqForm" class="space-y-6">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-2">نام شرکت / متقاضی:</label>
-                        <input type="text" id="companyName" required class="w-full rounded-xl border border-slate-300 p-3.5 text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none transition text-sm" placeholder="مثال: پویا نوین سازه">
+                        <label class="block text-xs font-bold text-slate-700 mb-2">نام شرکت / شخص متقاضی <span class="text-rose-500">*</span></label>
+                        <input type="text" id="companyName" required class="w-full rounded-xl border border-slate-300 p-3.5 text-slate-800 text-sm focus:ring-2 focus:ring-sky-500 focus:outline-none transition" placeholder="مثال: شرکت پویا نوین سازه">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-2">شماره تماس (جهت پیگیری):</label>
-                        <input type="tel" id="mobile" required class="w-full rounded-xl border border-slate-300 p-3.5 text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none transition text-sm" placeholder="مثال: 09123456789">
+                        <label class="block text-xs font-bold text-slate-700 mb-2">شماره تماس مستقیم (موبایل) <span class="text-rose-500">*</span></label>
+                        <input type="tel" id="mobile" required class="w-full rounded-xl border border-slate-300 p-3.5 text-slate-800 text-sm focus:ring-2 focus:ring-sky-500 focus:outline-none transition" placeholder="مثال: 09123456789">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-2">گرید متریال / آلیاژ</label>
+                        <select id="materialGrade" class="w-full rounded-xl border border-slate-300 p-3.5 text-slate-800 text-sm focus:ring-2 focus:ring-sky-500 focus:outline-none transition bg-white">
+                            <option value="ST37">فولاد ساختمانی ST37</option>
+                            <option value="ST52">فولاد پرمقاومت ST52</option>
+                            <option value="Hardox">ضدسایش (Hardox / CK45)</option>
+                            <option value="Stainless">استنلس استیل (304 / 316)</option>
+                            <option value="Other">سایر موارد (در توضیحات ذکر شود)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-2">پوشش سطحی نهایی</label>
+                        <select id="surfaceCoating" class="w-full rounded-xl border border-slate-300 p-3.5 text-slate-800 text-sm focus:ring-2 focus:ring-sky-500 focus:outline-none transition bg-white">
+                            <option value="None">بدون رنگ (خام)</option>
+                            <option value="Sandblast_Zinc">سندبلاست و زینک‌ریچ اپوکسی</option>
+                            <option value="Galvanized">گالوانیزه گرم (Hot-Dip)</option>
+                            <option value="IndustrialPaint">رنگ‌آمیزی صنعتی سه‌لایه</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-2">گواهی متریال (MTC)</label>
+                        <select id="mtcRequired" class="w-full rounded-xl border border-slate-300 p-3.5 text-slate-800 text-sm focus:ring-2 focus:ring-sky-500 focus:outline-none transition bg-white">
+                            <option value="Yes">ارائه گواهینامه معتبر کارخانه الزامی است</option>
+                            <option value="No">نیاز به گواهینامه آزمایشگاهی نیست</option>
+                        </select>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2">شرح نیاز فنی یا مشخصات پروژه:</label>
-                    <textarea id="projectDesc" rows="4" required class="w-full rounded-xl border border-slate-300 p-4 text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none transition" placeholder="مثال: ساخت ۲۲ عدد ورق فولادی با مشخصات داخل فایل و از کاویان اهواز، گرید ST52..."></textarea>
+                    <label class="block text-xs font-bold text-slate-700 mb-2">شرح نیاز فنی، تیراژ قطعه و تلرانس‌های حساس <span class="text-rose-500">*</span></label>
+                    <textarea id="projectDesc" rows="4" required class="w-full rounded-xl border border-slate-300 p-4 text-slate-800 text-sm focus:ring-2 focus:ring-sky-500 focus:outline-none transition" placeholder="مثال: برشکاری و ماشین‌کاری ۴۵ قطعه فلنج ضخامت ۳۰ میلیمتر با تلرانس سوراخکاری ۰.۱ میلیمتر..."></textarea>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2">فایل نقشه / CAD / مستندات (اختیاری - DWG, STEP, PDF):</label>
-                    <input type="file" id="rfqFile" class="w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition cursor-pointer border border-slate-300 rounded-xl p-2 bg-slate-50"/>
+                    <label class="block text-xs font-bold text-slate-700 mb-2">بارگذاری نقشه مهندسی یا پکیج فنی (DWG, STEP, PDF, ZIP):</label>
+                    <input type="file" id="rfqFile" class="w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 transition cursor-pointer border border-slate-300 rounded-xl p-2 bg-slate-50"/>
+                    <span class="block text-[11px] text-slate-400 mt-1">حداکثر حجم مجاز: ۵۰ مگابایت</span>
                 </div>
 
+                <!-- پیام خطا -->
                 <div id="statusMessage" class="hidden p-4 rounded-xl text-sm font-medium"></div>
 
-                <!-- Success Tracking Receipt Box (Hidden initially) -->
-                <div id="receiptBox" class="hidden bg-emerald-50 border border-emerald-200 rounded-2xl p-6 text-emerald-900 space-y-3">
-                    <div class="flex items-center justify-between border-b border-emerald-200/60 pb-3">
-                        <span class="font-black text-emerald-800 flex items-center gap-2">✓ استعلام شما با موفقیت ثبت شد</span>
-                        <span id="trackingCodeBadge" class="bg-emerald-600 text-white text-xs px-3 py-1 rounded-full font-mono font-bold"></span>
+                <!-- کارت رسید و کد رهگیری اختصاصی -->
+                <div id="receiptBox" class="hidden bg-emerald-50 border border-emerald-300 rounded-2xl p-6 text-emerald-950 space-y-3">
+                    <div class="flex items-center justify-between border-b border-emerald-200/80 pb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs">✓</span>
+                            <span class="font-black text-emerald-900 text-base">استعلام شما با موفقیت در پایگاه‌داده متالیکس ثبت شد</span>
+                        </div>
+                        <span id="trackingCodeBadge" class="bg-emerald-700 text-white text-xs px-3.5 py-1.5 rounded-full font-mono font-black tracking-wider"></span>
                     </div>
-                    <p class="text-xs text-emerald-700">اطلاعات پروژه شما با موفقیت در پایگاه‌داده متالیکس ذخیره شد و کارشناسان و کارخانجات همکار جهت ارسال پیش‌فاکتور با شما تماس خواهند گرفت.</p>
-                    <div class="text-xs pt-1 text-emerald-800 font-medium">کد رهگیری خود را یادداشت فرمایید.</div>
+                    <p class="text-xs text-emerald-800 leading-relaxed">
+                        مشخصات فنی سفارش شما دریافت گردید و پس از بررسی تیم مهندسی، پیش‌فاکتور تجمیعی و زمان‌بندی ساخت برای شما ارسال خواهد شد.
+                    </p>
+                    <div class="text-xs text-slate-600 bg-white p-3 rounded-xl border border-emerald-200 font-mono">
+                        لطفاً کد رهگیری بالا را برای پیگیری مراحل ساخت و ارتباط با تیم داوری نزد خود نگه دارید.
+                    </div>
                 </div>
 
-                <button type="submit" id="submitBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-6 rounded-xl shadow-lg transition duration-200 flex items-center justify-center gap-2">
-                    ثبت نهایی و ارسال استعلام به دیتابیس
+                <button type="submit" id="submitBtn" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-black py-4 px-6 rounded-xl shadow-lg transition duration-200 flex items-center justify-center gap-2 text-base">
+                    <span>ثبت نهایی و دریافت کد رهگیری متالیکس</span>
                 </button>
             </form>
-        </section>
-    </main>
+        </div>
+    </section>
 
-    <!-- Footer -->
-    <footer class="bg-white border-t border-slate-200 py-6 mt-16 text-center text-xs text-slate-500">
-        <p>کلیه حقوق مادی و معنوی برای پلتفرم صنعتی <span class="font-bold text-slate-700">METALICS (متالیکس)</span> محفوظ است.</p>
+    <!-- فوتر شرکتی و مشخصات پلتفرم -->
+    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 pb-8 border-b border-slate-800">
+                <div>
+                    <span class="text-white font-black text-xl">METALICS</span>
+                    <p class="text-xs text-slate-400 mt-2 leading-relaxed">توسعه‌یافته به عنوان زیرساخت تحول دیجیتال در صنعت فولاد، برشکاری و ساخت قطعات صنعتی ایران. تکیه‌گاه قطعی طرفین در کیفیت، تسویه و تحویل بار.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold text-sm mb-3">حوزه‌های تحت پوشش</h4>
+                    <ul class="text-xs space-y-2 text-slate-400">
+                        <li>برش لیزر و پلاسمای ورق‌های سنگین تا ضخامت‌های بالا</li>
+                        <li>ماشین‌کاری قطعات دقیق صنعتی و تراشکاری CNC</li>
+                        <li>ساخت و مونتاژ استراکچرهای صنعتی و فلنج‌های خاص</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold text-sm mb-3">امنیت و استانداردهای کیفی</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">سیستم پرداخت امن اسکرو، بررسی نمونه اولیه (FAI)، بازرسی ابعادی مستقل و صدور رسمی فاکتور مودیان.</p>
+                </div>
+            </div>
+            <div class="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+                <p>© ۲۰۲۶ تمامی حقوق مادی و معنوی برای پلتفرم <span class="text-slate-300 font-bold">METALICS (متالیکس)</span> محفوظ است.</p>
+                <div class="flex gap-4">
+                    <span>نسخه MVP پایدار</span>
+                    <span>•</span>
+                    <span>پشتیبانی مهندسی و بازرسی فنی</span>
+                </div>
+            </div>
+        </div>
     </footer>
 
-    <!-- Supabase Integration Script -->
+    <!-- منطق اتصال به Supabase و تولید کد رهگیری -->
     <script>
+        // آدرس پایگاه‌داده رسمی متالیکس
         const SUPABASE_URL = 'https://gndxhgtgnuefmwqdzdss.supabase.co';
-        const SUPABASE_ANON_KEY = 'GAPGPTMASKTOKENfp3aojdkesX0X...'; // کلید معتبر پروژه‌تان
+        
+        // کلید مجاز عمومی (Anon / Publishable Key) پروژه Supabase شما
+        // نکته: اگر در گیت‌هاب کلید قبلی را داری، اینجا جایگزین می‌کنی
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImduZHhoZ3RnbnVlZm13cWR6ZHNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMxMTAwMjUsImV4cCI6MjEwODY4NjAyNX0.BzPBoaCL3jXnx0C5c7CKynt_sme1iLKRWYvCnoUBz80'; 
 
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -123,56 +283,90 @@
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             submitBtn.disabled = true;
-            submitBtn.textContent = 'در حال ارسال اطلاعات به دیتابیس...';
+            submitBtn.innerHTML = `
+                <svg class="animate-spin h-5 w-5 text-white inline-block ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                </svg>
+                <span>در حال آپلود مستندات و ثبت در دیتابیس متالیکس...</span>
+            `;
             statusMessage.classList.add('hidden');
             receiptBox.classList.add('hidden');
 
             try {
-                const company = document.getElementById('companyName').value;
-                const mobile = document.getElementById('mobile').value;
-                const desc = document.getElementById('projectDesc').value;
+                const company = document.getElementById('companyName').value.trim();
+                const mobile = document.getElementById('mobile').value.trim();
+                const material = document.getElementById('materialGrade').value;
+                const coating = document.getElementById('surfaceCoating').value;
+                const mtc = document.getElementById('mtcRequired').value;
+                const desc = document.getElementById('projectDesc').value.trim();
                 const fileInput = document.getElementById('rfqFile');
-                let filePath = null;
+                let uploadedFilePath = null;
 
-                // 1. Upload File if selected
+                // ۱. تولید کد رهگیری استاندارد مهندسی متالیکس
+                const currentYear = new Date().getFullYear();
+                const randomId = Math.floor(100000 + Math.random() * 900000);
+                const trackingCode = `MTX-${currentYear}-${randomId}`;
+
+                // ۲. آپلود فایل پیوست در صورتی که کاربر فایلی انتخاب کرده باشد
                 if (fileInput.files.length > 0) {
                     const file = fileInput.files[0];
-                    const fileExt = file.name.split('.').pop();
-                    const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
-                    
+                    const cleanFileName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+                    const storagePath = `${trackingCode}/${Date.now()}_${cleanFileName}`;
+
                     const { data: uploadData, error: uploadError } = await supabaseClient.storage
                         .from('rfq-files')
-                        .upload(fileName, file);
+                        .upload(storagePath, file, {
+                            cacheControl: '3600',
+                            upsert: false
+                        });
 
-                    if (uploadError) throw uploadError;
-                    filePath = uploadData.path;
+                    if (uploadError) {
+                        throw new Error(`خطای ذخیره فایل در Storage: ${uploadError.message}`);
+                    }
+                    uploadedFilePath = uploadData.path;
                 }
 
-                // Generate Unique Tracking Code
-                const trackingCode = 'MTX-' + Math.floor(100000 + Math.random() * 900000);
+                // ۳. فرمت‌بندی کامل مشخصات برای درج در جدول دیتابیس
+                const structuredPayload = `[کد رهگیری: ${trackingCode}]
+شرکت/متقاضی: ${company}
+تلفن تماس: ${mobile}
+آلیاژ/متریال: ${material}
+پوشش نهایی: ${coating}
+الزام MTC: ${mtc}
 
-                // 2. Insert RFQ Record into Table
-                const fullDescription = `شرکت/متقاضی: ${company} | موبایل: ${mobile} | کد رهگیری: ${trackingCode}\n\nشرح پروژه:\n${desc}`;
-                
+شرح نیازمندی و مشخصات فنی:
+${desc}`;
+
+                // ۴. درج در جدول rfqs در دیتابیس Supabase
                 const { error: insertError } = await supabaseClient
                     .from('rfqs')
-                    .insert([{ description: fullDescription, file_path: filePath }]);
+                    .insert([
+                        {
+                            description: structuredPayload,
+                            file_path: uploadedFilePath
+                        }
+                    ]);
 
-                if (insertError) throw insertError;
+                if (insertError) {
+                    throw new Error(`خطای ذخیره در جدول استعلام‌ها: ${insertError.message}`);
+                }
 
-                // Success & Receipt Display
-                trackingCodeBadge.textContent = `کد رهگیری: ${trackingCode}`;
+                // ۵. نمایش موفقیت، تحویل رسید و آماده‌سازی فرم برای استعلام بعدی
+                trackingCodeBadge.textContent = trackingCode;
                 receiptBox.classList.remove('hidden');
                 form.reset();
 
+                // اسکرول نرم به بخش رسید
+                receiptBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
             } catch (err) {
-                console.error(err);
-                statusMessage.className = 'p-4 rounded-xl text-sm font-medium bg-rose-50 text-rose-800 border border-rose-200';
-                statusMessage.textContent = 'خطا در ثبت اطلاعات: ' + (err.message || 'مشکل ارتباط با دیتابیس');
-                statusMessage.classList.remove('hidden');
+                console.error('METALICS Error:', err);
+                statusMessage.className = 'p-4 rounded-xl text-sm font-medium bg-rose-50 text-rose-800 border border-rose-200 block';
+                statusMessage.textContent = 'خطا در ثبت استعلام: ' + (err.message || 'خطای اتصال به سرور دیتابیس');
             } finally {
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'ثبت نهایی و ارسال استعلام به دیتابیس';
+                submitBtn.innerHTML = `<span>ثبت نهایی و دریافت کد رهگیری متالیکس</span>`;
             }
         });
     </script>
