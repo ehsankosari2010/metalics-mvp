@@ -271,19 +271,18 @@
         $("btnSubmit").disabled = true;
       }
     }
+$("btnSignIn").addEventListener("click", async () => {
+    const email = prompt("لطفاً ایمیل خود را برای ورود وارد کنید:");
+    if (!email) return;
 
-    $("btnSignIn").addEventListener("click", async () => {
-      const email = prompt("لطفاً ایمیل خود را برای ورود وارد کنید (لینک ورود ارسال می‌شود):");
-      if (!email) return;
-      
-      const { error } = await supabase.auth.signInWithOtp({ 
-        email, 
-        options: { emailRedirectTo: window.location.href } 
-      });
-      
-      if (error) alert("خطا در ارسال لینک: " + error.message);
-      else alert("لینک ورود به ایمیل شما ارسال شد. لطفاً ایمیل خود را بررسی کنید.");
-    });
+    const { error } = await supabase.auth.signInWithOtp({ email });
+    if (error) {
+        alert("خطا در ورود: " + error.message);
+    } else {
+        alert("لینک ورود به ایمیل شما ارسال شد! لطفاً صندوق پستی خود را بررسی کنید.");
+    }
+});
+
 
     $("btnSignOut").addEventListener("click", async () => {
       await supabase.auth.signOut();
