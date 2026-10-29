@@ -170,8 +170,8 @@
         <span id="authLabel" class="mono" style="font-weight: 600;">در حال بررسی...</span>
       </div>
       <div>
-        <button class="btn secondary" id="btnSignIn" style="padding: 6px 14px; font-size: 13px;">ورود / ثبت‌نام با ایمیل</button>
-        <button class="btn secondary" id="btnSignOut" style="padding: 6px 14px; font-size: 13px; display: none;">خروج</button>
+        <button class="btn secondary" id="btnSignIn" style="padding: 6px 14px; font-size: 13px;" type="button">ورود / ثبت‌نام با ایمیل</button>
+        <button class="btn secondary" id="btnSignOut" style="padding: 6px 14px; font-size: 13px; display: none;" type="button">خروج</button>
       </div>
     </div>
 
@@ -242,9 +242,9 @@
   </div>
 
   <script>
-    // تنظیمات اتصال به Supabase (مقادیر پروژه خودت را اینجا قرار بده)
+    // تنظیمات اتصال به Supabase (لطفاً کلید anon واقعی پروژه خود را جایگزین کنید)
     const SUPABASE_URL = "https://gndxhgtgnuefmwqdzdss.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImduZHhoZ3RnbnVlZm13cWR6ZHNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMxMTAwMjUsImV4cCI6MjEwODY4NjAyNX0.BzPBoaCL3jXnx0C5c7CKynt_sme1iLKRWYvCnoUBz80";
+    const SUPABASE_ANON_KEY = "sb_publishable_9lmT4IxeqEix7MmQJd07_A_cYeHr6SI"; // <--- کلید صحیح خود را اینجا بگذارید
 
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -252,37 +252,46 @@
 
     function setStatus(type, html) {
       const el = $("submitStatus");
+      if (!el) return;
       el.style.display = "block";
       el.className = "status-box " + (type === "ok" ? "ok" : type === "err" ? "err" : "");
       el.innerHTML = html;
     }
 
     async function refreshAuthUI() {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        $("authLabel").textContent = user.email;
-        $("btnSignIn").style.display = "none";
-        $("btnSignOut").style.display = "inline-flex";
-        $("btnSubmit").disabled = false;
-      } else {
-        $("authLabel").textContent = "وارد نشده‌اید";
-        $("btnSignIn").style.display = "inline-flex";
-        $("btnSignOut").style.display = "none";
-        $("btnSubmit").disabled = true;
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          $("authLabel").textContent = user.email;
+          $("btnSignIn").style.display = "none";
+          $("btnSignOut").style.display = "inline-flex";
+          $("btnSubmit").disabled = false;
+        } else {
+          $("authLabel").textContent = "وارد نشده‌اید";
+          $("btnSignIn").style.display = "inline-flex";
+          $("btnSignOut").style.display = "none";
+          $("btnSubmit").disabled = true;
+        }
+      } catch (err) {
+        console.error("Auth status error:", err);
       }
     }
-$("btnSignIn").addEventListener("click", async () => {
-    const email = prompt("لطفاً ایمیل خود را برای ورود وارد کنید:");
-    if (!email) return;
 
-    const { error } = await supabase.auth.signInWithOtp({ email });
-    if (error) {
-        alert("خطا در ورود: " + error.message);
-    } else {
-        alert("لینک ورود به ایمیل شما ارسال شد! لطفاً صندوق پستی خود را بررسی کنید.");
-    }
-});
+    $("btnSignIn").addEventListener("click", async () => {
+      const email = prompt("لطفاً ایمیل خود را برای ورود وارد کنید:");
+      if (!email) return;
 
+      try {
+        const { error } = await supabase.auth.signInWithOtp({ email });
+        if (error) {
+          alert("خطا در ورود: " + error.message);
+        } else {
+          alert("لینک ورود به ایمیل شما ارسال شد! لطفاً صندوق پستی خود را بررسی کنید.");
+        }
+      } catch (err) {
+        alert("خطای سیستمی در ارسال لینک ورود: " + err.message);
+      }
+    });
 
     $("btnSignOut").addEventListener("click", async () => {
       await supabase.auth.signOut();
@@ -293,13 +302,15 @@ $("btnSignIn").addEventListener("click", async () => {
     $("rfqForm").addEventListener("submit", async (e) => {
       e.preventDefault();
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return alert("لطفاً ابتدا وارد سیستم شوید.");
+      if (!user) {
+        alert("لطفاً ابتدا وارد سیستم شوید.");
+        return;
+      }
 
       $("btnSubmit").disabled = true;
       setStatus("", "در حال ثبت استعلام و آپلود پیوست‌ها...");
 
       try {
-        // درج رکورد در جدول rfqs
         const payload = {
           title: $("f_title").value.trim(),
           process: $("f_process").value,
@@ -328,7 +339,6 @@ $("btnSignIn").addEventListener("click", async () => {
           const path = `rfqs/${rfqRow.id}/${Date.now()}-${file.name}`;
           await supabase.storage.from("rfq-files").upload(path, file);
           
-          // ثبت در جدول order_attachments
           await supabase.from("order_attachments").insert({
             rfq_id: rfqRow.id,
             bucket_id: "rfq-files",
