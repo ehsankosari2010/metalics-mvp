@@ -8,363 +8,299 @@
   <!-- Vazirmatn Font (Persian RTL) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
   <!-- Supabase JS v2 SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     :root {
-      --bg: #0b1220;
-      --card: #0f1a2e;
-      --text: #e8eefc;
-      --muted: #a9b6d3;
-      --border: #23314f;
-      --primary: #4f7cff;
-      --primary-hover: #3b65e0;
-      --danger: #ff5a6a;
-      --ok: #26d07c;
+      --bg: #070d18;
+      --card-bg: rgba(16, 26, 46, 0.85);
+      --border: rgba(255, 255, 255, 0.12);
+      --accent: #2563eb;
+      --accent-glow: rgba(37, 99, 235, 0.35);
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --success: #10b981;
+      --error: #ef4444;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Vazirmatn', system-ui, -apple-system, sans-serif;
-      background: var(--bg);
+      font-family: 'Vazirmatn', system-ui, sans-serif;
+      background: radial-gradient(circle at 50% 0%, #172554 0%, var(--bg) 75%);
       color: var(--text);
-      line-height: 1.6;
-      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px;
     }
-
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
     header {
+      width: 100%;
+      max-width: 850px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 30px;
-      padding-bottom: 15px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .logo {
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--primary);
-      letter-spacing: -0.5px;
-    }
-
-    .card {
-      background: var(--card);
+      margin-bottom: 24px;
+      padding: 12px 20px;
+      background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      backdrop-filter: blur(12px);
     }
-
-    h2 { font-size: 20px; margin-bottom: 8px; font-weight: 600; }
-    .hint { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
-
-    .row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
+    .brand-title { font-size: 20px; font-weight: 800; color: #60a5fa; letter-spacing: 0.5px; }
+    .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 600; transition: color 0.2s; }
+    .nav-links a:hover { color: #fff; }
+    
+    .main-card {
+      width: 100%;
+      max-width: 850px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px 28px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      backdrop-filter: blur(16px);
     }
-
-    @media (max-width: 768px) {
-      .row { grid-template-columns: 1fr; }
-    }
-
-    .field {
-      margin-bottom: 16px;
-    }
-
-    label {
-      display: block;
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 6px;
-      font-weight: 500;
-    }
-
+    .form-header { margin-bottom: 24px; text-align: center; }
+    .form-header h1 { font-size: 24px; font-weight: 800; margin-bottom: 8px; color: #fff; }
+    .form-header p { font-size: 14px; color: var(--text-muted); }
+    
+    .grid-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    @media (max-width: 680px) { .grid-row { grid-template-columns: 1fr; } }
+    
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+    label { font-size: 13px; font-weight: 600; color: #cbd5e1; }
+    
     input, select, textarea {
       width: 100%;
-      padding: 12px;
-      border-radius: 10px;
+      padding: 12px 14px;
+      background: rgba(8, 14, 26, 0.7);
       border: 1px solid var(--border);
-      background: #0b1730;
-      color: var(--text);
-      font-family: 'Vazirmatn', sans-serif;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--primary);
-    }
-
-    textarea { min-height: 120px; resize: vertical; }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 12px 20px;
-      border-radius: 10px;
-      border: none;
-      background: var(--primary);
-      color: white;
-      cursor: pointer;
-      font-weight: 600;
-      font-family: 'Vazirmatn', sans-serif;
-      transition: background 0.2s;
-    }
-
-    .btn:hover { background: var(--primary-hover); }
-    .btn.secondary { background: transparent; border: 1px solid var(--border); color: var(--text); }
-    .btn.secondary:hover { background: rgba(255,255,255,0.05); }
-    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
-
-    .status-box {
-      margin-top: 16px;
-      padding: 14px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: #0b1730;
-      font-size: 14px;
-      display: none;
-    }
-    .status-box.ok { border-color: rgba(38, 208, 124, 0.4); color: #26d07c; }
-    .status-box.err { border-color: rgba(255, 90, 106, 0.4); color: #ff5a6a; }
-
-    .mono { font-family: ui-monospace, monospace; direction: ltr; text-align: left; }
-    
-    .auth-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: rgba(11, 23, 48, 0.6);
-      padding: 12px 16px;
       border-radius: 12px;
-      border: 1px solid var(--border);
-      margin-bottom: 20px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    }
+    
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      box-shadow: 0 8px 20px var(--accent-glow);
+      transition: transform 0.15s, filter 0.15s;
+      margin-top: 8px;
+    }
+    .btn-submit:hover { filter: brightness(1.1); transform: translateY(-1px); }
+    .btn-submit:active { transform: translateY(0); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .result-box {
+      margin-top: 20px;
+      padding: 16px;
+      border-radius: 12px;
+      display: none;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .result-box.success { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #6ee7b7; }
+    .result-box.error { background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #fca5a5; }
+    .tracking-badge {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 6px 14px;
+      background: #0f172a;
+      border: 1px solid #38bdf8;
+      color: #38bdf8;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 16px;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <header>
-      <div class="logo">METALICS / متالیکس</div>
-      <div style="font-size: 13px; color: var(--muted);">B2B Industrial Marketplace MVP</div>
-    </header>
+  <header>
+    <div class="brand-title">METALICS | متالیکس</div>
+    <div class="nav-links">
+      <a href="/admin.html" target="_blank">ورود به پنل کارشناس / ادمین ↗</a>
+    </div>
+  </header>
 
-    <!-- بخش احراز هویت -->
-    <div class="auth-bar">
-      <div>
-        <span style="font-size: 13px; color: var(--muted);">وضعیت حساب: </span>
-        <span id="authLabel" class="mono" style="font-weight: 600;">در حال بررسی...</span>
-      </div>
-      <div>
-        <button class="btn secondary" id="btnSignIn" style="padding: 6px 14px; font-size: 13px;" type="button">ورود / ثبت‌نام با ایمیل</button>
-        <button class="btn secondary" id="btnSignOut" style="padding: 6px 14px; font-size: 13px; display: none;" type="button">خروج</button>
-      </div>
+  <div class="main-card">
+    <div class="form-header">
+      <h1>فرم ثبت استعلام ساخت و تأمین قطعات (RFQ)</h1>
+      <p>مشخصات فنی قطعه، متریال، برند ورق و نقشه ساخت خود را وارد کنید.</p>
     </div>
 
-    <!-- فرم ثبت استعلام RFQ -->
-    <section class="card">
-      <h2>ثبت استعلام قطعه سفارشی (RFQ)</h2>
-      <div class="hint">مشخصات فنی و نقشه‌های مهندسی خود را جهت ارسال محرمانه به سازندگان واجد شرایط وارد کنید.</div>
+    <form id="rfqForm">
+      <div class="grid-row">
+        <div class="form-group">
+          <label>عنوان قطعه یا پروژه *</label>
+          <input type="text" id="projectTitle" placeholder="مثال: شاسی دستگاه صنعتی، فلنج سفارشی" required>
+        </div>
+        <div class="form-group">
+          <label>شهر محل تحویل *</label>
+          <input type="text" id="city" placeholder="مثال: شیراز، کرمان، تهران" required>
+        </div>
+      </div>
 
-      <form id="rfqForm">
-        <div class="row">
-          <div class="field">
-            <label>عنوان قطعه یا پروژه</label>
-            <input id="f_title" type="text" placeholder="مثال: فلنج فولادی فورج استنلس استیل" required>
-          </div>
-          <div class="field">
-            <label>فرآیند ساخت</label>
-            <select id="f_process" required>
-              <option value="">انتخاب فرآیند...</option>
-              <option value="cnc">ماشین‌کاری CNC</option>
-              <option value="laser">برش لیزر</option>
-              <option value="waterjet">واترجت</option>
-              <option value="bending">خم‌کاری و پرس</option>
-              <option value="welding">جوشکاری و ساخت سازه</option>
-              <option value="casting">ریخته‌گری</option>
-              <option value="other">سایر</option>
-            </select>
-          </div>
+      <div class="grid-row">
+        <div class="form-group">
+          <label>جنس متریال (آلیاژ) *</label>
+          <select id="material" required>
+            <option value="فولاد ساختمانی (St37 / St52)">فولاد ساختمانی (St37 / St52)</option>
+            <option value="استنلس استیل (304 / 316)">استنلس استیل (304 / 316)</option>
+            <option value="آلومینیوم صنعتی">آلومینیوم صنعتی</option>
+            <option value="برنج / مس / فسفر برنز">برنج / مس / فسفر برنز</option>
+            <option value="سایر آلیاژها">سایر آلیاژها (قید در توضیحات)</option>
+          </select>
         </div>
 
-        <div class="row">
-          <div class="field">
-            <label>متریال / آلیاژ</label>
-            <input id="f_material" type="text" placeholder="مثال: St52, 304, Aluminum 6061">
-          </div>
-          <div class="field">
-            <label>تعداد / تیراژ</label>
-            <input id="f_qty" type="number" min="1" placeholder="مثال: 50">
-          </div>
+        <div class="form-group">
+          <label>کارخانه / برند متریال (ورق یا مقاطع) *</label>
+          <select id="materialBrand" required>
+            <option value="فولاد مبارکه اصفهان">فولاد مبارکه اصفهان</option>
+            <option value="فولاد اکسین خوزستان (عریض/آلیاژی)">فولاد اکسین خوزستان</option>
+            <option value="فولاد کاویان">فولاد کاویان</option>
+            <option value="مجتمع فولاد گیلان">فولاد گیلان</option>
+            <option value="فولاد سبا">فولاد سبا</option>
+            <option value="وارداتی (روس / چین / اروپا)">ورق وارداتی (روس / چین / اروپا)</option>
+            <option value="متفرقه / تایید کارشناس متالیکس">متفرقه (طبق تایید متالیکس)</option>
+            <option value="مهم نیست / آزاد">مهم نیست / برند آزاد</option>
+            <option value="سایر">سایر (ذکر در توضیحات)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid-row">
+        <div class="form-group">
+          <label>فرآیند ساخت درخواستی *</label>
+          <select id="process" required>
+            <option value="برش لیزر و خم‌کاری CNC">برش لیزر و خم‌کاری CNC</option>
+            <option value="تراشکاری و فرزکاری CNC">تراشکاری و فرزکاری CNC</option>
+            <option value="واترجت / پلاسما">واترجت / پلاسما</option>
+            <option value="جوشکاری تخصصی و مونتاژ سازه">جوشکاری تخصصی و مونتاژ سازه</option>
+            <option value="تولید کامل بر اساس نقشه">تولید کامل بر اساس نقشه فنی</option>
+          </select>
         </div>
 
-        <div class="row">
-          <div class="field">
-            <label>مهلت تحویل مدنظر (روز)</label>
-            <input id="f_delivery_days" type="number" min="1" placeholder="مثال: 15">
+        <div class="grid-row" style="margin-bottom:0">
+          <div class="form-group">
+            <label>تعداد قطعه *</label>
+            <input type="number" id="quantity" min="1" value="1" required>
           </div>
-          <div class="field">
-            <label>شهر محل تحویل</label>
-            <input id="f_city" type="text" placeholder="مثال: شیراز / تهران">
+          <div class="form-group">
+            <label>مهلت تحویل (روز)</label>
+            <input type="number" id="deliveryDays" min="1" placeholder="مثال: ۱۰">
           </div>
         </div>
+      </div>
 
-        <div class="field">
-            <label>توضیحات و تلرانس‌های فنی</label>
-            <textarea id="f_notes" placeholder="استانداردها، الزامات بازرسی، تست متریال (MTC) و جزئیات نقشه..."></textarea>
-            <div class="hint" style="margin-top: 4px;">رعایت قوانین بازار کور (Blind Marketplace): اطلاعات هویتی خریدار درج نشود.</div>
-        </div>
+      <div class="form-group">
+        <label>فایل نقشه فنی / CAD (اختیاری)</label>
+        <input type="file" id="cadFile" accept=".pdf,.dxf,.dwg,.step,.stp,.zip,.rar,.png,.jpg">
+      </div>
 
-        <div class="field">
-          <label>پیوست نقشه (PDF / DWG / STEP / ZIP)</label>
-          <input id="f_files" type="file" multiple>
-        </div>
+      <div class="form-group">
+        <label>شرح تکمیلی، تلورانس، یا مشخصات خاص برند</label>
+        <textarea id="notes" rows="3" placeholder="هرگونه الزامات ابعادی، تست متریال، آنالیز کوانتومتری، یا توضیحات برند را اینجا بنویسید..."></textarea>
+      </div>
 
-        <button class="btn" id="btnSubmit" type="submit" disabled>ثبت نهایی استعلام و دریافت کد رهگیری</button>
-        
-        <div id="submitStatus" class="status-box"></div>
-      </form>
-    </section>
+      <button type="submit" class="btn-submit" id="submitBtn">ثبت فوری استعلام و صدور کد رهگیری</button>
+    </form>
+
+    <div class="result-box" id="resultBox"></div>
   </div>
 
   <script>
-    // تنظیمات اتصال به Supabase (لطفاً کلید anon واقعی پروژه خود را جایگزین کنید)
     const SUPABASE_URL = "https://gndxhgtgnuefmwqdzdss.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_9lmT4IxeqEix7MmQJd07_A_cYeHr6SI"; // <--- کلید صحیح خود را اینجا بگذارید
+    const SUPABASE_ANON_KEY = "GAPGPTMASKTOKENfjiitcfnqhiX0X"; // کلید پابلیش شما
+    const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const form = document.getElementById('rfqForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const resultBox = document.getElementById('resultBox');
 
-    const $ = (id) => document.getElementById(id);
-
-    function setStatus(type, html) {
-      const el = $("submitStatus");
-      if (!el) return;
-      el.style.display = "block";
-      el.className = "status-box " + (type === "ok" ? "ok" : type === "err" ? "err" : "");
-      el.innerHTML = html;
-    }
-
-    async function refreshAuthUI() {
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-          $("authLabel").textContent = user.email;
-          $("btnSignIn").style.display = "none";
-          $("btnSignOut").style.display = "inline-flex";
-          $("btnSubmit").disabled = false;
-        } else {
-          $("authLabel").textContent = "وارد نشده‌اید";
-          $("btnSignIn").style.display = "inline-flex";
-          $("btnSignOut").style.display = "none";
-          $("btnSubmit").disabled = true;
-        }
-      } catch (err) {
-        console.error("Auth status error:", err);
-      }
-    }
-
-    $("btnSignIn").addEventListener("click", async () => {
-      const email = prompt("لطفاً ایمیل خود را برای ورود وارد کنید:");
-      if (!email) return;
-
-      try {
-        const { error } = await supabase.auth.signInWithOtp({ email });
-        if (error) {
-          alert("خطا در ورود: " + error.message);
-        } else {
-          alert("لینک ورود به ایمیل شما ارسال شد! لطفاً صندوق پستی خود را بررسی کنید.");
-        }
-      } catch (err) {
-        alert("خطای سیستمی در ارسال لینک ورود: " + err.message);
-      }
-    });
-
-    $("btnSignOut").addEventListener("click", async () => {
-      await supabase.auth.signOut();
-      await refreshAuthUI();
-    });
-
-    // ثبت فرم RFQ
-    $("rfqForm").addEventListener("submit", async (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        alert("لطفاً ابتدا وارد سیستم شوید.");
-        return;
-      }
-
-      $("btnSubmit").disabled = true;
-      setStatus("", "در حال ثبت استعلام و آپلود پیوست‌ها...");
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'در حال ثبت در شبکه متالیکس...';
+      resultBox.style.display = 'none';
 
       try {
+        let uploadedFilePath = null;
+        const fileInput = document.getElementById('cadFile');
+        if (fileInput.files.length > 0) {
+          const file = fileInput.files[0];
+          const fileName = `${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
+          const { data: uploadData, error: uploadErr } = await client.storage
+            .from('rfq-files')
+            .upload(fileName, file);
+
+          if (!uploadErr && uploadData) {
+            uploadedFilePath = uploadData.path;
+          }
+        }
+
         const payload = {
-          title: $("f_title").value.trim(),
-          process: $("f_process").value,
-          material: $("f_material").value.trim() || null,
-          quantity: $("f_qty").value ? Number($("f_qty").value) : null,
-          delivery_days: $("f_delivery_days").value ? Number($("f_delivery_days").value) : null,
-          city: $("f_city").value.trim() || null,
-          notes: $("f_notes").value.trim() || null,
-          customer_user_id: user.id,
-          status: "new"
+          title: document.getElementById('projectTitle').value.trim(),
+          city: document.getElementById('city').value.trim(),
+          material: document.getElementById('material').value,
+          raw_material_brand: document.getElementById('materialBrand').value,
+          process: document.getElementById('process').value,
+          quantity: parseInt(document.getElementById('quantity').value) || 1,
+          delivery_days: parseInt(document.getElementById('deliveryDays').value) || null,
+          notes: document.getElementById('notes').value.trim(),
+          files: uploadedFilePath ? [uploadedFilePath] : null,
+          status: 'new'
         };
 
-        const { data: rfqRow, error: rfqErr } = await supabase
-          .from("rfqs")
-          .insert(payload)
-          .select("*")
-          .single();
+        const { data, error } = await client
+          .from('rfqs')
+          .insert([payload])
+          .select();
 
-        if (rfqErr) throw rfqErr;
+        if (error) throw error;
 
-        const trackingCode = rfqRow.tracking_code || "MTX-2026-XXXX";
+        const inserted = data && data[0];
+        const tracking = inserted?.tracking_code || 'در سامانه ثبت شد';
 
-        // آپلود فایل‌ها در باکت rfq-files
-        const files = $("f_files").files ? Array.from($("f_files").files) : [];
-        for (const file of files) {
-          const path = `rfqs/${rfqRow.id}/${Date.now()}-${file.name}`;
-          await supabase.storage.from("rfq-files").upload(path, file);
-          
-          await supabase.from("order_attachments").insert({
-            rfq_id: rfqRow.id,
-            bucket_id: "rfq-files",
-            object_path: path,
-            file_name: file.name,
-            file_size: file.size,
-            uploaded_by: user.id
-          });
-        }
-
-        setStatus("ok", `
+        resultBox.className = 'result-box success';
+        resultBox.style.display = 'block';
+        resultBox.innerHTML = `
           <strong>استعلام شما با موفقیت ثبت شد!</strong><br>
-          کد رهگیری: <span class="mono" style="font-weight:700;">${trackingCode}</span><br>
-          شناسه رکورد: <span class="mono">${rfqRow.id}</span>
-        `);
-        $("rfqForm").reset();
+          کد رهگیری یکتا شما جهت پیگیری:
+          <div class="tracking-badge">${tracking}</div>
+          <p style="margin-top:8px;font-size:12px;color:#94a3b8">این سفارش مستقیماً در پنل کارشناسی ادمین قابل مشاهده است.</p>
+        `;
 
+        form.reset();
       } catch (err) {
-        setStatus("err", "خطا در ثبت استعلام: " + err.message);
+        console.error(err);
+        resultBox.className = 'result-box error';
+        resultBox.style.display = 'block';
+        resultBox.textContent = 'خطا در ثبت استعلام: ' + (err.message || 'لطفاً دوباره تلاش کنید.');
       } finally {
-        $("btnSubmit").disabled = false;
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'ثبت فوری استعلام و صدور کد رهگیری';
       }
     });
-
-    supabase.auth.onAuthStateChange(() => refreshAuthUI());
-    refreshAuthUI();
   </script>
 </body>
 </html>
