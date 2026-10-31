@@ -456,9 +456,8 @@ if (filesRaw) {
     try {
         let filePath = typeof filesRaw === 'string' ? JSON.parse(filesRaw)[0] : filesRaw[0];
         if (filePath) {
-            // ساخت لینک عمومی یا موقت از باکت rfq-files در Supabase
             const publicUrl = `https://gndxhgtgnuefmwqdzdss.supabase.co/storage/v1/object/public/rfq-files/${filePath}`;
-            fileLink = `<a href="${publicUrl}" target="_blank" style="color: #38bdf8; text-decoration: underline;">مشاهده / دانلود نقشه (${filePath})</a>`;
+            fileLink = `<a href="${publicUrl}" target="_blank" style="color: #38bdf8; text-decoration: underline; font-weight: bold;">📥 دانلود فایل نقشه</a>`;
         }
     } catch (e) {
         fileLink = filesRaw;
