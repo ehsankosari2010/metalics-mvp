@@ -4,56 +4,219 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>METALICS | Admin & Expert Panel</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <style>
-        * { box-sizing: border-box; font-family: 'Vazirmatn', sans-serif; }
-        body { margin: 0; background: #0b1120; color: #f3f4f6; padding: 20px; line-height: 1.6; }
-        header { display: flex; justify-content: space-between; align-items: center; background: #111827; padding: 15px 25px; border-radius: 12px; border: 1px solid #1f2937; margin-bottom: 25px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
-        h1 { margin: 0; font-size: 1.3rem; color: #38bdf8; letter-spacing: -0.025em; }
-        .main-container { display: grid; grid-template-columns: 350px 1fr; gap: 20px; }
-        @media(max-width: 1024px) { .main-container { grid-template-columns: 1fr; } }
-        .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 20px; height: fit-content; }
-        h3 { margin-top: 0; border-bottom: 1px solid #1f2937; padding-bottom: 10px; color: #e5e7eb; font-size: 1.1rem; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 14px; text-align: right; border-bottom: 1px solid #1f2937; font-size: 0.85rem; }
-        th { color: #9ca3af; font-weight: 500; background: #161e2e; }
-        tr:hover { background: #1f2937; cursor: pointer; transition: 0.2s; }
-        .btn { background: #38bdf8; color: #0b0f19; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn:hover { background: #7dd3fc; transform: translateY(-1px); }
-        .kv { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #1f2937; }
-        .kv .k { color: #9ca3af; font-size: 0.85rem; }
-        .kv .v { color: #f3f4f6; font-weight: 500; font-size: 0.9rem; text-align: left; }
-        .status-badge { padding: 4px 10px; border-radius: 6px; background: #1e3a8a; color: #93c5fd; font-size: 0.75rem; font-weight: bold; }
-        .mono { font-family: 'Courier New', Courier, monospace; direction: ltr; color: #38bdf8; font-weight: bold; }
-        .file-link { display: inline-block; margin-top: 10px; padding: 8px 15px; background: #0369a1; color: white; border-radius: 6px; text-decoration: none; font-size: 0.85rem; width: 100%; text-align: center; }
-        .file-link:hover { background: #075985; }
-        #loading-overlay { text-align: center; padding: 50px; color: #9ca3af; }
+        * {
+            box-sizing: border-box;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: #0b1120;
+            color: #f3f4f6;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            background: #111827;
+            padding: 15px 25px;
+            border-radius: 12px;
+            border: 1px solid #1f2937;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.3rem;
+            color: #38bdf8;
+            letter-spacing: -0.025em;
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+
+        .card {
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 12px;
+            padding: 20px;
+            height: fit-content;
+        }
+
+        h3 {
+            margin-top: 0;
+            border-bottom: 1px solid #1f2937;
+            padding-bottom: 10px;
+            color: #e5e7eb;
+            font-size: 1.1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: right;
+            border-bottom: 1px solid #1f2937;
+            font-size: 0.85rem;
+        }
+
+        th {
+            color: #9ca3af;
+            font-weight: 500;
+            background: #161e2e;
+        }
+
+        tbody tr:hover {
+            background: #1f2937;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn {
+            background: #38bdf8;
+            color: #0b0f19;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #7dd3fc;
+            transform: translateY(-1px);
+        }
+
+        .kv {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #1f2937;
+        }
+
+        .kv .k {
+            color: #9ca3af;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .kv .v {
+            color: #f3f4f6;
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-align: left;
+            overflow-wrap: anywhere;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            background: #1e3a8a;
+            color: #93c5fd;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .mono {
+            font-family: 'Courier New', Courier, monospace;
+            direction: ltr;
+            color: #38bdf8;
+            font-weight: bold;
+        }
+
+        .file-link {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 15px;
+            background: #0369a1;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            width: 100%;
+            text-align: center;
+        }
+
+        .file-link:hover {
+            background: #075985;
+        }
+
+        .message-cell {
+            text-align: center;
+            padding: 25px;
+            color: #9ca3af;
+        }
+
+        .error-cell {
+            color: #ef4444;
+        }
+
+        .notes-box {
+            text-align: right;
+            font-size: 0.8rem;
+            background: #161e2e;
+            padding: 10px;
+            border-radius: 8px;
+            color: #f3f4f6;
+            overflow-wrap: anywhere;
+        }
     </style>
 </head>
-<body>
 
+<body>
     <header>
         <div>
             <h1>METALICS — Admin & Expert Panel</h1>
-            <div style="font-size: 0.8rem; color: #6b7280; margin-top: 5px;">پویا نوین سازه | مدیریت متمرکز استعلام‌ها</div>
+            <div style="font-size:0.8rem; color:#6b7280; margin-top:5px;">
+                پویا نوین سازه | مدیریت متمرکز استعلام‌ها
+            </div>
         </div>
-        <button class="btn" onclick="fetchData()">🔄 رفرش لیست</button>
+        <button class="btn" id="refresh-button" type="button">🔄 رفرش لیست</button>
     </header>
 
     <div class="main-container">
-        <!-- پنل جزئیات (سمت راست در موبایل، سمت چپ در دسکتاپ) -->
         <div class="card" id="details-panel">
             <h3>جزئیات استعلام</h3>
             <div id="details-content">
-                <p style="color: #6b7280; text-align: center; font-size: 0.85rem;">یک ردیف را برای مشاهده انتخاب کنید.</p>
+                <p style="color:#6b7280; text-align:center; font-size:0.85rem;">
+                    یک ردیف را برای مشاهده انتخاب کنید.
+                </p>
             </div>
         </div>
 
-        <!-- پنل لیست اصلی -->
         <div class="card">
             <h3>لیست RFQهای دریافتی</h3>
-            <div style="overflow-x: auto;">
+            <div style="overflow-x:auto;">
                 <table>
                     <thead>
                         <tr>
@@ -65,7 +228,9 @@
                         </tr>
                     </thead>
                     <tbody id="rfq-list">
-                        <tr><td colspan="5" id="loading-overlay">در حال برقراری ارتباط با دیتابیس...</td></tr>
+                        <tr>
+                            <td colspan="5" class="message-cell">در حال برقراری ارتباط با دیتابیس...</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -73,80 +238,294 @@
     </div>
 
     <script>
-        // تنظیمات اتصال مستقیم به Supabase احسان
+        // آدرس پروژه Supabase
         const SB_URL = "https://gndxhgtgnuefmwqdzdss.supabase.co";
-        // کلید ANON شما (برگرفته از تنظیمات صحیح پروژه)
-        const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImduZHhoZ3RnbnVlZm13cWR6ZHNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjk5NTI1NzUsImV4cCI6MjA0NTUzMDU3NX0.zY7mU7X-vX16FmK6uK6E7X-vX16FmK6uK6E";
-        
-        const client = supabase.createClient(SB_URL, SB_KEY);
 
-        async function fetchData() {
-            const listBody = document.getElementById('rfq-list');
-            listBody.innerHTML = '<tr><td colspan="5" id="loading-overlay">در حال بارگذاری...</td></tr>';
+        // کلید عمومی anon/publishable همین پروژه را نگه دار.
+        // از service_role یا کلید secret در فایل HTML استفاده نکن.
+        const SB_KEY = "GAPGPTMASKTOKENqitkzl7z7dX0X";
 
-            const { data, error } = await client
-                .from('rfqs')
-                .select('*')
-                .order('created_at', { ascending: false });
+        const listBody = document.getElementById("rfq-list");
+        const detailsContent = document.getElementById("details-content");
+        const refreshButton = document.getElementById("refresh-button");
 
-            if (error) {
-                listBody.innerHTML = `<tr><td colspan="5" style="color:#ef4444; text-align:center;">خطا: ${error.message}</td></tr>`;
-                return;
-            }
+        function showTableMessage(message, isError = false) {
+            listBody.replaceChildren();
 
-            listBody.innerHTML = '';
-            data.forEach(item => {
-                const tr = document.createElement('tr');
-                tr.onclick = () => renderDetails(item);
-                tr.innerHTML = `
-                    <td class="mono">${item.tracking_code || item.id.substring(0,8)}</td>
-                    <td>${item.title || item.project_title || 'بدون عنوان'}</td>
-                    <td>${item.city || '-'}</td>
-                    <td><span class="status-badge">${item.status || 'جدید'}</span></td>
-                    <td style="direction: ltr; font-size: 0.75rem; color: #6b7280;">${new Date(item.created_at).toLocaleDateString('fa-IR')}</td>
-                `;
-                listBody.appendChild(tr);
-            });
+            const row = document.createElement("tr");
+            const cell = document.createElement("td");
+
+            cell.colSpan = 5;
+            cell.className = isError
+                ? "message-cell error-cell"
+                : "message-cell";
+            cell.textContent = message;
+
+            row.appendChild(cell);
+            listBody.appendChild(row);
         }
 
-        function renderDetails(item) {
-            const container = document.getElementById('details-content');
-            
-            // استخراج هوشمند فایل از JSON یا فیلد متنی
-            let fileHtml = '<span style="color:#6b7280;">بدون فایل</span>';
-            const raw = item.raw || {};
-            const potentialFile = raw.files || raw.attachments || item.file_url || item.file_path;
+        function getDisplayValue(value, fallback = "-") {
+            if (value === null || value === undefined || value === "") {
+                return fallback;
+            }
 
-            if (potentialFile) {
-                let path = "";
+            if (typeof value === "object") {
+                return JSON.stringify(value);
+            }
+
+            return String(value);
+        }
+
+        function addCell(row, text, className = "") {
+            const cell = document.createElement("td");
+            cell.textContent = text;
+
+            if (className) {
+                cell.className = className;
+            }
+
+            row.appendChild(cell);
+            return cell;
+        }
+
+        function getRawData(item) {
+            if (!item.raw) return {};
+
+            if (typeof item.raw === "object") {
+                return item.raw;
+            }
+
+            if (typeof item.raw === "string") {
                 try {
-                    path = Array.isArray(potentialFile) ? potentialFile[0] : (typeof potentialFile === 'string' && potentialFile.startsWith('[') ? JSON.parse(potentialFile)[0] : potentialFile);
-                } catch(e) { path = potentialFile; }
-
-                if (path) {
-                    const url = `${SB_URL}/storage/v1/object/public/rfq-files/${path}`;
-                    fileHtml = `<a href="${url}" target="_blank" class="file-link">📥 دانلود فایل نقشه</a>`;
+                    return JSON.parse(item.raw);
+                } catch {
+                    return {};
                 }
             }
 
-            container.innerHTML = `
-                <div class="kv"><div class="k">عنوان</div><div class="v">${item.title || item.project_title || '-'}</div></div>
-                <div class="kv"><div class="k">متریال</div><div class="v">${item.material || raw.material || '-'}</div></div>
-                <div class="kv"><div class="k">فرآیند</div><div class="v">${item.process || raw.process || '-'}</div></div>
-                <div class="kv"><div class="k">تعداد</div><div class="v">${item.quantity || raw.quantity || '-'}</div></div>
-                <div class="kv"><div class="k">شهر</div><div class="v">${item.city || '-'}</div></div>
-                <div class="kv" style="flex-direction:column; border:none;">
-                    <div class="k" style="margin-bottom:5px;">توضیحات:</div>
-                    <div class="v" style="text-align:right; font-size:0.8rem; background:#161e2e; padding:10px; border-radius:8px;">${item.notes || raw.notes || '---'}</div>
-                </div>
-                <div style="margin-top:20px;">
-                    ${fileHtml}
-                </div>
-            `;
+            return {};
         }
 
-        // اجرای خودکار در بدو ورود
-        window.onload = fetchData;
+        async function fetchData() {
+            if (!window.supabase || !window.supabase.createClient) {
+                showTableMessage(
+                    "کتابخانه Supabase بارگذاری نشد. اتصال اینترنت یا دسترسی به CDN را بررسی کن.",
+                    true
+                );
+                return;
+            }
+
+            showTableMessage("در حال بارگذاری...");
+
+            try {
+                const client = window.supabase.createClient(SB_URL, SB_KEY);
+
+                const { data, error } = await client
+                    .from("rfqs")
+                    .select("*")
+                    .order("created_at", { ascending: false });
+
+                if (error) {
+                    console.error("Supabase error:", error);
+
+                    const message = String(error.message || "");
+
+                    if (message.toLowerCase().includes("invalid api key")) {
+                        showTableMessage(
+                            "کلید API پذیرفته نشد. آدرس پروژه و کلید عمومی anon/publishable همان پروژه را بررسی کن.",
+                            true
+                        );
+                    } else {
+                        showTableMessage("خطا در دریافت اطلاعات: " + message, true);
+                    }
+
+                    return;
+                }
+
+                if (!Array.isArray(data) || data.length === 0) {
+                    showTableMessage("هنوز استعلامی ثبت نشده است.");
+                    return;
+                }
+
+                listBody.replaceChildren();
+
+                data.forEach((item) => {
+                    const row = document.createElement("tr");
+                    row.addEventListener("click", () => renderDetails(item));
+
+                    const trackingCode =
+                        item.tracking_code ||
+                        (item.id ? String(item.id).slice(0, 8) : "-");
+
+                    const title =
+                        item.title ||
+                        item.project_title ||
+                        "بدون عنوان";
+
+                    const city = item.city || "-";
+                    const status = item.status || "جدید";
+
+                    let dateText = "-";
+                    if (item.created_at) {
+                        const date = new Date(item.created_at);
+                        if (!Number.isNaN(date.getTime())) {
+                            dateText = date.toLocaleDateString("fa-IR");
+                        }
+                    }
+
+                    addCell(row, String(trackingCode), "mono");
+                    addCell(row, String(title));
+                    addCell(row, String(city));
+
+                    const statusCell = document.createElement("td");
+                    const badge = document.createElement("span");
+                    badge.className = "status-badge";
+                    badge.textContent = String(status);
+                    statusCell.appendChild(badge);
+                    row.appendChild(statusCell);
+
+                    const dateCell = addCell(row, dateText);
+                    dateCell.style.direction = "ltr";
+                    dateCell.style.fontSize = "0.75rem";
+                    dateCell.style.color = "#6b7280";
+
+                    listBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error("Unexpected error:", error);
+                showTableMessage(
+                    "خطای غیرمنتظره در اتصال. اینترنت و تنظیمات Supabase را بررسی کن.",
+                    true
+                );
+            }
+        }
+
+        function addDetailRow(label, value) {
+            const row = document.createElement("div");
+            row.className = "kv";
+
+            const key = document.createElement("div");
+            key.className = "k";
+            key.textContent = label;
+
+            const val = document.createElement("div");
+            val.className = "v";
+            val.textContent = getDisplayValue(value);
+
+            row.append(key, val);
+            detailsContent.appendChild(row);
+        }
+
+        function getFileCandidate(item, raw) {
+            let candidate =
+                raw.files ||
+                raw.attachments ||
+                item.file_url ||
+                item.file_path ||
+                item.file ||
+                null;
+
+            if (!candidate) return null;
+
+            if (Array.isArray(candidate)) {
+                candidate = candidate[0];
+            }
+
+            if (typeof candidate === "string" && candidate.trim().startsWith("[")) {
+                try {
+                    const parsed = JSON.parse(candidate);
+                    candidate = Array.isArray(parsed) ? parsed[0] : parsed;
+                } catch {
+                    // اگر JSON نبود، همان مقدار متنی بررسی می‌شود.
+                }
+            }
+
+            if (candidate && typeof candidate === "object") {
+                candidate =
+                    candidate.url ||
+                    candidate.publicUrl ||
+                    candidate.path ||
+                    candidate.name ||
+                    null;
+            }
+
+            return typeof candidate === "string" ? candidate.trim() : null;
+        }
+
+        function renderDetails(item) {
+            detailsContent.replaceChildren();
+
+            const raw = getRawData(item);
+
+            addDetailRow("عنوان", item.title || item.project_title);
+            addDetailRow("متریال", item.material || raw.material);
+            addDetailRow("فرآیند", item.process || raw.process);
+            addDetailRow("تعداد", item.quantity || raw.quantity);
+            addDetailRow("شهر", item.city);
+
+            const notesRow = document.createElement("div");
+            notesRow.className = "kv";
+            notesRow.style.flexDirection = "column";
+            notesRow.style.border = "none";
+
+            const notesLabel = document.createElement("div");
+            notesLabel.className = "k";
+            notesLabel.style.marginBottom = "5px";
+            notesLabel.textContent = "توضیحات:";
+
+            const notesValue = document.createElement("div");
+            notesValue.className = "notes-box";
+            notesValue.textContent = getDisplayValue(
+                item.notes || raw.notes,
+                "---"
+            );
+
+            notesRow.append(notesLabel, notesValue);
+            detailsContent.appendChild(notesRow);
+
+            const fileContainer = document.createElement("div");
+            fileContainer.style.marginTop = "20px";
+
+            const candidate = getFileCandidate(item, raw);
+
+            if (candidate) {
+                let fileUrl;
+
+                if (/^https?:\/\//i.test(candidate)) {
+                    fileUrl = candidate;
+                } else {
+                    const safePath = candidate
+                        .replace(/^\/+/, "")
+                        .split("/")
+                        .map((part) => encodeURIComponent(part))
+                        .join("/");
+
+                    fileUrl =
+                        SB_URL +
+                        "/storage/v1/object/public/rfq-files/" +
+                        safePath;
+                }
+
+                const link = document.createElement("a");
+                link.href = fileUrl;
+                link.target = "_blank";
+                link.rel = "noopener noreferrer";
+                link.className = "file-link";
+                link.textContent = "📥 دانلود فایل نقشه";
+                fileContainer.appendChild(link);
+            } else {
+                const noFile = document.createElement("span");
+                noFile.style.color = "#6b7280";
+                noFile.textContent = "بدون فایل";
+                fileContainer.appendChild(noFile);
+            }
+
+            detailsContent.appendChild(fileContainer);
+        }
+
+        refreshButton.addEventListener("click", fetchData);
+        document.addEventListener("DOMContentLoaded", fetchData);
     </script>
 </body>
 </html>
