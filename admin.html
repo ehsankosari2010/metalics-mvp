@@ -1,527 +1,177 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>METALICS | Admin & Expert Panel</title>
-
-  <!-- Vazirmatn (Persian RTL) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- Supabase JS v2 -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <style>
-    :root{
-      --bg:#0b1220;
-      --panel:#0f1b33;
-      --panel2:#0c162c;
-      --text:#e8eefc;
-      --muted:#a8b3cc;
-      --brand:#3aa0ff;
-      --ok:#2dd4bf;
-      --warn:#fbbf24;
-      --bad:#fb7185;
-      --border:rgba(255,255,255,.10);
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:"Vazirmatn", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: radial-gradient(1200px 600px at 80% -10%, rgba(58,160,255,.20), transparent 60%),
-                  radial-gradient(900px 600px at 0% 0%, rgba(45,212,191,.14), transparent 55%),
-                  var(--bg);
-      color:var(--text);
-    }
-    a{color:inherit}
-    .container{max-width:1200px;margin:0 auto;padding:20px}
-    .topbar{
-      display:flex;align-items:center;justify-content:space-between;gap:12px;
-      padding:14px 16px;border:1px solid var(--border);border-radius:14px;
-      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      box-shadow:var(--shadow);
-    }
-    .brand{display:flex;flex-direction:column;gap:4px}
-    .brand .title{font-weight:800;letter-spacing:.4px}
-    .brand .sub{font-size:12px;color:var(--muted)}
-    .actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .pill{
-      font-size:12px;color:var(--muted);
-      border:1px solid var(--border);padding:8px 10px;border-radius:999px;
-      background:rgba(255,255,255,.04);
-    }
-    .btn{
-      cursor:pointer;border:none;border-radius:12px;
-      padding:10px 12px;font-weight:700;
-      background:rgba(58,160,255,.16);
-      color:var(--text);
-      border:1px solid rgba(58,160,255,.35);
-    }
-    .btn:hover{filter:brightness(1.08)}
-    .btn.secondary{
-      background:rgba(255,255,255,.06);
-      border:1px solid var(--border);
-      font-weight:700;
-    }
-    .grid{
-      display:grid;
-      grid-template-columns: 1.4fr .9fr;
-      gap:16px;
-      margin-top:16px;
-      align-items:start;
-    }
-    @media (max-width: 980px){
-      .grid{grid-template-columns:1fr}
-    }
-    .card{
-      border:1px solid var(--border);
-      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.025));
-      border-radius:16px;
-      box-shadow:var(--shadow);
-      overflow:hidden;
-    }
-    .card-header{
-      padding:14px 16px;
-      display:flex;align-items:center;justify-content:space-between;gap:12px;
-      border-bottom:1px solid var(--border);
-      background:rgba(0,0,0,.10);
-    }
-    .card-header h2{margin:0;font-size:14px}
-    .card-body{padding:14px 16px}
-    .row{display:flex;gap:10px;flex-wrap:wrap}
-    .input, .select{
-      padding:10px 12px;border-radius:12px;
-      border:1px solid var(--border);
-      background:rgba(0,0,0,.20);
-      color:var(--text);
-      min-width:200px;
-      outline:none;
-    }
-    .select{min-width:180px}
-    .muted{color:var(--muted)}
-    .small{font-size:12px}
-    table{width:100%;border-collapse:collapse}
-    thead th{
-      text-align:right;
-      font-size:12px;
-      color:var(--muted);
-      padding:10px 8px;
-      border-bottom:1px solid var(--border);
-      font-weight:700;
-    }
-    tbody td{
-      padding:10px 8px;border-bottom:1px solid rgba(255,255,255,.06);
-      vertical-align:top;
-      font-size:13px;
-    }
-    tbody tr:hover{background:rgba(255,255,255,.03)}
-    .tag{
-      display:inline-flex;align-items:center;gap:6px;
-      padding:6px 10px;border-radius:999px;font-weight:800;font-size:12px;
-      border:1px solid var(--border);
-      background:rgba(255,255,255,.04);
-      white-space:nowrap;
-    }
-    .dot{width:8px;height:8px;border-radius:50%}
-    .tag.new .dot{background:var(--brand)}
-    .tag.reviewing .dot{background:var(--warn)}
-    .tag.quoted .dot{background:var(--ok)}
-    .tag.closed .dot{background:var(--bad)}
-    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
-    .split{
-      display:grid;grid-template-columns:1fr 1fr;gap:10px
-    }
-    @media (max-width: 700px){ .split{grid-template-columns:1fr} }
-    .kv{
-      border:1px solid rgba(255,255,255,.08);
-      background:rgba(0,0,0,.18);
-      border-radius:14px;
-      padding:10px 12px;
-    }
-    .kv .k{font-size:12px;color:var(--muted);margin-bottom:4px}
-    .kv .v{font-size:13px}
-    .hr{height:1px;background:rgba(255,255,255,.08);margin:12px 0}
-    .toast{
-      position:fixed;left:16px;bottom:16px;right:16px;
-      max-width:1200px;margin:0 auto;
-      display:none;
-      padding:12px 14px;border-radius:14px;
-      border:1px solid var(--border);
-      background:rgba(10,16,30,.92);
-      box-shadow:var(--shadow);
-      color:var(--text);
-    }
-    .toast.show{display:block}
-    .toast .t{font-weight:800;margin-bottom:4px}
-    .toast .d{font-size:12px;color:var(--muted)}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>METALICS | Admin & Expert Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * { box-sizing: border-box; font-family: 'Vazirmatn', sans-serif; }
+        body { margin: 0; background: #0b0f19; color: #f3f4f6; padding: 20px; }
+        header { display: flex; justify-content: space-between; align-items: center; background: #111827; padding: 15px 25px; border-radius: 12px; border: 1px solid #1f2937; margin-bottom: 20px; }
+        h1 { margin: 0; font-size: 1.2rem; color: #38bdf8; }
+        .main-container { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+        @media(max-width: 900px) { .main-container { grid-template-columns: 1fr; } }
+        .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 12px; text-align: right; border-bottom: 1px solid #1f2937; font-size: 0.9rem; }
+        th { color: #9ca3af; }
+        tr:hover { background: #1f2937; cursor: pointer; }
+        .btn { background: #38bdf8; color: #0b0f19; border: none; padding: 8px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .btn:hover { background: #0ea5e9; }
+        .btn.secondary { background: #374151; color: #f3f4f6; }
+        .btn.secondary:hover { background: #4b5563; }
+        .kv { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #1f2937; font-size: 0.9rem; }
+        .kv .k { color: #9ca3af; }
+        .kv .v { color: #f3f4f6; font-weight: 500; }
+        .mono { font-family: monospace; direction: ltr; text-align: left; }
+    </style>
 </head>
-
 <body>
-  <div class="container">
-    <div class="topbar">
-      <div class="brand">
-        <div class="title">METALICS — Admin & Expert Panel</div>
-        <div class="sub">پنل کارشناسان/ادمین | مدیریت RFQها (طبق Blueprint: Buyers ↔ Suppliers ↔ Expert/Admin)</div>
-      </div>
-      <div class="actions">
-        <div class="pill" id="authState">Auth: unknown</div>
-        <button class="btn secondary" id="btnRefresh">ریفرش</button>
-        <button class="btn" id="btnLogin">ورود</button>
-        <button class="btn secondary" id="btnLogout" style="display:none">خروج</button>
-      </div>
+
+    <header>
+        <div>
+            <h1>METALICS — Admin & Expert Panel</h1>
+            <div style="font-size: 0.8rem; color: #9ca3af; margin-top: 4px;">پنل کارشناسان/ادمین | مدیریت RFQها</div>
+        </div>
+        <div>
+            <button class="btn secondary" onclick="loadRfqs()">رفرش</button>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- جزئیات RFQ انتخابی -->
+        <div class="card">
+            <h3>جزئیات RFQ</h3>
+            <div id="selectedId" style="color: #9ca3af; font-size: 0.85rem; margin-bottom: 15px;">یک RFQ را از لیست انتخاب کن.</div>
+            <div id="detailsContent">
+                <div style="color: #6b7280; text-align: center; padding: 40px 0;">هنوز موردی انتخاب نشده است.</div>
+            </div>
+        </div>
+
+        <!-- لیست RFQها -->
+        <div class="card">
+            <h3>لیست RFQها</h3>
+            <div style="font-size: 0.8rem; color: #9ca3af; margin-bottom: 10px;">منبع داده: جدول rfqs در Supabase</div>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tracking</th>
+                            <th>عنوان</th>
+                            <th>شهر</th>
+                            <th>وضعیت</th>
+                            <th>تاریخ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rfqTableBody">
+                        <tr><td colspan="5" style="text-align: center; color: #9ca3af;">در حال بارگذاری...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
-    <div class="grid">
-      <!-- Left: RFQ List -->
-      <div class="card">
-        <div class="card-header">
-          <h2>لیست RFQها</h2>
-          <div class="row">
-            <input class="input" id="qSearch" placeholder="جستجو: کد رهگیری / عنوان / شهر ..." />
-            <select class="select" id="qStatus">
-              <option value="">همه وضعیت‌ها</option>
-              <option value="new">new</option>
-              <option value="reviewing">reviewing</option>
-              <option value="quoted">quoted</option>
-              <option value="closed">closed</option>
-            </select>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="row small muted" style="justify-content:space-between;margin-bottom:10px">
-            <div>منبع داده: جدول <span class="mono">rfqs</span> در Supabase</div>
-            <div id="countInfo">—</div>
-          </div>
+    <script>
+        // اتصال به Supabase
+        const SUPABASE_URL = "https://gndxhgtgnuefmwqdzdss.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImduZHhoZ3RnbnVlZm13cWR6ZHNzIiwicm9sZSI6ImFub24iLCJpYXQiOjM3MzI5X5V5Yw"; // کلید عمومی شما
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-          <div style="overflow:auto">
-            <table>
-              <thead>
-                <tr>
-                  <th>Tracking</th>
-                  <th>عنوان</th>
-                  <th>شهر</th>
-                  <th>وضعیت</th>
-                  <th>تاریخ</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="rfqTbody">
-                <tr><td colspan="6" class="muted">در حال بارگذاری…</td></tr>
-              </tbody>
-            </table>
-          </div>
+        let RFQS_CACHE = [];
+        let SELECTED = {};
 
-          <div class="hr"></div>
-
-          <div class="row small muted">
-            <div>اگر ستون‌های دیتابیس با این UI فرق دارند، فقط نام فیلدها را به من بگو تا دقیقاً مپ کنم.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right: RFQ Details -->
-      <div class="card">
-        <div class="card-header">
-          <h2>جزئیات RFQ</h2>
-          <div class="pill mono" id="selectedId">No selection</div>
-        </div>
-        <div class="card-body" id="detailsBox">
-          <div class="muted">یک RFQ را از لیست انتخاب کن.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="toast" id="toast">
-    <div class="t" id="toastTitle">—</div>
-    <div class="d" id="toastDesc">—</div>
-  </div>
-
-<script>
-  /**********************
-   * CONFIG (تو فقط این دو مقدار را چک کن)
-   **********************/
-  const SUPABASE_URL = window.SUPABASE_URL || "https://gndxhgtgnuefmwqdzdss.supabase.co";
-  const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImduZHhoZ3RnbnVlZm13cWR6ZHNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMxMTAwMjUsImV4cCI6MjEwODY4NjAyNX0.BzPBoaCL3jXnx0C5c7CKynt_sme1iLKRWYvCnoUBz80";
-
-  const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  /**********************
-   * Helpers
-   **********************/
-  const el = (id) => document.getElementById(id);
-
-  function toast(title, desc){
-    el("toastTitle").textContent = title;
-    el("toastDesc").textContent = desc || "";
-    el("toast").classList.add("show");
-    setTimeout(() => el("toast").classList.remove("show"), 3800);
-  }
-
-  function safe(v, fallback="—"){
-    if (v === null || v === undefined || v === "") return fallback;
-    return v;
-  }
-
-  function fmtDate(d){
-    try{
-      if(!d) return "—";
-      const dt = new Date(d);
-      if(String(dt) === "Invalid Date") return String(d);
-      return dt.toLocaleString("fa-IR");
-    }catch(e){
-      return String(d || "—");
-    }
-  }
-
-  function statusTag(statusRaw){
-    const s = String(statusRaw || "new").toLowerCase();
-    const map = {
-      "new": {cls:"new", label:"new"},
-      "reviewing": {cls:"reviewing", label:"reviewing"},
-      "quoted": {cls:"quoted", label:"quoted"},
-      "closed": {cls:"closed", label:"closed"},
-    };
-    const m = map[s] || {cls:"new", label:s};
-    return `<span class="tag ${m.cls}"><span class="dot"></span>${m.label}</span>`;
-  }
-
-  /**********************
-   * Auth (اختیاری برای MVP)
-   **********************/
-  async function updateAuthState(){
-    const { data } = await client.auth.getSession();
-    const session = data.session;
-    if(session){
-      el("authState").textContent = "Auth: signed-in";
-      el("btnLogin").style.display = "none";
-      el("btnLogout").style.display = "inline-block";
-    }else{
-      el("authState").textContent = "Auth: signed-out";
-      el("btnLogin").style.display = "inline-block";
-      el("btnLogout").style.display = "none";
-    }
-  }
-
-  async function login(){
-    const email = prompt("ایمیل ادمین/کارشناس را وارد کنید:");
-    if(!email) return;
-    const { error } = await client.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: window.location.origin + window.location.pathname }
-    });
-    if(error){
-      console.error(error);
-      toast("خطا در ورود", error.message);
-      return;
-    }
-    toast("لینک ورود ارسال شد", "ایمیل را چک کنید و سپس صفحه را ریفرش کنید.");
-  }
-
-  async function logout(){
-    const { error } = await client.auth.signOut();
-    if(error){
-      toast("خطا در خروج", error.message);
-      return;
-    }
-    toast("خروج انجام شد");
-    await updateAuthState();
-  }
-
-  /**********************
-   * Data access
-   **********************/
-  let RFQS_CACHE = [];
-  let SELECTED = null;
-
-  // IMPORTANT:
-  // این mapping برای سازگاری با دیتابیس‌های متفاوت است.
-  // اگر نام ستون‌ها در rfqs شما فرق دارد، فقط بگو تا همینجا دقیق اصلاح کنم.
-  function pickField(obj, keys){
-    for(const k of keys){
-      if(obj && Object.prototype.hasOwnProperty.call(obj, k) && obj[k] !== undefined){
-        return obj[k];
-      }
-    }
-    return null;
-  }
-
-  function normalizeRfq(r){
-    // Common candidates based on our earlier MVP + typical schema:
-    const id = pickField(r, ["id"]);
-    const tracking = pickField(r, ["tracking_code", "tracking", "track_code", "code", "rfq_code"]);
-    const title = pickField(r, ["title", "project_title", "subject", "name"]);
-    const city = pickField(r, ["city", "location_city", "delivery_city"]);
-    const status = pickField(r, ["status", "stage_status", "state"]);
-    const created = pickField(r, ["created_at", "createdAt", "inserted_at", "date"]);
-    return { raw:r, id, tracking, title, city, status, created };
-  }
-
-  async function fetchRfqs(){
-    el("rfqTbody").innerHTML = `<tr><td colspan="6" class="muted">در حال بارگذاری…</td></tr>`;
-
-    // Try minimal select to avoid breaking if columns differ
-    const { data, error } = await client
-      .from("rfqs")
-      .select("*")
-      .order("created_at", { ascending:false });
-
-    if(error){
-      console.error(error);
-      el("rfqTbody").innerHTML = `<tr><td colspan="6" class="muted">خطا: ${error.message}</td></tr>`;
-      toast("خطا در دریافت RFQها", error.message);
-      return;
-    }
-
-    RFQS_CACHE = (data || []).map(normalizeRfq);
-    renderList();
-    el("countInfo").textContent = `Count: ${RFQS_CACHE.length}`;
-  }
-
-  function renderList(){
-    const q = (el("qSearch").value || "").trim().toLowerCase();
-    const st = (el("qStatus").value || "").trim().toLowerCase();
-
-    let items = [...RFQS_CACHE];
-
-    if(st){
-      items = items.filter(x => String(x.status || "").toLowerCase() === st);
-    }
-
-    if(q){
-      items = items.filter(x => {
-        const hay = [
-          x.tracking, x.title, x.city,
-          pickField(x.raw, ["material","process","notes","description"])
-        ].join(" ").toLowerCase();
-        return hay.includes(q);
-      });
-    }
-
-    if(items.length === 0){
-      el("rfqTbody").innerHTML = `<tr><td colspan="6" class="muted">موردی یافت نشد.</td></tr>`;
-      return;
-    }
-
-    el("rfqTbody").innerHTML = items.map(x => {
-      return `
-        <tr>
-          <td class="mono">${safe(x.tracking, safe(x.id, "—"))}</td>
-          <td>${safe(x.title)}</td>
-          <td>${safe(x.city)}</td>
-          <td>${statusTag(x.status)}</td>
-          <td>${fmtDate(x.created)}</td>
-          <td>
-            <button class="btn secondary" onclick="window.__select('${x.id}')">باز کردن</button>
-          </td>
-        </tr>
-      `;
-    }).join("");
-  }
-
-  async function updateStatus(id, newStatus){
-    // Optimistic UI
-    toast("در حال ثبت وضعیت…", `status = ${newStatus}`);
-    const { error } = await client.from("rfqs").update({ status: newStatus }).eq("id", id);
-    if(error){
-      console.error(error);
-      toast("خطا در آپدیت وضعیت", error.message);
-      return;
-    }
-    toast("وضعیت ثبت شد", `status = ${newStatus}`);
-    await fetchRfqs();
-    // Keep details synced
-    const again = RFQS_CACHE.find(x => String(x.id) === String(id));
-    if(again) showDetails(again);
-  }
-
-  function showDetails(x){
-    SELECTED = x;
-    el("selectedId").textContent = safe(x.tracking, safe(x.id, "—"));
-
-    const r = x.raw || {};
-
-    const material = pickField(r, ["material","mat","metal","alloy"]);
-    const process  = pickField(r, ["process","manufacturing_process","service","method"]);
-    const qty      = pickField(r, ["quantity","qty","count"]);
-    const delivery = pickField(r, ["delivery_days","lead_time_days","delivery","lead_time"]);
-    const notes    = pickField(r, ["notes","description","details","reqs"]);
-    const filesRaw = pickField(r, ["files", "attachments", "file_paths"]);
-let fileLink = "فایلی پیوست نشده است";
-if (filesRaw) {
-    try {
-        let filePath = typeof filesRaw === 'string' ? JSON.parse(filesRaw)[0] : filesRaw[0];
-        if (filePath) {
-            const publicUrl = `https://gndxhgtgnuefmwqdzdss.supabase.co/storage/v1/object/public/rfq-files/${filePath}`;
-            fileLink = `<a href="${publicUrl}" target="_blank" style="color: #38bdf8; text-decoration: underline; font-weight: bold;">مشاهده و دانلود فایل نقشه</a>`;
+        function safe(v) { return v ? v : '-'; }
+        
+        function pickField(obj, keys) {
+            for (let k of keys) {
+                if (obj[k] !== undefined && obj[k] !== null) return obj[k];
+            }
+            return null;
         }
-    } catch (e) {
-        fileLink = filesRaw;
-    }
-}
 
-        <div class="kv"><div class="k">Status</div><div class="v">${statusTag(x.status)}</div></div>
+        async function loadRfqs() {
+            const tbody = document.getElementById('rfqTableBody');
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #9ca3af;">در حال بارگذاری...</td></tr>`;
+            
+            try {
+                const { data, error } = await supabaseClient
+                    .from('rfqs')
+                    .select('*')
+                    .order('created_at', { ascending: false });
 
-        <div class="kv"><div class="k">Title</div><div class="v">${safe(x.title)}</div></div>
-        <div class="kv"><div class="k">City</div><div class="v">${safe(x.city)}</div></div>
+                if (error) throw error;
 
-        <div class="kv"><div class="k">Material</div><div class="v">${safe(material)}</div></div>
-        <div class="kv"><div class="k">Process</div><div class="v">${safe(process)}</div></div>
+                RFQS_CACHE = data || [];
+                
+                if (RFQS_CACHE.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #9ca3af;">هیچ استعلامی یافت نشد.</td></tr>`;
+                    return;
+                }
 
-        <div class="kv"><div class="k">Quantity</div><div class="v">${safe(qty)}</div></div>
-        <div class="kv"><div class="k">Delivery / Lead time</div><div class="v">${safe(delivery)}</div></div>
+                tbody.innerHTML = '';
+                RFQS_CACHE.forEach(r => {
+                    const tr = document.createElement('tr');
+                    tr.onclick = () => showDetails(r);
+                    tr.innerHTML = `
+                        <td class="mono" style="color: #38bdf8; font-weight: bold;">${safe(r.tracking_code || r.id)}</td>
+                        <td>${safe(r.title || r.project_title)}</td>
+                        <td>${safe(r.city)}</td>
+                        <td><span style="padding: 2px 8px; border-radius: 4px; background: #1e3a8a; color: #93c5fd; font-size: 0.8rem;">${safe(r.status || 'new')}</span></td>
+                        <td style="font-size: 0.8rem; color: #9ca3af;">${new Date(r.created_at).toLocaleDateString('fa-IR')}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                console.error("Error loading RFQs:", err);
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #ef4444;">خطا در بارگذاری اطلاعات: ${err.message}</td></tr>`;
+            }
+        }
 
-        <div class="kv" style="grid-column:1/-1"><div class="k">Notes</div><div class="v">${safe(notes)}</div></div>
-        <div class="kv" style="grid-column:1/-1"><div class="k">Customer / Buyer (id)</div><div class="v mono">${safe(customer)}</div></div>
-        <div class="kv" style="grid-column:1/-1"><div class="k">Files / Attachments (raw)</div><div class="v mono">${safe(JSON.stringify(files), safe(files))}</div></div>
-      <div class="v">${fileLink}</div>
+        function showDetails(r) {
+            SELECTED = r;
+            document.getElementById('selectedId').textContent = `کد رهگیری: ${r.tracking_code || r.id}`;
 
-      <div class="hr"></div>
+            const r_raw = r.raw || {};
+            const material = pickField(r_raw, ["material", "mat", "metal", "alloy"]) || r.material;
+            const process = pickField(r_raw, ["process", "manufacturing_process", "service", "method"]) || r.process;
+            const qty = pickField(r_raw, ["quantity", "qty", "count"]) || r.quantity;
+            const delivery = pickField(r_raw, ["delivery_days", "lead_time_days", "delivery"]) || r.delivery_days;
+            const notes = pickField(r_raw, ["notes", "description", "details", "reqs"]) || r.notes;
+            
+            // استخراج فایل‌ها و ساخت لینک دانلود مستقیم
+            const filesRaw = pickField(r_raw, ["files", "attachments", "file_paths"]) || r.file_url || r.file_path;
+            let fileLink = "فایلی پیوست نشده است";
+            
+            if (filesRaw) {
+                try {
+                    let filePath = typeof filesRaw === 'string' ? (filesRaw.startsWith('[') ? JSON.parse(filesRaw)[0] : filesRaw) : filesRaw[0];
+                    if (filePath) {
+                        const publicUrl = `https://gndxhgtgnuefmwqdzdss.supabase.co/storage/v1/object/public/rfq-files/${filePath}`;
+                        fileLink = `<a href="${publicUrl}" target="_blank" style="color: #38bdf8; text-decoration: underline; font-weight: bold;">مشاهده و دانلود فایل نقشه</a>`;
+                    }
+                } catch (e) {
+                    fileLink = `<a href="${filesRaw}" target="_blank" style="color: #38bdf8; text-decoration: underline;">مشاهده فایل</a>`;
+                }
+            }
 
-      <div class="row" style="justify-content:space-between;align-items:center">
-        <div class="muted small">اکشن کارشناس/ادمین (طبق Blueprint: گردش سفارش و کنترل مرحله‌ای)</div>
-        <div class="row">
-          <button class="btn secondary" onclick="window.__setStatus('new')">new</button>
-          <button class="btn secondary" onclick="window.__setStatus('reviewing')">reviewing</button>
-          <button class="btn secondary" onclick="window.__setStatus('quoted')">quoted</button>
-          <button class="btn secondary" onclick="window.__setStatus('closed')">closed</button>
-        </div>
-      </div>
-    `;
-  }
+            const container = document.getElementById('detailsContent');
+            container.innerHTML = `
+                <div class="kv"><div class="k">وضعیت</div><div class="v">${safe(r.status)}</div></div>
+                <div class="kv"><div class="k">عنوان</div><div class="v">${safe(r.title || r.project_title)}</div></div>
+                <div class="kv"><div class="k">شهر</div><div class="v">${safe(r.city)}</div></div>
+                <div class="kv"><div class="k">متریال</div><div class="v">${safe(material)}</div></div>
+                <div class="kv"><div class="k">فرآیند ساخت</div><div class="v">${safe(process)}</div></div>
+                <div class="kv"><div class="k">تیراژ / مقدار</div><div class="v">${safe(qty)}</div></div>
+                <div class="kv"><div class="k">زمان تحویل</div><div class="v">${safe(delivery)}</div></div>
+                <div class="kv" style="grid-column: 1/-1;"><div class="k">توضیحات</div><div class="v">${safe(notes)}</div></div>
+                <div class="kv"><div class="k">فایل پیوست</div><div class="v">${fileLink}</div></div>
+            `;
+        }
 
-  // Expose minimal hooks
-  window.__select = (id) => {
-    const x = RFQS_CACHE.find(y => String(y.id) === String(id));
-    if(x) showDetails(x);
-  };
-  window.__setStatus = (newStatus) => {
-    if(!SELECTED?.id) return;
-    updateStatus(SELECTED.id, newStatus);
-  };
-
-  /**********************
-   * Boot
-   **********************/
-  async function boot(){
-    // UI hooks
-    el("btnRefresh").addEventListener("click", fetchRfqs);
-    el("btnLogin").addEventListener("click", login);
-    el("btnLogout").addEventListener("click", logout);
-    el("qSearch").addEventListener("input", renderList);
-    el("qStatus").addEventListener("change", renderList);
-
-    await updateAuthState();
-    client.auth.onAuthStateChange(async () => updateAuthState());
-
-    await fetchRfqs();
-  }
-
-  boot();
-</script>
+        // بارگذاری اولیه هنگام باز شدن صفحه
+        window.onload = loadRfqs;
+    </script>
 </body>
 </html>
