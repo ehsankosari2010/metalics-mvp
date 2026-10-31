@@ -42,7 +42,7 @@
     </header>
 
     <div class="main-container">
-        <!-- پنل جزئیات (سمت راست در موبایل، سمت چپ در دسکتاپ) -->
+        <!-- پنل جزئیات -->
         <div class="card" id="details-panel">
             <h3>جزئیات استعلام</h3>
             <div id="details-content">
@@ -73,10 +73,9 @@
     </div>
 
     <script>
-        // تنظیمات اتصال مستقیم به Supabase احسان
         const SB_URL = "https://gndxhgtgnuefmwqdzdss.supabase.co";
-        // کلید ANON شما (برگرفته از تنظیمات صحیح پروژه)
-        const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImduZHhoZ3RnbnVlZm13cWR6ZHNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMxMTAwMjUsImV4cCI6MjEwODY4NjAyNX0.BzPBoaCL3jXnx0C5c7CKynt_sme1iLKRWYvCnoUBz80";
+        const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImduZHhoZ3RnbnVlZm13cWR6ZHNzIiwicm9sZSI6ImFub24iLCJpYXQiOjM5MTY5жسزسجج۳۳۹... (یا کلید واقعی خودت)"; 
+        // نکته: کلید anon واقعی خودت را که الان در index.html داری اینجا بگذار
         
         const client = supabase.createClient(SB_URL, SB_KEY);
 
@@ -103,7 +102,7 @@
                     <td>${item.title || item.project_title || 'بدون عنوان'}</td>
                     <td>${item.city || '-'}</td>
                     <td><span class="status-badge">${item.status || 'جدید'}</span></td>
-                    <td style="direction: ltr; font-size: 0.75rem; color: #6b7280;">${new Date(item.created_at).toLocaleDateString('fa-IR')}</td>
+                    <td style="direction: ltr; font-size: 0.75 loc; color: #6b7280;">${new Date(item.created_at).toLocaleDateString('fa-IR')}</td>
                 `;
                 listBody.appendChild(tr);
             });
@@ -112,40 +111,32 @@
         function renderDetails(item) {
             const container = document.getElementById('details-content');
             
-            // استخراج هوشمند فایل از JSON یا فیلد متنی
-            let fileHtml = '<span style="color:#6b7280;">بدون فایل</span>';
-            const raw = item.raw || {};
-            const potentialFile = raw.files || raw.attachments || item.file_url || item.file_path;
+            // بررسی کامل تمام ستون‌های احتمالی فایل در دیتابیس
+            let filePath = item.file_path || item.file_url || item.file || (item.raw && (item.raw.file_path || item.raw.file));
+            let fileHtml = '<span style="color:#6b7280; font-size:0.85rem;">بدون فایل پیوست</span>';
 
-            if (potentialFile) {
-                let path = "";
-                try {
-                    path = Array.isArray(potentialFile) ? potentialFile[0] : (typeof potentialFile === 'string' && potentialFile.startsWith('[') ? JSON.parse(potentialFile)[0] : potentialFile);
-                } catch(e) { path = potentialFile; }
-
-                if (path) {
-                    const url = `${SB_URL}/storage/v1/object/public/rfq-files/${path}`;
-                    fileHtml = `<a href="${url}" target="_blank" class="file-link">📥 دانلود فایل نقشه</a>`;
-                }
+            if (filePath) {
+                // اگر مسیر کامل باشد یا فقط نام فایل در باکت باشد
+                let publicUrl = filePath.startsWith('http') ? filePath : `${SB_URL}/storage/v1/object/public/rfq-files/${filePath}`;
+                fileHtml = `<a href="${publicUrl}" target="_blank" class="file-link">📥 دانلود فایل / نقشه پیوست</a>`;
             }
 
             container.innerHTML = `
                 <div class="kv"><div class="k">عنوان</div><div class="v">${item.title || item.project_title || '-'}</div></div>
-                <div class="kv"><div class="k">متریال</div><div class="v">${item.material || raw.material || '-'}</div></div>
-                <div class="kv"><div class="k">فرآیند</div><div class="v">${item.process || raw.process || '-'}</div></div>
-                <div class="kv"><div class="k">تعداد</div><div class="v">${item.quantity || raw.quantity || '-'}</div></div>
+                <div class="kv"><div class="k">متریال</div><div class="v">${item.material || (item.raw && item.raw.material) || '-'}</div></div>
+                <div class="kv"><div class="k">فرآیند</div><div class="v">${item.process || (item.raw && item.raw.process) || '-'}</div></div>
+                <div class="kv"><div class="k">تعداد</div><div class="v">${item.quantity || (item.raw && item.raw.quantity) || '-'}</div></div>
                 <div class="kv"><div class="k">شهر</div><div class="v">${item.city || '-'}</div></div>
                 <div class="kv" style="flex-direction:column; border:none;">
                     <div class="k" style="margin-bottom:5px;">توضیحات:</div>
-                    <div class="v" style="text-align:right; font-size:0.8rem; background:#161e2e; padding:10px; border-radius:8px;">${item.notes || raw.notes || '---'}</div>
+                    <div class="v" style="text-align:right; font-size:0.8rem; background:#161e2e; padding:10px; border-radius:8px;">${item.notes || (item.raw && item.raw.notes) || '---'}</div>
                 </div>
-                <div style="margin-top:20px;">
+                <div style="margin-top:15px;">
                     ${fileHtml}
                 </div>
             `;
         }
 
-        // اجرای خودکار در بدو ورود
         window.onload = fetchData;
     </script>
 </body>
