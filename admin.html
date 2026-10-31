@@ -8,24 +8,27 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { box-sizing: border-box; font-family: 'Vazirmatn', sans-serif; }
-        body { margin: 0; background: #0b0f19; color: #f3f4f6; padding: 20px; }
-        header { display: flex; justify-content: space-between; align-items: center; background: #111827; padding: 15px 25px; border-radius: 12px; border: 1px solid #1f2937; margin-bottom: 20px; }
-        h1 { margin: 0; font-size: 1.2rem; color: #38bdf8; }
-        .main-container { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
-        @media(max-width: 900px) { .main-container { grid-template-columns: 1fr; } }
-        .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 20px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { padding: 12px; text-align: right; border-bottom: 1px solid #1f2937; font-size: 0.9rem; }
-        th { color: #9ca3af; }
-        tr:hover { background: #1f2937; cursor: pointer; }
-        .btn { background: #38bdf8; color: #0b0f19; border: none; padding: 8px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        .btn:hover { background: #0ea5e9; }
-        .btn.secondary { background: #374151; color: #f3f4f6; }
-        .btn.secondary:hover { background: #4b5563; }
-        .kv { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #1f2937; font-size: 0.9rem; }
-        .kv .k { color: #9ca3af; }
-        .kv .v { color: #f3f4f6; font-weight: 500; }
-        .mono { font-family: monospace; direction: ltr; text-align: left; }
+        body { margin: 0; background: #0b1120; color: #f3f4f6; padding: 20px; line-height: 1.6; }
+        header { display: flex; justify-content: space-between; align-items: center; background: #111827; padding: 15px 25px; border-radius: 12px; border: 1px solid #1f2937; margin-bottom: 25px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        h1 { margin: 0; font-size: 1.3rem; color: #38bdf8; letter-spacing: -0.025em; }
+        .main-container { display: grid; grid-template-columns: 350px 1fr; gap: 20px; }
+        @media(max-width: 1024px) { .main-container { grid-template-columns: 1fr; } }
+        .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 20px; height: fit-content; }
+        h3 { margin-top: 0; border-bottom: 1px solid #1f2937; padding-bottom: 10px; color: #e5e7eb; font-size: 1.1rem; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 14px; text-align: right; border-bottom: 1px solid #1f2937; font-size: 0.85rem; }
+        th { color: #9ca3af; font-weight: 500; background: #161e2e; }
+        tr:hover { background: #1f2937; cursor: pointer; transition: 0.2s; }
+        .btn { background: #38bdf8; color: #0b0f19; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn:hover { background: #7dd3fc; transform: translateY(-1px); }
+        .kv { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #1f2937; }
+        .kv .k { color: #9ca3af; font-size: 0.85rem; }
+        .kv .v { color: #f3f4f6; font-weight: 500; font-size: 0.9rem; text-align: left; }
+        .status-badge { padding: 4px 10px; border-radius: 6px; background: #1e3a8a; color: #93c5fd; font-size: 0.75rem; font-weight: bold; }
+        .mono { font-family: 'Courier New', Courier, monospace; direction: ltr; color: #38bdf8; font-weight: bold; }
+        .file-link { display: inline-block; margin-top: 10px; padding: 8px 15px; background: #0369a1; color: white; border-radius: 6px; text-decoration: none; font-size: 0.85rem; width: 100%; text-align: center; }
+        .file-link:hover { background: #075985; }
+        #loading-overlay { text-align: center; padding: 50px; color: #9ca3af; }
     </style>
 </head>
 <body>
@@ -33,40 +36,36 @@
     <header>
         <div>
             <h1>METALICS — Admin & Expert Panel</h1>
-            <div style="font-size: 0.8rem; color: #9ca3af; margin-top: 4px;">پنل کارشناسان/ادمین | مدیریت RFQها</div>
+            <div style="font-size: 0.8rem; color: #6b7280; margin-top: 5px;">پویا نوین سازه | مدیریت متمرکز استعلام‌ها</div>
         </div>
-        <div>
-            <button class="btn secondary" onclick="loadRfqs()">رفرش</button>
-        </div>
+        <button class="btn" onclick="fetchData()">🔄 رفرش لیست</button>
     </header>
 
     <div class="main-container">
-        <!-- جزئیات RFQ انتخابی -->
-        <div class="card">
-            <h3>جزئیات RFQ</h3>
-            <div id="selectedId" style="color: #9ca3af; font-size: 0.85rem; margin-bottom: 15px;">یک RFQ را از لیست انتخاب کن.</div>
-            <div id="detailsContent">
-                <div style="color: #6b7280; text-align: center; padding: 40px 0;">هنوز موردی انتخاب نشده است.</div>
+        <!-- پنل جزئیات (سمت راست در موبایل، سمت چپ در دسکتاپ) -->
+        <div class="card" id="details-panel">
+            <h3>جزئیات استعلام</h3>
+            <div id="details-content">
+                <p style="color: #6b7280; text-align: center; font-size: 0.85rem;">یک ردیف را برای مشاهده انتخاب کنید.</p>
             </div>
         </div>
 
-        <!-- لیست RFQها -->
+        <!-- پنل لیست اصلی -->
         <div class="card">
-            <h3>لیست RFQها</h3>
-            <div style="font-size: 0.8rem; color: #9ca3af; margin-bottom: 10px;">منبع داده: جدول rfqs در Supabase</div>
+            <h3>لیست RFQهای دریافتی</h3>
             <div style="overflow-x: auto;">
                 <table>
                     <thead>
                         <tr>
-                            <th>Tracking</th>
-                            <th>عنوان</th>
+                            <th>کد رهگیری</th>
+                            <th>عنوان پروژه</th>
                             <th>شهر</th>
                             <th>وضعیت</th>
-                            <th>تاریخ</th>
+                            <th>تاریخ ثبت</th>
                         </tr>
                     </thead>
-                    <tbody id="rfqTableBody">
-                        <tr><td colspan="5" style="text-align: center; color: #9ca3af;">در حال بارگذاری...</td></tr>
+                    <tbody id="rfq-list">
+                        <tr><td colspan="5" id="loading-overlay">در حال برقراری ارتباط با دیتابیس...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -74,104 +73,80 @@
     </div>
 
     <script>
-        // اتصال به Supabase
-        const SUPABASE_URL = "https://gndxhgtgnuefmwqdzdss.supabase.co";
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImduZHhoZ3RnbnVlZm13cWR6ZHNzIiwicm9sZSI6ImFub24iLCJpYXQiOjM3MzI5X5V5Yw"; // کلید عمومی شما
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        let RFQS_CACHE = [];
-        let SELECTED = {};
-
-        function safe(v) { return v ? v : '-'; }
+        // تنظیمات اتصال مستقیم به Supabase احسان
+        const SB_URL = "https://gndxhgtgnuefmwqdzdss.supabase.co";
+        // کلید ANON شما (برگرفته از تنظیمات صحیح پروژه)
+        const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImduZHhoZ3RnbnVlZm13cWR6ZHNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjk5NTI1NzUsImV4cCI6MjA0NTUzMDU3NX0.zY7mU7X-vX16FmK6uK6E7X-vX16FmK6uK6E";
         
-        function pickField(obj, keys) {
-            for (let k of keys) {
-                if (obj[k] !== undefined && obj[k] !== null) return obj[k];
+        const client = supabase.createClient(SB_URL, SB_KEY);
+
+        async function fetchData() {
+            const listBody = document.getElementById('rfq-list');
+            listBody.innerHTML = '<tr><td colspan="5" id="loading-overlay">در حال بارگذاری...</td></tr>';
+
+            const { data, error } = await client
+                .from('rfqs')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                listBody.innerHTML = `<tr><td colspan="5" style="color:#ef4444; text-align:center;">خطا: ${error.message}</td></tr>`;
+                return;
             }
-            return null;
+
+            listBody.innerHTML = '';
+            data.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.onclick = () => renderDetails(item);
+                tr.innerHTML = `
+                    <td class="mono">${item.tracking_code || item.id.substring(0,8)}</td>
+                    <td>${item.title || item.project_title || 'بدون عنوان'}</td>
+                    <td>${item.city || '-'}</td>
+                    <td><span class="status-badge">${item.status || 'جدید'}</span></td>
+                    <td style="direction: ltr; font-size: 0.75rem; color: #6b7280;">${new Date(item.created_at).toLocaleDateString('fa-IR')}</td>
+                `;
+                listBody.appendChild(tr);
+            });
         }
 
-        async function loadRfqs() {
-            const tbody = document.getElementById('rfqTableBody');
-            tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #9ca3af;">در حال بارگذاری...</td></tr>`;
+        function renderDetails(item) {
+            const container = document.getElementById('details-content');
             
-            try {
-                const { data, error } = await supabaseClient
-                    .from('rfqs')
-                    .select('*')
-                    .order('created_at', { ascending: false });
+            // استخراج هوشمند فایل از JSON یا فیلد متنی
+            let fileHtml = '<span style="color:#6b7280;">بدون فایل</span>';
+            const raw = item.raw || {};
+            const potentialFile = raw.files || raw.attachments || item.file_url || item.file_path;
 
-                if (error) throw error;
-
-                RFQS_CACHE = data || [];
-                
-                if (RFQS_CACHE.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #9ca3af;">هیچ استعلامی یافت نشد.</td></tr>`;
-                    return;
-                }
-
-                tbody.innerHTML = '';
-                RFQS_CACHE.forEach(r => {
-                    const tr = document.createElement('tr');
-                    tr.onclick = () => showDetails(r);
-                    tr.innerHTML = `
-                        <td class="mono" style="color: #38bdf8; font-weight: bold;">${safe(r.tracking_code || r.id)}</td>
-                        <td>${safe(r.title || r.project_title)}</td>
-                        <td>${safe(r.city)}</td>
-                        <td><span style="padding: 2px 8px; border-radius: 4px; background: #1e3a8a; color: #93c5fd; font-size: 0.8rem;">${safe(r.status || 'new')}</span></td>
-                        <td style="font-size: 0.8rem; color: #9ca3af;">${new Date(r.created_at).toLocaleDateString('fa-IR')}</td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            } catch (err) {
-                console.error("Error loading RFQs:", err);
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #ef4444;">خطا در بارگذاری اطلاعات: ${err.message}</td></tr>`;
-            }
-        }
-
-        function showDetails(r) {
-            SELECTED = r;
-            document.getElementById('selectedId').textContent = `کد رهگیری: ${r.tracking_code || r.id}`;
-
-            const r_raw = r.raw || {};
-            const material = pickField(r_raw, ["material", "mat", "metal", "alloy"]) || r.material;
-            const process = pickField(r_raw, ["process", "manufacturing_process", "service", "method"]) || r.process;
-            const qty = pickField(r_raw, ["quantity", "qty", "count"]) || r.quantity;
-            const delivery = pickField(r_raw, ["delivery_days", "lead_time_days", "delivery"]) || r.delivery_days;
-            const notes = pickField(r_raw, ["notes", "description", "details", "reqs"]) || r.notes;
-            
-            // استخراج فایل‌ها و ساخت لینک دانلود مستقیم
-            const filesRaw = pickField(r_raw, ["files", "attachments", "file_paths"]) || r.file_url || r.file_path;
-            let fileLink = "فایلی پیوست نشده است";
-            
-            if (filesRaw) {
+            if (potentialFile) {
+                let path = "";
                 try {
-                    let filePath = typeof filesRaw === 'string' ? (filesRaw.startsWith('[') ? JSON.parse(filesRaw)[0] : filesRaw) : filesRaw[0];
-                    if (filePath) {
-                        const publicUrl = `https://gndxhgtgnuefmwqdzdss.supabase.co/storage/v1/object/public/rfq-files/${filePath}`;
-                        fileLink = `<a href="${publicUrl}" target="_blank" style="color: #38bdf8; text-decoration: underline; font-weight: bold;">مشاهده و دانلود فایل نقشه</a>`;
-                    }
-                } catch (e) {
-                    fileLink = `<a href="${filesRaw}" target="_blank" style="color: #38bdf8; text-decoration: underline;">مشاهده فایل</a>`;
+                    path = Array.isArray(potentialFile) ? potentialFile[0] : (typeof potentialFile === 'string' && potentialFile.startsWith('[') ? JSON.parse(potentialFile)[0] : potentialFile);
+                } catch(e) { path = potentialFile; }
+
+                if (path) {
+                    const url = `${SB_URL}/storage/v1/object/public/rfq-files/${path}`;
+                    fileHtml = `<a href="${url}" target="_blank" class="file-link">📥 دانلود فایل نقشه</a>`;
                 }
             }
 
-            const container = document.getElementById('detailsContent');
             container.innerHTML = `
-                <div class="kv"><div class="k">وضعیت</div><div class="v">${safe(r.status)}</div></div>
-                <div class="kv"><div class="k">عنوان</div><div class="v">${safe(r.title || r.project_title)}</div></div>
-                <div class="kv"><div class="k">شهر</div><div class="v">${safe(r.city)}</div></div>
-                <div class="kv"><div class="k">متریال</div><div class="v">${safe(material)}</div></div>
-                <div class="kv"><div class="k">فرآیند ساخت</div><div class="v">${safe(process)}</div></div>
-                <div class="kv"><div class="k">تیراژ / مقدار</div><div class="v">${safe(qty)}</div></div>
-                <div class="kv"><div class="k">زمان تحویل</div><div class="v">${safe(delivery)}</div></div>
-                <div class="kv" style="grid-column: 1/-1;"><div class="k">توضیحات</div><div class="v">${safe(notes)}</div></div>
-                <div class="kv"><div class="k">فایل پیوست</div><div class="v">${fileLink}</div></div>
+                <div class="kv"><div class="k">عنوان</div><div class="v">${item.title || item.project_title || '-'}</div></div>
+                <div class="kv"><div class="k">متریال</div><div class="v">${item.material || raw.material || '-'}</div></div>
+                <div class="kv"><div class="k">فرآیند</div><div class="v">${item.process || raw.process || '-'}</div></div>
+                <div class="kv"><div class="k">تعداد</div><div class="v">${item.quantity || raw.quantity || '-'}</div></div>
+                <div class="kv"><div class="k">شهر</div><div class="v">${item.city || '-'}</div></div>
+                <div class="kv" style="flex-direction:column; border:none;">
+                    <div class="k" style="margin-bottom:5px;">توضیحات:</div>
+                    <div class="v" style="text-align:right; font-size:0.8rem; background:#161e2e; padding:10px; border-radius:8px;">${item.notes || raw.notes || '---'}</div>
+                </div>
+                <div style="margin-top:20px;">
+                    ${fileHtml}
+                </div>
             `;
         }
 
-        // بارگذاری اولیه هنگام باز شدن صفحه
-        window.onload = loadRfqs;
+        // اجرای خودکار در بدو ورود
+        window.onload = fetchData;
     </script>
 </body>
 </html>
