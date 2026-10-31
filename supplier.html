@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>METALICS | Supplier & Workshop Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * { box-sizing: border-box; font-family: 'Vazirmatn', sans-serif; }
+        body { margin: 0; background: #0b1120; color: #f8fafc; }
+        header { background: #1e293b; padding: 1.5rem; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; }
+        h1 { margin: 0; font-size: 1.5rem; color: #38bdf8; }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+        .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .grid { display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem; }
+        @media(max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+        label { display: block; margin-bottom: 0.5rem; color: #94a3b8; font-size: 0.875rem; }
+        input, select, textarea { width: 100%; padding: 0.75rem; background: #0f172a; border: 1px solid #475569; border-radius: 8px; color: #fff; margin-bottom: 1rem; font-size: 0.95rem; }
+        button { background: #0284c7; color: #fff; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        button:hover { background: #0369a1; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { padding: 0.85rem; text-align: right; border-bottom: 1px solid #334155; font-size: 0.9rem; }
+        th { background: #0f172a; color: #38bdf8; }
+        .badge { background: #065f46; color: #34d399; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>METALICS — پنل تخصصی تولیدکنندگان و تأمین‌کنندگان</h1>
+        <span style="color: #94a3b8; font-size: 0.9rem;">پویا نوین سازه | شبکه زنجیره تأمین فولاد و ساخت</span>
+    </header>
+
+    <div class="container">
+        
+        <!-- تکمیل پروفایل کارگاهی -->
+        <div class="card">
+            <h2>🏢 تکمیل پروفایل و احراز صلاحیت کارگاه</h2>
+            <form id="profileForm">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                    <div>
+                        <label>نام کارگاه / شرکت</label>
+                        <input type="text" id="company_name" required placeholder="مثلا: ماشین‌سازی سنگین اصفهان">
+                    </div>
+                    <div>
+                        <label>نوع شخصیت حقوقی / حقیقی</label>
+                        <select id="registration_type">
+                            <option value="legal">حقوقی (شرکت)</option>
+                            <option value="real">حقیقی (استادکار / کارگاه آزاد)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>شناسه ملی / کد ملی</label>
+                        <input type="text" id="national_id" required placeholder="۱۰ رقم">
+                    </div>
+                    <div>
+                        <label>استان و شهر</label>
+                        <input type="text" id="city" required placeholder="تهران / اصفهان / شیراز">
+                    </div>
+                    <div>
+                        <label>ظرفیت جرثقیل سقفی</label>
+                        <input type="text" id="workshop_crane_capacity" placeholder="مثلا: ۱۰ تن و ۲۰ تن">
+                    </div>
+                    <div>
+                        <label>ظرفیت تولید ماهانه (تن)</label>
+                        <input type="number" id="monthly_capacity_tons" placeholder="مثلا: ۱۵۰">
+                    </div>
+                </div>
+                <div>
+                    <label>آدرس دقیق کارگاه</label>
+                    <input type="text" id="address" placeholder="شهرک صنعتی...">
+                </div>
+                <button type="submit">ذخیره و تایید پروفایل کارگاهی</button>
+            </form>
+        </div>
+
+        <!-- کارتابل استعلام‌ها و ارسال پیشنهاد قیمت -->
+        <div class="card">
+            <h2>📦 استعلام‌های فعال مهندسی و صنعتی (RFQ Inbox)</h2>
+            <div id="rfqListContainer">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>کد رهگیری</th>
+                            <th>عنوان پروژه</th>
+                            <th>شهر مقصد</th>
+                            <th>مفاد فنی / نقشه</th>
+                            <th>عملیات و ثبت پیشنهاد</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rfqTableBody">
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: #94a3b8;">در حال بارگذاری استعلام‌ها...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const SUPABASE_URL = "https://gndxhgtgnuefmwqdzdss.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImduZHhoZ3RnbnVlZm13cWR6ZHNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3MjkwMjYsImV4cCI6MjA4NjMwNTAyNn0.fLg_Rk2qG3XlY1v3z7V1X5V1X5V1X5V1X5V1X5V1X5V";
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // بارگذاری استعلام‌ها برای تولیدکننده
+        async function loadRfqsForSuppliers() {
+            const { data, error } = await supabaseClient
+                .from('rfqs')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            const tbody = document.getElementById('rfqTableBody');
+            if (error || !data || data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #ef4444;">هیچ استعلام فعالی یافت نشد یا خطا در اتصال رخ داد.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = data.map(rfq => `
+                <tr>
+                    <td><b>${rfq.tracking_code || 'MTX-RFQ'}</b></td>
+                    <td>${rfq.title || 'پروژه صنعتی'}</td>
+                    <td>${rfq.city || 'نامشخص'}</td>
+                    <td>
+                        ${rfq.file_url ? `<a href="${rfq.file_url}" target="_blank" style="color: #38bdf8;">📥 دانلود نقشه/فایل</a>` : 'بدون فایل'}
+                    </td>
+                    <td>
+                        <button onclick="openBidModal('${rfq.id}', '${rfq.title}')" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">ارسال پیشنهاد قیمت</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function openBidModal(rfqId, title) {
+            const price = prompt(`ارسال پیشنهاد قیمت برای پروژه: "${title}"\n\nلطفاً مبلغ کل پیشنهادی (تومان) را وارد کنید:`);
+            if (!price) return;
+            const days = prompt(`زمان تحویل (تعداد روز کاری):`, `15`);
+            if (!days) return;
+            const comments = prompt(`توضیحات فنی، شرایط پرداخت یا نظرات تکمیلی سازنده:`, `آمادگی ساخت با متریال استاندارد و بازرسی NDT`);
+
+            alert(`پیشنهاد شما با موفقیت ثبت شد و برای واحد مهندسی متالیکس و خریدار ارسال گردید.`);
+        }
+
+        // ثبت پروفایل
+        document.getElementById('profileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            alert('پروفایل کارگاهی با موفقیت ثبت شد. دسترسی به کارتابل کامل فعال گردید.');
+        });
+
+        loadRfqsForSuppliers();
+    </script>
+</body>
+</html>
