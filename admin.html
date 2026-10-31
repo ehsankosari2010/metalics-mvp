@@ -450,14 +450,21 @@
     const qty      = pickField(r, ["quantity","qty","count"]);
     const delivery = pickField(r, ["delivery_days","lead_time_days","delivery","lead_time"]);
     const notes    = pickField(r, ["notes","description","details","reqs"]);
-    const files    = pickField(r, ["files","attachments","file_paths"]);
-    const customer = pickField(r, ["customer_user_id","buyer_id","user_id","created_by"]);
+    const filesRaw = pickField(r, ["files", "attachments", "file_paths"]);
+let fileLink = "فایلی پیوست نشده است";
+if (filesRaw) {
+    try {
+        let filePath = typeof filesRaw === 'string' ? JSON.parse(filesRaw)[0] : filesRaw[0];
+        if (filePath) {
+            // ساخت لینک عمومی یا موقت از باکت rfq-files در Supabase
+            const publicUrl = `https://gndxhgtgnuefmwqdzdss.supabase.co/storage/v1/object/public/rfq-files/${filePath}`;
+            fileLink = `<a href="${publicUrl}" target="_blank" style="color: #38bdf8; text-decoration: underline;">مشاهده / دانلود نقشه (${filePath})</a>`;
+        }
+    } catch (e) {
+        fileLink = filesRaw;
+    }
+}
 
-    // If you store file paths in Supabase Storage:
-    // we'll just show raw value and later we can generate signed URLs.
-    el("detailsBox").innerHTML = `
-      <div class="split">
-        <div class="kv"><div class="k">Tracking Code</div><div class="v mono">${safe(x.tracking, safe(x.id))}</div></div>
         <div class="kv"><div class="k">Status</div><div class="v">${statusTag(x.status)}</div></div>
 
         <div class="kv"><div class="k">Title</div><div class="v">${safe(x.title)}</div></div>
