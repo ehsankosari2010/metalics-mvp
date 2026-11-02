@@ -3,526 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>METALICS | Admin & Expert Panel</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <title>متالیکس | پنل مدیریت و کارشناسی (Admin & Expert Panel)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Vazirmatn Font -->
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <!-- Supabase Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
     <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Vazirmatn', sans-serif;
-        }
-
-        body {
-            margin: 0;
-            background: #0b1120;
-            color: #f3f4f6;
-            padding: 20px;
-            line-height: 1.6;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-            background: #111827;
-            padding: 15px 25px;
-            border-radius: 12px;
-            border: 1px solid #1f2937;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            margin: 0;
-            font-size: 1.3rem;
-            color: #38bdf8;
-            letter-spacing: -0.025em;
-        }
-
-        .main-container {
-            display: grid;
-            grid-template-columns: 350px 1fr;
-            gap: 20px;
-        }
-
-        @media (max-width: 1024px) {
-            .main-container {
-                grid-template-columns: 1fr;
-            }
-
-            header {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-        }
-
-        .card {
-            background: #111827;
-            border: 1px solid #1f2937;
-            border-radius: 12px;
-            padding: 20px;
-            height: fit-content;
-        }
-
-        h3 {
-            margin-top: 0;
-            border-bottom: 1px solid #1f2937;
-            padding-bottom: 10px;
-            color: #e5e7eb;
-            font-size: 1.1rem;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 14px;
-            text-align: right;
-            border-bottom: 1px solid #1f2937;
-            font-size: 0.85rem;
-        }
-
-        th {
-            color: #9ca3af;
-            font-weight: 500;
-            background: #161e2e;
-        }
-
-        tbody tr:hover {
-            background: #1f2937;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .btn {
-            background: #38bdf8;
-            color: #0b0f19;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .btn:hover {
-            background: #7dd3fc;
-            transform: translateY(-1px);
-        }
-
-        .kv {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            padding: 10px 0;
-            border-bottom: 1px solid #1f2937;
-        }
-
-        .kv .k {
-            color: #9ca3af;
-            font-size: 0.85rem;
-            flex-shrink: 0;
-        }
-
-        .kv .v {
-            color: #f3f4f6;
-            font-weight: 500;
-            font-size: 0.9rem;
-            text-align: left;
-            overflow-wrap: anywhere;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 6px;
-            background: #1e3a8a;
-            color: #93c5fd;
-            font-size: 0.75rem;
-            font-weight: bold;
-        }
-
-        .mono {
-            font-family: 'Courier New', Courier, monospace;
-            direction: ltr;
-            color: #38bdf8;
-            font-weight: bold;
-        }
-
-        .file-link {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 8px 15px;
-            background: #0369a1;
-            color: white;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 0.85rem;
-            width: 100%;
-            text-align: center;
-        }
-
-        .file-link:hover {
-            background: #075985;
-        }
-
-        .message-cell {
-            text-align: center;
-            padding: 25px;
-            color: #9ca3af;
-        }
-
-        .error-cell {
-            color: #ef4444;
-        }
-
-        .notes-box {
-            text-align: right;
-            font-size: 0.8rem;
-            background: #161e2e;
-            padding: 10px;
-            border-radius: 8px;
-            color: #f3f4f6;
-            overflow-wrap: anywhere;
-        }
+        body { font-family: 'Vazirmatn', sans-serif; }
     </style>
 </head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-<body>
-    <header>
-        <div>
-            <h1>METALICS — Admin & Expert Panel</h1>
-            <div style="font-size:0.8rem; color:#6b7280; margin-top:5px;">
-                پویا نوین سازه | مدیریت متمرکز استعلام‌ها
+    <!-- Global Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-4 space-x-reverse">
+                <span class="text-2xl font-black tracking-tight text-blue-600">METALICS</span>
+                <span class="bg-indigo-50 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full border border-indigo-200">پنل نظارت و کارشناسی ارشد</span>
             </div>
+            <nav class="hidden md:flex space-x-6 space-x-reverse text-sm font-medium">
+                <a href="index.html" class="text-slate-600 hover:text-blue-600 transition">ثبت استعلام (Customer)</a>
+                <a href="supplier.html" class="text-slate-600 hover:text-blue-600 transition">پنل تامین‌کنندگان (Supplier)</a>
+                <a href="admin.html" class="text-blue-600 font-bold">مدیریت و کارشناسی (Admin)</a>
+            </nav>
         </div>
-        <button class="btn" id="refresh-button" type="button">🔄 رفرش لیست</button>
     </header>
 
-    <div class="main-container">
-        <div class="card" id="details-panel">
-            <h3>جزئیات استعلام</h3>
-            <div id="details-content">
-                <p style="color:#6b7280; text-align:center; font-size:0.85rem;">
-                    یک ردیف را برای مشاهده انتخاب کنید.
-                </p>
+    <!-- Main Dashboard -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+        <div class="bg-gradient-to-r from-slate-900 to-indigo-900 rounded-2xl p-6 md:p-8 text-white shadow-xl mb-8 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-black mb-2">کارتابل نظارت و مدیریت استعلام‌ها</h1>
+                <p class="text-slate-300 text-sm md:text-base">بررسی فنی نقشه‌ها، تایید صلاحیت تامین‌کنندگان و مدیریت فرآیند ساخت صنعتی.</p>
             </div>
+            <button onclick="loadAdminData()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition shadow-md">بروزرسانی اطلاعات</button>
         </div>
 
-        <div class="card">
-            <h3>لیست RFQهای دریافتی</h3>
-            <div style="overflow-x:auto;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>کد رهگیری</th>
-                            <th>عنوان پروژه</th>
-                            <th>شهر</th>
-                            <th>وضعیت</th>
-                            <th>تاریخ ثبت</th>
-                        </tr>
-                    </thead>
-                    <tbody id="rfq-list">
-                        <tr>
-                            <td colspan="5" class="message-cell">در حال برقراری ارتباط با دیتابیس...</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- RFQ Management Box -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <h2 class="text-lg font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">استعلام‌های ثبت‌شده مشتریان (RFQs)</h2>
+                <div id="adminRfqsContainer" class="space-y-4 max-h-[500px] overflow-y-auto">
+                    <div class="text-center py-8 text-slate-400">در حال بارگذاری استعلام‌ها...</div>
+                </div>
+            </div>
+
+            <!-- Suppliers Review Box -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <h2 class="text-lg font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">تامین‌کنندگان منتظر تایید (Supplier Network)</h2>
+                <div id="adminSuppliersContainer" class="space-y-4 max-h-[500px] overflow-y-auto">
+                    <div class="text-center py-8 text-slate-400">در حال بارگذاری تامین‌کنندگان...</div>
+                </div>
             </div>
         </div>
-    </div>
+    </main>
 
+    <!-- Script -->
     <script>
-        // آدرس و کلید دقیق هماهنگ‌شده با index.html
-        const SUPABASE_URL = "https://gndxhgtgnuefmwqdzdss.supabase.co";
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImduZHhoZ3RnbnVlZm13cWR6ZHNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMxMTAwMjUsImV4cCI6MjEwODY4NjAyNX0.BzPBoaCL3jXnx0C5c7CKynt_sme1iLKRWYvCnoUBz80"; // مقداری که در index.html کار می‌کند
+        const SUPABASE_URL = 'https://gndxhgtgnuefmwqdzdss.supabase.co';
+        const SUPABASE_ANON_KEY = 'GAPGPTMASKTOKENii7sak6d5iX1X';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        const listBody = document.getElementById("rfq-list");
-        const detailsContent = document.getElementById("details-content");
-        const refreshButton = document.getElementById("refresh-button");
-
-        function showTableMessage(message, isError = false) {
-            listBody.replaceChildren();
-
-            const row = document.createElement("tr");
-            const cell = document.createElement("td");
-
-            cell.colSpan = 5;
-            cell.className = isError
-                ? "message-cell error-cell"
-                : "message-cell";
-            cell.textContent = message;
-
-            row.appendChild(cell);
-            listBody.appendChild(row);
-        }
-
-        function getDisplayValue(value, fallback = "-") {
-            if (value === null || value === undefined || value === "") {
-                return fallback;
-            }
-
-            if (typeof value === "object") {
-                return JSON.stringify(value);
-            }
-
-            return String(value);
-        }
-
-        function addCell(row, text, className = "") {
-            const cell = document.createElement("td");
-            cell.textContent = text;
-
-            if (className) {
-                cell.className = className;
-            }
-
-            row.appendChild(cell);
-            return cell;
-        }
-
-        function getRawData(item) {
-            if (!item.raw) return {};
-
-            if (typeof item.raw === "object") {
-                return item.raw;
-            }
-
-            if (typeof item.raw === "string") {
-                try {
-                    return JSON.parse(item.raw);
-                } catch {
-                    return {};
-                }
-            }
-
-            return {};
-        }
-
-        async function fetchData() {
-            if (!window.supabase || !window.supabase.createClient) {
-                showTableMessage(
-                    "کتابخانه Supabase بارگذاری نشد. اتصال اینترنت یا دسترسی به CDN را بررسی کن.",
-                    true
-                );
-                return;
-            }
-
-            showTableMessage("در حال بارگذاری...");
-
-            try {
-                const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-                const { data, error } = await client
-                    .from("rfqs")
-                    .select("*")
-                    .order("created_at", { ascending: false });
-
-                if (error) {
-                    console.error("Supabase error:", error);
-
-                    const message = String(error.message || "");
-
-                    if (message.toLowerCase().includes("invalid api key")) {
-                        showTableMessage(
-                            "کلید API پذیرفته نشد. آدرس پروژه و کلید عمومی anon/publishable همان پروژه را بررسی کن.",
-                            true
-                        );
-                    } else {
-                        showTableMessage("خطا در دریافت اطلاعات: " + message, true);
-                    }
-
-                    return;
-                }
-
-                if (!Array.isArray(data) || data.length === 0) {
-                    showTableMessage("هنوز استعلامی ثبت نشده است.");
-                    return;
-                }
-
-                listBody.replaceChildren();
-
-                data.forEach((item) => {
-                    const row = document.createElement("tr");
-                    row.addEventListener("click", () => renderDetails(item));
-
-                    const trackingCode =
-                        item.tracking_code ||
-                        (item.id ? String(item.id).slice(0, 8) : "-");
-
-                    const title =
-                        item.title ||
-                        item.project_title ||
-                        "بدون عنوان";
-
-                    const city = item.city || "-";
-                    const status = item.status || "جدید";
-
-                    let dateText = "-";
-                    if (item.created_at) {
-                        const date = new Date(item.created_at);
-                        if (!Number.isNaN(date.getTime())) {
-                            dateText = date.toLocaleDateString("fa-IR");
-                        }
-                    }
-
-                    addCell(row, String(trackingCode), "mono");
-                    addCell(row, String(title));
-                    addCell(row, String(city));
-
-                    const statusCell = document.createElement("td");
-                    const badge = document.createElement("span");
-                    badge.className = "status-badge";
-                    badge.textContent = String(status);
-                    statusCell.appendChild(badge);
-                    row.appendChild(statusCell);
-
-                    const dateCell = addCell(row, dateText);
-                    dateCell.style.direction = "ltr";
-                    dateCell.style.fontSize = "0.75rem";
-                    dateCell.style.color = "#6b7280";
-
-                    listBody.appendChild(row);
-                });
-            } catch (error) {
-                console.error("Unexpected error:", error);
-                showTableMessage(
-                    "خطای غیرمنتظره در اتصال. اینترنت و تنظیمات Supabase را بررسی کن.",
-                    true
-                );
-            }
-        }
-
-        function addDetailRow(label, value) {
-            const row = document.createElement("div");
-            row.className = "kv";
-
-            const key = document.createElement("div");
-            key.className = "k";
-            key.textContent = label;
-
-            const val = document.createElement("div");
-            val.className = "v";
-            val.textContent = getDisplayValue(value);
-
-            row.append(key, val);
-            detailsContent.appendChild(row);
-        }
-
-        function getFileCandidate(item, raw) {
-            let candidate =
-                raw.files ||
-                raw.attachments ||
-                item.file_url ||
-                item.file_path ||
-                item.file ||
-                null;
-
-            if (!candidate) return null;
-
-            if (Array.isArray(candidate)) {
-                candidate = candidate[0];
-            }
-
-            if (typeof candidate === "string" && candidate.trim().startsWith("[")) {
-                try {
-                    const parsed = JSON.parse(candidate);
-                    candidate = Array.isArray(parsed) ? parsed[0] : parsed;
-                } catch {
-                    // اگر JSON نبود، همان مقدار متنی بررسی می‌شود.
-                }
-            }
-
-            if (candidate && typeof candidate === "object") {
-                candidate =
-                    candidate.url ||
-                    candidate.publicUrl ||
-                    candidate.path ||
-                    candidate.name ||
-                    null;
-            }
-
-            return typeof candidate === "string" ? candidate.trim() : null;
-        }
-
-        function renderDetails(item) {
-            detailsContent.replaceChildren();
-
-            const raw = getRawData(item);
-
-            addDetailRow("عنوان", item.title || item.project_title);
-            addDetailRow("متریال", item.material || raw.material);
-            addDetailRow("فرآیند", item.process || raw.process);
-            addDetailRow("تعداد", item.quantity || raw.quantity);
-            addDetailRow("شهر", item.city);
-
-            const notesRow = document.createElement("div");
-            notesRow.className = "kv";
-            notesRow.style.flexDirection = "column";
-            notesRow.style.border = "none";
-
-            const notesLabel = document.createElement("div");
-            notesLabel.className = "k";
-            notesLabel.style.marginBottom = "5px";
-            notesLabel.textContent = "توضیحات:";
-
-            const notesValue = document.createElement("div");
-            notesValue.className = "notes-box";
-            notesValue.textContent = getDisplayValue(
-                item.notes || raw.notes,
-                "---"
-            );
-
-            notesRow.append(notesLabel, notesValue);
-            detailsContent.appendChild(notesRow);
-
-            const fileContainer = document.createElement("div");
-            fileContainer.style.marginTop = "20px";
-
-            const candidate = getFileCandidate(item, raw);
-
-            if (candidate) {
-                let fileUrl;
-
-                if (/^https?:\/\//i.test(candidate)) {
-                    fileUrl = candidate;
-                } else {
-                    const safePath = candidate
-                        .replace(/^\/+/, "")
-                        .split("/")
-                        .map((part) => encodeURIComponent(part))
-                        .join("/");
-
-                    fileUrl =
-                        SUPABASE_URL +
-                        "/storage/v1/object/public/rfq-files/" +
-                        safePath;
-                }
-
-                const link = document.createElement("a");
-                link.href = fileUrl;
-                link.target = "_blank";
-                link.rel = "noopener noreferrer";
-                link.className = "file-link";
-                link.textContent = "📥 دانلود فایل نقشه";
-                fileContainer.appendChild(link);
+        async function loadAdminData() {
+            // Load RFQs
+            const rfqContainer = document.getElementById('adminRfqsContainer');
+            const { data: rfqs, error: rfqError } = await supabaseClient.from('rfqs').select('*').order('created_at', { ascending: false });
+            
+            if (rfqError) {
+                rfqContainer.innerHTML = `<div class="p-4 bg-red-50 text-red-700 rounded-xl text-sm">خطا: ${rfqError.message}</div>`;
+            } else if (!rfqs || rfqs.length === 0) {
+                rfqContainer.innerHTML = '<div class="text-center py-8 text-slate-400">هیچ استعلامی ثبت نشده است.</div>';
             } else {
-                const noFile = document.createElement("span");
-                noFile.style.color = "#6b7280";
-                noFile.textContent = "بدون فایل";
-                fileContainer.appendChild(noFile);
+                rfqContainer.innerHTML = rfqs.map(item => `
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50 flex justify-between items-center">
+                        <div>
+                            <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-0.5 rounded">${item.tracking_code || 'MTX-2026'}</span>
+                            <h4 class="font-bold text-slate-900 mt-1">${item.project_title}</h4>
+                            <p class="text-xs text-slate-500 mt-0.5">متریال: ${item.material} | استان: ${item.province}</p>
+                        </div>
+                        <span class="bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-1 rounded-full">در انتظار بررسی</span>
+                    </div>
+                `).join('');
             }
 
-            detailsContent.appendChild(fileContainer);
+            // Load Suppliers
+            const supplierContainer = document.getElementById('adminSuppliersContainer');
+            const { data: suppliers, error: supError } = await supabaseClient.from('suppliers').select('*').order('created_at', { ascending: false });
+            
+            if (supError) {
+                supplierContainer.innerHTML = `<div class="p-4 bg-red-50 text-red-700 rounded-xl text-sm">خطا: ${supError.message}</div>`;
+            } else if (!suppliers || suppliers.length === 0) {
+                supplierContainer.innerHTML = '<div class="text-center py-8 text-slate-400">هیچ تامین‌کننده‌ای ثبت‌نام نکرده است.</div>';
+            } else {
+                supplierContainer.innerHTML = suppliers.map(sup => `
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50 flex justify-between items-center">
+                        <div>
+                            <h4 class="font-bold text-slate-900">${sup.company_name}</h4>
+                            <p class="text-xs text-slate-500 mt-0.5">شناسه ملی: ${sup.national_id} | شهر: ${sup.location}</p>
+                        </div>
+                        <span class="bg-emerald-100 text-emerald-800 text-xs font-semibold px-2.5 py-1 rounded-full">فعال در شبکه</span>
+                    </div>
+                `).join('');
+            }
         }
 
-        refreshButton.addEventListener("click", fetchData);
-        document.addEventListener("DOMContentLoaded", fetchData);
+        // Load data on page load
+        window.onload = loadAdminData;
     </script>
 </body>
 </html>
