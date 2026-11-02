@@ -3,153 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>METALICS | Supplier & Workshop Panel</title>
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <title>متالیکس | پنل تخصصی تامین‌کنندگان و شرکای تولیدی (Metalics Supplier Network)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Vazirmatn Font -->
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        * { box-sizing: border-box; font-family: 'Vazirmatn', sans-serif; }
-        body { margin: 0; background: #0b1120; color: #f8fafc; }
-        header { background: #1e293b; padding: 1.5rem; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; }
-        h1 { margin: 0; font-size: 1.5rem; color: #38bdf8; }
-        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
-        .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
-        .grid { display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem; }
-        @media(max-width: 768px) { .grid { grid-template-columns: 1fr; } }
-        label { display: block; margin-bottom: 0.5rem; color: #94a3b8; font-size: 0.875rem; }
-        input, select, textarea { width: 100%; padding: 0.75rem; background: #0f172a; border: 1px solid #475569; border-radius: 8px; color: #fff; margin-bottom: 1rem; font-size: 0.95rem; }
-        button { background: #0284c7; color: #fff; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-        button:hover { background: #0369a1; }
-        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-        th, td { padding: 0.85rem; text-align: right; border-bottom: 1px solid #334155; font-size: 0.9rem; }
-        th { background: #0f172a; color: #38bdf8; }
-        .badge { background: #065f46; color: #34d399; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; }
+        body { font-family: 'Vazirmatn', sans-serif; }
     </style>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-    <header>
-        <h1>METALICS — پنل تخصصی تولیدکنندگان و تأمین‌کنندگان</h1>
-        <span style="color: #94a3b8; font-size: 0.9rem;">پویا نوین سازه | شبکه زنجیره تأمین فولاد و ساخت</span>
+    <!-- Global Navigation Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-4 space-x-reverse">
+                <span class="text-2xl font-black tracking-tight text-blue-600">METALICS</span>
+                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">شبکه تامین‌کنندگان (Xometry Model)</span>
+            </div>
+            <nav class="hidden md:flex space-x-6 space-x-reverse text-sm font-medium">
+                <a href="index.html" class="text-slate-600 hover:text-blue-600 transition">ثبت استعلام (Customer)</a>
+                <a href="supplier.html" class="text-blue-600 font-bold">پنل تامین‌کنندگان (Supplier)</a>
+                <a href="admin.html" class="text-slate-600 hover:text-blue-600 transition">مدیریت و کارشناسی (Admin)</a>
+            </nav>
+        </div>
     </header>
 
-    <div class="container">
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
         
-        <!-- تکمیل پروفایل کارگاهی -->
-        <div class="card">
-            <h2>🏢 تکمیل پروفایل و احراز صلاحیت کارگاه</h2>
-            <form id="profileForm">
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+        <!-- Welcome Banner -->
+        <div class="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-2xl p-6 md:p-8 text-white shadow-lg mb-8">
+            <h1 class="text-2xl md:text-3xl font-bold mb-2">به شبکه شرکای تولیدی متالیکس خوش آمدید</h1>
+            <p class="text-blue-100 text-sm md:text-base max-w-2xl">
+                مشابه استانداردهای جهانی Xometry، ظرفیت خالی کارگاه خود را به سفارش‌های صنعتی پربازده تبدیل کنید. ماشین‌آلات، گواهینامه‌ها و توانمندی‌های خود را ثبت کنید تا استعلام‌ها به صورت هوشمند به شما ارجاع شوند.
+            </p>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="flex border-b border-slate-200 mb-6 overflow-x-auto">
+            <button onclick="switchTab('profile')" id="btn-profile" class="py-3 px-6 font-bold text-blue-600 border-b-2 border-blue-600 focus:outline-none whitespace-nowrap">
+                ۱. پروفایل و ماشین‌آلات کارگاه
+            </button>
+            <button onclick="switchTab('inbox')" id="btn-inbox" class="py-3 px-6 font-medium text-slate-500 hover:text-blue-600 focus:outline-none whitespace-nowrap">
+                ۲. کارتابل استعلام‌ها (RFQ Job Board)
+            </button>
+            <button onclick="switchTab('orders')" id="btn-orders" class="py-3 px-6 font-medium text-slate-500 hover:text-blue-600 focus:outline-none whitespace-nowrap">
+                ۳. سفارش‌های در دست ساخت و تحویل
+            </button>
+        </div>
+
+        <!-- TAB 1: Workshop Profile & Capabilities -->
+        <div id="tab-profile" class="space-y-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
+                <h2 class="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">فرم احراز و ثبت مشخصات فنی کارگاه</h2>
+                <form id="supplierProfileForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label>نام کارگاه / شرکت</label>
-                        <input type="text" id="company_name" required placeholder="مثلا: ماشین‌سازی سنگین اصفهان">
+                        <label class="block text-sm font-medium text-slate-700 mb-1">نام رسمی کارگاه / شرکت</label>
+                        <input type="text" required class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="مثال: ماشین‌کاری دقیق پویان">
                     </div>
                     <div>
-                        <label>نوع شخصیت حقوقی / حقیقی</label>
-                        <select id="registration_type">
-                            <option value="legal">حقوقی (شرکت)</option>
-                            <option value="real">حقیقی (استادکار / کارگاه آزاد)</option>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">نوع شخصیت حقوقی</label>
+                        <select class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <option>شرکت حقوقی (سهامی خاص / مسئولیت محدود)</option>
+                            <option>کارگاه صنعتی / استادکار (حقیقی)</option>
                         </select>
                     </div>
                     <div>
-                        <label>شناسه ملی / کد ملی</label>
-                        <input type="text" id="national_id" required placeholder="۱۰ رقم">
+                        <label class="block text-sm font-medium text-slate-700 mb-1">شناسه ملی / کد ملی</label>
+                        <input type="text" required class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="۱۰ رقم شناسه ملی">
                     </div>
                     <div>
-                        <label>استان و شهر</label>
-                        <input type="text" id="city" required placeholder="تهران / اصفهان / شیراز">
+                        <label class="block text-sm font-medium text-slate-700 mb-1">استان و شهرک صنعتی</label>
+                        <input type="text" required class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder="مثال: تهران - شهرک صنعتی بزرگ شیراز / پلاک ...">
                     </div>
                     <div>
-                        <label>ظرفیت جرثقیل سقفی</label>
-                        <input type="text" id="workshop_crane_capacity" placeholder="مثلا: ۱۰ تن و ۲۰ تن">
+                        <label class="block text-sm font-medium text-slate-700 mb-1">ظرفیت جرثقیل سقفی (تن)</label>
+                        <select class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                            <option>فاقد جرثقیل سقفی</option>
+                            <option>۵ تن</option>
+                            <option>۱۰ تن</option>
+                            <option>۲۰ تن و بالاتر</option>
+                        </select>
                     </div>
                     <div>
-                        <label>ظرفیت تولید ماهانه (تن)</label>
-                        <input type="number" id="monthly_capacity_tons" placeholder="مثلا: ۱۵۰">
+                        <label class="block text-sm font-medium text-slate-700 mb-1">تخصص‌های اصلی ساخت (قابل انتخاب)</label>
+                        <div class="grid grid-cols-2 gap-2 mt-1 text-sm">
+                            <label class="flex items-center space-x-2 space-x-reverse"><input type="checkbox" class="rounded text-blue-600"> <span>فرز و تراش CNC</span></label>
+                            <label class="flex items-center space-x-2 space-x-reverse"><input type="checkbox" class="rounded text-blue-600"> <span>برش لیزر و پلاسما</span></label>
+                            <label class="flex items-center space-x-2 space-x-reverse"><input type="checkbox" class="rounded text-blue-600"> <span>ساخت سازه‌های فلزی جوشی</span></label>
+                            <label class="flex items-center space-x-2 space-x-reverse"><input type="checkbox" class="rounded text-blue-600"> <span>پرس بریک و نورد</span></label>
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <label>آدرس دقیق کارگاه</label>
-                    <input type="text" id="address" placeholder="شهرک صنعتی...">
-                </div>
-                <button type="submit">ذخیره و تایید پروفایل کارگاهی</button>
-            </form>
-        </div>
-
-        <!-- کارتابل استعلام‌ها و ارسال پیشنهاد قیمت -->
-        <div class="card">
-            <h2>📦 استعلام‌های فعال مهندسی و صنعتی (RFQ Inbox)</h2>
-            <div id="rfqListContainer">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>کد رهگیری</th>
-                            <th>عنوان پروژه</th>
-                            <th>شهر مقصد</th>
-                            <th>مفاد فنی / نقشه</th>
-                            <th>عملیات و ثبت پیشنهاد</th>
-                        </tr>
-                    </thead>
-                    <tbody id="rfqTableBody">
-                        <tr>
-                            <td colspan="5" style="text-align: center; color: #94a3b8;">در حال بارگذاری استعلام‌ها...</td>
-                        </tr>
-                    </tbody>
-                </table>
+                    <div class="md:col-span-2 pt-4">
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-xl transition shadow-md">
+                            ذخیره و تایید پروفایل کارگاهی
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
 
-    </div>
+        <!-- TAB 2: RFQ Inbox / Job Board -->
+        <div id="tab-inbox" class="hidden space-y-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
+                <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-100">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900">کارتابل استعلام‌های صنعتی (RFQ Job Board)</h2>
+                        <p class="text-sm text-slate-500">پروژه‌های ارسالی مشتریان متالیکس آماده برای استعلام قیمت و ساخت</p>
+                    </div>
+                    <button onclick="loadRfqsForSuppliers()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl text-sm font-medium transition">
+                        بارگذاری مجدد استعلام‌ها
+                    </button>
+                </div>
+                
+                <div id="supplierRfqsContainer" class="space-y-4">
+                    <div class="text-center py-12 text-slate-400">در حال بارگذاری استعلام‌های فعال...</div>
+                </div>
+            </div>
+        </div>
 
+        <!-- TAB 3: Production & Delivery Status -->
+        <div id="tab-orders" class="hidden space-y-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 text-center py-12">
+                <h3 class="text-lg font-bold text-slate-700 mb-2">هیچ سفارش فعالی در دست ساخت ندارید</h3>
+                <p class="text-sm text-slate-400">پس از پذیرش قیمت پیشنهادی در کارتابل، وضعیت ساخت و بازرسی در این بخش نمایش داده خواهد شد.</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-12 py-6 text-center text-sm text-slate-500">
+        <p>پلتفرم صنعتی متالیکس (METALICS) — توسعه‌یافته برای استقرار در پارک علم و فناوری</p>
+    </footer>
+
+    <!-- Script Logic -->
     <script>
-        const SUPABASE_URL = "https://gndxhgtgnuefmwqdzdss.supabase.co";
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImduZHhoZ3RnbnVlZm13cWR6ZHNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMxMTAwMjUsImV4cCI6MjEwODY4NjAyNX0.BzPBoaCL3jXnx0C5c7CKynt_sme1iLKRWYvCnoUBz80";
+        const SUPABASE_URL = 'https://gndxhgtgnuefmwqdzdss.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImduZHhoZ3RnbnVlbWZ3cWR6ZHNzIiwicm9sع...'; // کلید استاندارد پروژه
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // بارگذاری استعلام‌ها برای تولیدکننده
+        function switchTab(tabName) {
+            ['profile', 'inbox', 'orders'].forEach(t => {
+                document.getElementById(`tab-${t}`).classList.add('hidden');
+                document.getElementById(`btn-${t}`).className = "py-3 px-6 font-medium text-slate-500 hover:text-blue-600 focus:outline-none whitespace-nowrap";
+            });
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+            document.getElementById(`btn-${tabName}`).className = "py-3 px-6 font-bold text-blue-600 border-b-2 border-blue-600 focus:outline-none whitespace-nowrap";
+            
+            if (tabName === 'inbox') {
+                loadRfqsForSuppliers();
+            }
+        }
+
         async function loadRfqsForSuppliers() {
+            const container = document.getElementById('supplierRfqsContainer');
+            container.innerHTML = '<div class="text-center py-8 text-slate-500">در حال دریافت استعلام‌ها از سرور...</div>';
+
             const { data, error } = await supabaseClient
                 .from('rfqs')
                 .select('*')
                 .order('created_at', { ascending: false });
 
-            const tbody = document.getElementById('rfqTableBody');
-            if (error || !data || data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #ef4444;">هیچ استعلام فعالی یافت نشد یا خطا در اتصال رخ داد.</td></tr>`;
+            if (error) {
+                container.innerHTML = `<div class="p-4 bg-red-50 text-red-700 rounded-xl text-sm">خطا در ارتباط با دیتابیس: ${error.message}</div>`;
                 return;
             }
 
-            tbody.innerHTML = data.map(rfq => `
-                <tr>
-                    <td><b>${rfq.tracking_code || 'MTX-RFQ'}</b></td>
-                    <td>${rfq.title || 'پروژه صنعتی'}</td>
-                    <td>${rfq.city || 'نامشخص'}</td>
-                    <td>
-                        ${rfq.file_url ? `<a href="${rfq.file_url}" target="_blank" style="color: #38bdf8;">📥 دانلود نقشه/فایل</a>` : 'بدون فایل'}
-                    </td>
-                    <td>
-                        <button onclick="openBidModal('${rfq.id}', '${rfq.title}')" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">ارسال پیشنهاد قیمت</button>
-                    </td>
-                </tr>
+            if (!data || data.length === 0) {
+                container.innerHTML = '<div class="text-center py-12 text-slate-400">هیچ استعلام فعالی در شبکه وجود ندارد.</div>';
+                return;
+            }
+
+            container.innerHTML = data.map(item => `
+                <div class="border border-slate-200 rounded-2xl p-5 hover:border-blue-300 transition bg-slate-50/50">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+                        <div>
+                            <span class="inline-block bg-blue-100 text-blue-800 text-xs font-bold px-2.5 py-1 rounded-lg mb-1">${item.tracking_code || 'MTX-2026-XXXX'}</span>
+                            <h3 class="text-lg font-bold text-slate-900">${item.project_title || 'بدون عنوان'}</h3>
+                        </div>
+                        <div class="text-xs text-slate-500">تاریخ ثبت: ${new Date(item.created_at).toLocaleDateString('fa-IR')}</div>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mb-4 bg-white p-4 rounded-xl border border-slate-100">
+                        <div><span class="text-slate-400 block text-xs">متریال:</span> <strong class="text-slate-700">${item.material || '-'}</strong></div>
+                        <div><span class="text-slate-400 block text-xs">فرآیند ساخت:</span> <strong class="text-slate-700">${item.process || '-'}</strong></div>
+                        <div><span class="text-slate-400 block text-xs">مقدار/تعداد:</span> <strong class="text-slate-700">${item.quantity || '-'}</strong></div>
+                        <div><span class="text-slate-400 block text-xs">استان مقصد:</span> <strong class="text-slate-700">${item.province || '-'}</strong></div>
+                    </div>
+                    <div class="flex justify-between items-center pt-2 border-t border-slate-200">
+                        ${item.file_url ? `<a href="${item.file_url}" target="_blank" class="text-blue-600 hover:underline text-sm font-medium">مشاهده نقشه / فایل فنی 📄</a>` : '<span class="text-slate-400 text-sm">بدون فایل پیوست</span>'}
+                        <button onclick="alert('قابلیت ارسال پیشنهاد قیمت برای استعلام ${item.tracking_code} فعال شد.')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold px-5 py-2.5 rounded-xl transition shadow-xs">
+                            ارسال پیشنهاد قیمت (Bid)
+                        </button>
+                    </div>
+                </div>
             `).join('');
         }
 
-        function openBidModal(rfqId, title) {
-            const price = prompt(`ارسال پیشنهاد قیمت برای پروژه: "${title}"\n\nلطفاً مبلغ کل پیشنهادی (تومان) را وارد کنید:`);
-            if (!price) return;
-            const days = prompt(`زمان تحویل (تعداد روز کاری):`, `15`);
-            if (!days) return;
-            const comments = prompt(`توضیحات فنی، شرایط پرداخت یا نظرات تکمیلی سازنده:`, `آمادگی ساخت با متریال استاندارد و بازرسی NDT`);
-
-            alert(`پیشنهاد شما با موفقیت ثبت شد و برای واحد مهندسی متالیکس و خریدار ارسال گردید.`);
-        }
-
-        // ثبت پروفایل
-        document.getElementById('profileForm').addEventListener('submit', async (e) => {
+        document.getElementById('supplierProfileForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            alert('پروفایل کارگاهی با موفقیت ثبت شد. دسترسی به کارتابل کامل فعال گردید.');
+            alert('پروفایل کارگاهی شما با موفقیت در شبکه متالیکس ثبت شد و به زودی تاییدیه نهایی صادر می‌گردد.');
         });
-
-        loadRfqsForSuppliers();
     </script>
 </body>
 </html>
