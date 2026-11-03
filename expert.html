@@ -1,1 +1,310 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پنل کارشناسی مهندسی | METALICS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <style>
+        body { font-family: 'Vazirmatn', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <span class="text-xl font-black text-slate-900 tracking-tight">METALICS</span>
+                <span id="role-badge" class="text-xs bg-indigo-50 text-indigo-700 font-bold px-2.5 py-1 rounded-md border border-indigo-200">
+                    میز کارشناسی فنی (DFM Review)
+                </span>
+            </div>
+            <div class="flex items-center space-x-4 space-x-reverse text-sm">
+                <span id="current-expert-display" class="font-medium text-slate-600">کارشناس: وارد نشده</span>
+                <button onclick="logoutExpert()" id="btn-logout" class="hidden text-xs text-red-600 hover:text-red-700 font-bold border border-red-200 px-3 py-1.5 rounded-lg bg-red-50">خروج</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Login Section for Experts -->
+    <div id="login-section" class="max-w-md mx-auto my-auto px-4 py-16 w-full">
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
+            <h2 class="text-xl font-black text-slate-900 mb-2">ورود کارشناس تخصصی</h2>
+            <p class="text-xs text-slate-500 mb-6">لطفاً حوزه تخصصی و شناسه کاربری خود را انتخاب کنید.</p>
+
+            <form id="expert-login-form" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">نام کارشناس</label>
+                    <input type="text" id="expert-name-input" required placeholder="مثلاً: مهندس رضایی" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-600 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">تخصص مهندسی</label>
+                    <select id="expert-role-select" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-600 outline-none">
+                        <option value="mechanical">کارشناس مکانیک و ساخت (بررسی نقشه، ابعاد، تلرانس، ماشین‌کاری)</option>
+                        <option value="metallurgy">کارشناس متالورژی و مواد (آنالیز متریال، سختی‌سنجی، عملیات حرارتی)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">کد امنیتی ورود</label>
+                    <input type="password" id="expert-pass-input" required placeholder="رمز عبور کارشناس" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-600 outline-none">
+                </div>
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-sm transition">
+                    ورود به پنل کارشناسی
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Workspace (Hidden until login) -->
+    <main id="workspace-section" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+        <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <h1 id="workspace-title" class="text-2xl font-black text-slate-900 tracking-tight">صف بررسی استعلام‌ها</h1>
+                <p id="workspace-desc" class="text-xs text-slate-500 mt-1">لیست پروژه‌های ارسالی نیازمند تحلیل فنی مهندسی.</p>
+            </div>
+            <button onclick="loadRfqsForExpert()" class="bg-white hover:bg-slate-50 text-slate-700 font-bold px-4 py-2 rounded-xl text-xs border border-slate-300 shadow-xs flex items-center gap-2">
+                🔄 به‌روزرسانی کارتابل
+            </button>
+        </div>
+
+        <div id="expert-alert" class="hidden p-4 rounded-xl text-sm mb-6"></div>
+
+        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-right border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-600">
+                            <th class="py-4 px-6">کد رهگیری</th>
+                            <th class="py-4 px-6">عنوان قطعه / پروژه</th>
+                            <th class="py-4 px-6">جنس اعلامی</th>
+                            <th class="py-4 px-6">فایل CAD / نقشه</th>
+                            <th class="py-4 px-6 text-center">اقدام تخصصی</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rfqs-list" class="divide-y divide-slate-100 text-sm">
+                        <tr>
+                            <td colspan="5" class="text-center py-10 text-slate-400">در حال دریافت داده‌ها...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal for Technical Review -->
+    <div id="review-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs hidden items-center justify-center z-50 p-4">
+        <div class="bg-white border border-slate-200 rounded-2xl max-w-xl w-full p-6 shadow-xl">
+            <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+                <h3 id="modal-title" class="font-black text-slate-900 text-base">ثبت ارزیابی فنی و DFM</h3>
+                <button onclick="closeReviewModal()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+            </div>
+
+            <form id="technical-review-form" class="space-y-4">
+                <input type="hidden" id="review_rfq_id">
+
+                <!-- Dynamic Fields: Mechanical -->
+                <div id="mechanical-fields" class="space-y-3 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                    <span class="text-xs font-black text-indigo-700 block">چک‌لیست مهندسی مکانیک و ساخت (DFM):</span>
+                    <label class="flex items-center space-x-2 space-x-reverse text-xs text-slate-700 cursor-pointer">
+                        <input type="checkbox" id="check_dimensions" checked class="rounded text-indigo-600 focus:ring-0">
+                        <span>ابعاد و تلرانس‌های درج‌شده در نقشه قابل پیاده‌سازی با ماشین‌آلات موجود است.</span>
+                    </label>
+                    <label class="flex items-center space-x-2 space-x-reverse text-xs text-slate-700 cursor-pointer">
+                        <input type="checkbox" id="check_machinability" checked class="rounded text-indigo-600 focus:ring-0">
+                        <span>عدم تداخل ابزار، پخ‌ها و زاویه‌های خم کاری مورد تأیید است.</span>
+                    </label>
+                </div>
+
+                <!-- Dynamic Fields: Metallurgy -->
+                <div id="metallurgy-fields" class="space-y-3 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                    <span class="text-xs font-black text-amber-700 block">چک‌لیست مهندسی متالورژی و مواد:</span>
+                    <label class="flex items-center space-x-2 space-x-reverse text-xs text-slate-700 cursor-pointer">
+                        <input type="checkbox" id="check_material_spec" checked class="rounded text-amber-600 focus:ring-0">
+                        <span>گرید آلیاژی معرفی‌شده با شرایط تنش و خوردگی قطعه مطابقت دارد.</span>
+                    </label>
+                    <label class="flex items-center space-x-2 space-x-reverse text-xs text-slate-700 cursor-pointer">
+                        <input type="checkbox" id="check_heat_treatment" checked class="rounded text-amber-600 focus:ring-0">
+                        <span>نیاز به عملیات حرارتی و سختی‌سنجی نهایی قطعه ارزیابی و تأیید شد.</span>
+                    </label>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">نتیجه ارزیابی</label>
+                    <select id="review_decision" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-indigo-600">
+                        <option value="approved">تأیید فنی کامل (Pass) ✓</option>
+                        <option value="needs_revision">نیازمند اصلاح نقشه توسط مشتری ⚠️</option>
+                        <option value="rejected">عدم امکان ساخت و رد فنی ✕</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">توضیحات و گزارش کارشناسی</label>
+                    <textarea id="review_notes" rows="3" required placeholder="یادداشت تخصصی جهت اطلاع ادمین و سازندگان..." class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-indigo-600"></textarea>
+                </div>
+
+                <div class="flex justify-end space-x-3 space-x-reverse pt-2">
+                    <button type="button" onclick="closeReviewModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-5 py-2.5 rounded-xl text-xs">انصراف</button>
+                    <button type="submit" id="btn-submit-review" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-2.5 rounded-xl text-xs">ثبت تاییدیه مهندسی ✓</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentExpert = null;
+
+        document.getElementById('expert-login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('expert-name-input').value.trim();
+            const role = document.getElementById('expert-role-select').value;
+            
+            currentExpert = { name, role };
+            localStorage.setItem('metalics_expert', JSON.stringify(currentExpert));
+            setupWorkspace();
+        });
+
+        function setupWorkspace() {
+            if (!currentExpert) return;
+
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('workspace-section').classList.remove('hidden');
+            document.getElementById('btn-logout').classList.remove('hidden');
+            
+            const rolePersian = currentExpert.role === 'mechanical' ? 'کارشناس مکانیک و ساخت' : 'کارشناس متالورژی و مواد';
+            document.getElementById('current-expert-display').textContent = `${currentExpert.name} (${rolePersian})`;
+            document.getElementById('role-badge').textContent = `میز تخصصی: ${rolePersian}`;
+            
+            // Adjust fields in modal according to expert role
+            if (currentExpert.role === 'mechanical') {
+                document.getElementById('mechanical-fields').classList.remove('hidden');
+                document.getElementById('metallurgy-fields').classList.add('hidden');
+            } else {
+                document.getElementById('mechanical-fields').classList.add('hidden');
+                document.getElementById('metallurgy-fields').classList.remove('hidden');
+            }
+
+            loadRfqsForExpert();
+        }
+
+        function logoutExpert() {
+            localStorage.removeItem('metalics_expert');
+            currentExpert = null;
+            document.getElementById('workspace-section').classList.add('hidden');
+            document.getElementById('btn-logout').classList.add('hidden');
+            document.getElementById('login-section').classList.remove('hidden');
+            document.getElementById('current-expert-display').textContent = 'کارشناس: وارد نشده';
+        }
+
+        async function loadRfqsForExpert() {
+            const tbody = document.getElementById('rfqs-list');
+            tbody.innerHTML = `<tr><td colspan="5" class="text-center py-10 text-slate-400">در حال دریافت داده‌ها...</td></tr>`;
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('rfqs')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+                if (!data || data.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="text-center py-10 text-slate-400">هیچ پروژه‌ای در صف بررسی موجود نیست.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = '';
+                data.forEach(rfq => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50 transition border-b border-slate-100';
+
+                    let fileLink = '<span class="text-slate-400 text-xs">بدون فایل</span>';
+                    if (rfq.file_path) {
+                        const fileUrl = supabaseClient.storage.from('rfq-files').getPublicUrl(rfq.file_path).data.publicUrl;
+                        fileLink = `<a href="${fileUrl}" target="_blank" class="text-indigo-600 hover:underline text-xs font-bold bg-indigo-50 px-2.5 py-1 rounded-md border border-indigo-200">بررسی نقشه 📐</a>`;
+                    }
+
+                    tr.innerHTML = `
+                        <td class="py-4 px-6 font-mono font-bold text-xs text-indigo-600">${rfq.tracking_code || '---'}</td>
+                        <td class="py-4 px-6 font-bold text-slate-900">${rfq.project_title || 'بدون عنوان'}</td>
+                        <td class="py-4 px-6 text-slate-600 text-xs">${rfq.material || 'تعیین نشده'}</td>
+                        <td class="py-4 px-6">${fileLink}</td>
+                        <td class="py-4 px-6 text-center">
+                            <button onclick="openReviewModal('${rfq.id}', '${rfq.project_title || ''}')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-3 py-1.5 rounded-lg text-xs transition">
+                                ارزیابی فنی ✍️
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-10 text-red-500">خطا: ${err.message}</td></tr>`;
+            }
+        }
+
+        function openReviewModal(rfqId, title) {
+            document.getElementById('review_rfq_id').value = rfqId;
+            document.getElementById('modal-title').textContent = `ارزیابی مهندسی: ${title}`;
+            document.getElementById('review-modal').classList.remove('hidden');
+            document.getElementById('review-modal').classList.add('flex');
+        }
+
+        function closeReviewModal() {
+            document.getElementById('review-modal').classList.add('hidden');
+            document.getElementById('review-modal').classList.remove('flex');
+            document.getElementById('technical-review-form').reset();
+        }
+
+        document.getElementById('technical-review-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const rfqId = document.getElementById('review_rfq_id').value;
+            const decision = document.getElementById('review_decision').value;
+            const notes = document.getElementById('review_notes').value;
+            const isMech = currentExpert.role === 'mechanical';
+            
+            const btn = document.getElementById('btn-submit-review');
+            btn.disabled = true;
+            btn.textContent = 'در حال ذخیره...';
+
+            try {
+                const { error } = await supabaseClient.from('expert_reviews').insert([{
+                    rfq_id: rfqId,
+                    expert_name: currentExpert.name,
+                    expert_role: currentExpert.role,
+                    status: decision,
+                    review_notes: notes,
+                    tolerances_feasible: isMech ? document.getElementById('check_dimensions').checked : null,
+                    material_approved: !isMech ? document.getElementById('check_material_spec').checked : null
+                }]);
+
+                if (error) throw error;
+
+                const alertDiv = document.getElementById('expert-alert');
+                alertDiv.className = 'bg-emerald-50 border border-emerald-200 text-emerald-800 p-4 rounded-xl text-sm mb-6';
+                alertDiv.textContent = 'ارزیابی تخصصی شما با موفقیت ثبت و به پنل ادمین مخابره شد.';
+                alertDiv.classList.remove('hidden');
+
+                closeReviewModal();
+                setTimeout(() => alertDiv.classList.add('hidden'), 4000);
+            } catch (err) {
+                alert('خطا در ثبت: ' + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'ثبت تاییدیه مهندسی ✓';
+            }
+        });
+
+        // Auto login if remembered
+        window.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem('metalics_expert');
+            if (saved) {
+                currentExpert = JSON.parse(saved);
+                setupWorkspace();
+            }
+        });
+    </script>
+</body>
+</html>
 
