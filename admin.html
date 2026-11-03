@@ -3,114 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متالیکس | پنل مدیریت و کارشناسی (Admin & Expert Panel)</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- Vazirmatn Font -->
+    <title>پنل مدیریت کل و نظارت | METALICS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
-    <!-- Supabase Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
     <style>
         body { font-family: 'Vazirmatn', sans-serif; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
 
     <!-- Global Header -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-xs">
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-4 space-x-reverse">
-                <span class="text-2xl font-black tracking-tight text-blue-600">METALICS</span>
-                <span class="bg-indigo-50 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full border border-indigo-200">پنل نظارت و کارشناسی ارشد</span>
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <span class="text-xl font-black text-slate-900 tracking-tight">METALICS</span>
+                <span class="text-xs bg-slate-900 text-white font-bold px-2.5 py-1 rounded-md">پنل سوپرادمین (Super Admin)</span>
             </div>
             <nav class="hidden md:flex space-x-6 space-x-reverse text-sm font-medium">
-                <a href="index.html" class="text-slate-600 hover:text-blue-600 transition">ثبت استعلام (Customer)</a>
-                <a href="supplier.html" class="text-slate-600 hover:text-blue-600 transition">پنل تامین‌کنندگان (Supplier)</a>
-                <a href="admin.html" class="text-blue-600 font-bold">مدیریت و کارشناسی (Admin)</a>
+                <a href="index.html" class="text-slate-600 hover:text-blue-600 transition">ثبت استعلام (مشتری)</a>
+                <a href="expert.html" class="text-slate-600 hover:text-indigo-600 transition">میز کارشناسی فنی</a>
+                <a href="supplier.html" class="text-slate-600 hover:text-emerald-600 transition">صندوق تامین‌کنندگان</a>
+                <a href="admin.html" class="text-blue-600 font-bold">مدیریت کل سیستم</a>
             </nav>
         </div>
     </header>
 
-    <!-- Main Dashboard -->
+    <!-- Main Workspace -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
-        <div class="bg-gradient-to-r from-slate-900 to-indigo-900 rounded-2xl p-6 md:p-8 text-white shadow-xl mb-8 flex justify-between items-center">
+        <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h1 class="text-2xl md:text-3xl font-black mb-2">کارتابل نظارت و مدیریت استعلام‌ها</h1>
-                <p class="text-slate-300 text-sm md:text-base">بررسی فنی نقشه‌ها، تایید صلاحیت تامین‌کنندگان و مدیریت فرآیند ساخت صنعتی.</p>
+                <h1 class="text-2xl font-black text-slate-900 tracking-tight">داشبورد نظارت و مدیریت استعلام‌ها</h1>
+                <p class="text-xs text-slate-500 mt-1">مدیریت سفارشات، نظارت بر تاییدیه‌های کارشناسان (مکانیک/متالورژی) و پیشنهادهای سازندگان.</p>
             </div>
-            <button onclick="loadAdminData()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition shadow-md">بروزرسانی اطلاعات</button>
+            <button onclick="loadAdminData()" class="bg-white hover:bg-slate-100 text-slate-700 font-bold px-4 py-2.5 rounded-xl text-xs border border-slate-300 shadow-xs flex items-center gap-2">
+                🔄 به‌روزرسانی داده‌ها
+            </button>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <!-- RFQ Management Box -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-                <h2 class="text-lg font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">استعلام‌های ثبت‌شده مشتریان (RFQs)</h2>
-                <div id="adminRfqsContainer" class="space-y-4 max-h-[500px] overflow-y-auto">
-                    <div class="text-center py-8 text-slate-400">در حال بارگذاری استعلام‌ها...</div>
-                </div>
-            </div>
+        <div id="admin-error" class="hidden bg-red-50 border border-red-200 text-red-700 p-4 rounded-xl text-sm mb-6"></div>
 
-            <!-- Suppliers Review Box -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-                <h2 class="text-lg font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">تامین‌کنندگان منتظر تایید (Supplier Network)</h2>
-                <div id="adminSuppliersContainer" class="space-y-4 max-h-[500px] overflow-y-auto">
-                    <div class="text-center py-8 text-slate-400">در حال بارگذاری تامین‌کنندگان...</div>
-                </div>
+        <!-- Section 1: All RFQs & Expert Status -->
+        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden mb-10">
+            <div class="p-5 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
+                <h2 class="font-black text-slate-900 text-base">۱. استعلام‌های ثبت‌شده و وضعیت ارزیابی مهندسی</h2>
+                <span id="rfq-count" class="text-xs bg-slate-200 text-slate-700 font-bold px-2.5 py-1 rounded-lg">۰ مورد</span>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-right border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-200 text-xs font-bold text-slate-600 bg-slate-50/50">
+                            <th class="py-3.5 px-6">کد رهگیری</th>
+                            <th class="py-3.5 px-6">عنوان پروژه</th>
+                            <th class="py-3.5 px-6">متریال / تعداد</th>
+                            <th class="py-3.5 px-6">فایل نقشه</th>
+                            <th class="py-3.5 px-6">نظر کارشناس مکانیک</th>
+                            <th class="py-3.5 px-6">نظر کارشناس متالورژی</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-rfqs-tbody" class="divide-y divide-slate-100 text-sm">
+                        <tr>
+                            <td colspan="6" class="text-center py-8 text-slate-400">در حال بارگذاری اطلاعات...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section 2: Supplier Bids & Quotations -->
+        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+            <div class="p-5 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
+                <h2 class="font-black text-slate-900 text-base">۲. پیشنهاد قیمت‌های دریافتی از تامین‌کنندگان (Bids Inbox)</h2>
+                <span id="bids-count" class="text-xs bg-emerald-50 text-emerald-700 font-bold px-2.5 py-1 rounded-lg border border-emerald-200">۰ پیشنهاد</span>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-right border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-200 text-xs font-bold text-slate-600 bg-slate-50/50">
+                            <th class="py-3.5 px-6">شناسه سفارش</th>
+                            <th class="py-3.5 px-6">مبلغ پیشنهادی (تومان)</th>
+                            <th class="py-3.5 px-6">زمان تحویل</th>
+                            <th class="py-3.5 px-6">توضیحات فنی سازنده</th>
+                            <th class="py-3.5 px-6 text-center">وضعیت</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-bids-tbody" class="divide-y divide-slate-100 text-sm">
+                        <tr>
+                            <td colspan="5" class="text-center py-8 text-slate-400">در حال بارگذاری پیشنهادها...</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </main>
 
-    <!-- Script -->
     <script>
-        const SUPABASE_URL = 'https://gndxhgtgnuefmwqdzdss.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImduZHhoZ3RnbnVlZm13cWR6ZHNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMxMTAwMjUsImV4cCI6MjEwODY4NjAyNX0.BzPBoaCL3jXnx0C5c7CKynt_sme1iLKRWYvCnoUBz80';
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const errorDiv = document.getElementById('admin-error');
 
         async function loadAdminData() {
-            // Load RFQs
-            const rfqContainer = document.getElementById('adminRfqsContainer');
-            const { data: rfqs, error: rfqError } = await supabaseClient.from('rfqs').select('*').order('created_at', { ascending: false });
-            
-            if (rfqError) {
-                rfqContainer.innerHTML = `<div class="p-4 bg-red-50 text-red-700 rounded-xl text-sm">خطا: ${rfqError.message}</div>`;
-            } else if (!rfqs || rfqs.length === 0) {
-                rfqContainer.innerHTML = '<div class="text-center py-8 text-slate-400">هیچ استعلامی ثبت نشده است.</div>';
-            } else {
-                rfqContainer.innerHTML = rfqs.map(item => `
-                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50 flex justify-between items-center">
-                        <div>
-                            <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-0.5 rounded">${item.tracking_code || 'MTX-2026'}</span>
-                            <h4 class="font-bold text-slate-900 mt-1">${item.project_title}</h4>
-                            <p class="text-xs text-slate-500 mt-0.5">متریال: ${item.material} | استان: ${item.province}</p>
-                        </div>
-                        <span class="bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-1 rounded-full">در انتظار بررسی</span>
-                    </div>
-                `).join('');
-            }
+            errorDiv.classList.add('hidden');
+            await loadRfqsWithReviews();
+            await loadSupplierBids();
+        }
 
-            // Load Suppliers
-            const supplierContainer = document.getElementById('adminSuppliersContainer');
-            const { data: suppliers, error: supError } = await supabaseClient.from('suppliers').select('*').order('created_at', { ascending: false });
-            
-            if (supError) {
-                supplierContainer.innerHTML = `<div class="p-4 bg-red-50 text-red-700 rounded-xl text-sm">خطا: ${supError.message}</div>`;
-            } else if (!suppliers || suppliers.length === 0) {
-                supplierContainer.innerHTML = '<div class="text-center py-8 text-slate-400">هیچ تامین‌کننده‌ای ثبت‌نام نکرده است.</div>';
-            } else {
-                supplierContainer.innerHTML = suppliers.map(sup => `
-                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50 flex justify-between items-center">
-                        <div>
-                            <h4 class="font-bold text-slate-900">${sup.company_name}</h4>
-                            <p class="text-xs text-slate-500 mt-0.5">شناسه ملی: ${sup.national_id} | شهر: ${sup.location}</p>
-                        </div>
-                        <span class="bg-emerald-100 text-emerald-800 text-xs font-semibold px-2.5 py-1 rounded-full">فعال در شبکه</span>
-                    </div>
-                `).join('');
+        async function loadRfqsWithReviews() {
+            const tbody = document.getElementById('admin-rfqs-tbody');
+            const countBadge = document.getElementById('rfq-count');
+
+            try {
+                // Fetch RFQs and expert reviews in parallel
+                const [rfqsRes, reviewsRes] = await Promise.all([
+                    supabaseClient.from('rfqs').select('*').order('created_at', { ascending: false }),
+                    supabaseClient.from('expert_reviews').select('*')
+                ]);
+
+                if (rfqsRes.error) throw rfqsRes.error;
+
+                const rfqs = rfqsRes.data || [];
+                const reviews = reviewsRes.data || [];
+
+                countBadge.textContent = `${rfqs.length} مورد`;
+                if (rfqs.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-400">هیچ استعلامی ثبت نشده است.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = '';
+                rfqs.forEach(rfq => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50 transition border-b border-slate-100';
+
+                    let fileLink = '<span class="text-slate-400 text-xs">بدون فایل</span>';
+                    if (rfq.file_path) {
+                        const fileUrl = supabaseClient.storage.from('rfq-files').getPublicUrl(rfq.file_path).data.publicUrl;
+                        fileLink = `<a href="${fileUrl}" target="_blank" class="text-blue-600 hover:underline text-xs font-bold">مشاهده فایل 📥</a>`;
+                    }
+
+                    // Find reviews for this RFQ
+                    const rfqReviews = reviews.filter(r => r.rfq_id === rfq.id);
+                    const mechReview = rfqReviews.find(r => r.expert_role === 'mechanical');
+                    const metReview = rfqReviews.find(r => r.expert_role === 'metallurgy');
+
+                    tr.innerHTML = `
+                        <td class="py-4 px-6 font-mono font-bold text-xs text-blue-600">${rfq.tracking_code || '---'}</td>
+                        <td class="py-4 px-6 font-bold text-slate-900">${rfq.project_title || 'بدون عنوان'}</td>
+                        <td class="py-4 px-6 text-slate-600 text-xs"><span class="font-bold">${rfq.material || '---'}</span> (${rfq.quantity || 1} عدد)</td>
+                        <td class="py-4 px-6">${fileLink}</td>
+                        <td class="py-4 px-6">${renderReviewBadge(mechReview, 'مکانیک')}</td>
+                        <td class="py-4 px-6">${renderReviewBadge(metReview, 'متالورژی')}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+            } catch (err) {
+                errorDiv.textContent = 'خطا در بارگذاری استعلام‌ها: ' + err.message;
+                errorDiv.classList.remove('hidden');
             }
         }
 
-        // Load data on page load
-        window.onload = loadAdminData;
+        function renderReviewBadge(review, roleTitle) {
+            if (!review) {
+                return `<span class="text-xs bg-slate-100 text-slate-500 px-2.5 py-1 rounded-md font-medium">در انتظار بررسی ${roleTitle}</span>`;
+            }
+            if (review.status === 'approved') {
+                return `<span class="text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-md font-bold" title="${review.review_notes}">تأیید شد (${review.expert_name}) ✓</span>`;
+            } else if (review.status === 'needs_revision') {
+                return `<span class="text-xs bg-amber-50 text-amber-700 border border-amber-200 px-2.5 py-1 rounded-md font-bold" title="${review.review_notes}">نیازمند اصلاح ⚠️</span>`;
+            } else {
+                return `<span class="text-xs bg-red-50 text-red-700 border border-red-200 px-2.5 py-1 rounded-md font-bold" title="${review.review_notes}">رد فنی ✕</span>`;
+            }
+        }
+
+        async function loadSupplierBids() {
+            const tbody = document.getElementById('admin-bids-tbody');
+            const countBadge = document.getElementById('bids-count');
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('bids')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                countBadge.textContent = `${data.length} پیشنهاد`;
+                if (!data || data.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-slate-400">هنوز پیشنهادی از تامین‌کنندگان ثبت نشده است.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = '';
+                data.forEach(bid => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50 transition border-b border-slate-100';
+                    tr.innerHTML = `
+                        <td class="py-4 px-6 font-mono font-bold text-xs text-slate-600">${bid.order_id ? bid.order_id.substring(0, 8) + '...' : '---'}</td>
+                        <td class="py-4 px-6 font-bold text-emerald-600">${Number(bid.price_offer).toLocaleString()} تومان</td>
+                        <td class="py-4 px-6 text-slate-600 text-xs font-bold">${bid.delivery_days} روز کاری</td>
+                        <td class="py-4 px-6 text-slate-600 text-xs">${bid.materials_note || '---'}</td>
+                        <td class="py-4 px-6 text-center"><span class="text-xs bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md font-bold">${bid.status || 'ثبت شده'}</span></td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', loadAdminData);
     </script>
 </body>
 </html>
