@@ -7,7 +7,7 @@
 
 const SUPABASE_URL = 'https://gndxhgtgnuefmwqdzdss.supabase.co';
 // کلید عمومی انانایموس (Publishable / Anon Key) متصل به پروژه شما
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImduZHhoZ3RnbnVlZm13cWR6ZHNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjkwMzI1MjB9.YOUR_ANON_KEY_SAFE_STRING_HERE'; 
+const SUPABASE_ANON_KEY = 'sb_publishable_9lmT4IxeqEix7MmQJd07_A_cYeHr6SI'; 
 
 // مقداردهی اولیه کلاینت Supabase
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
