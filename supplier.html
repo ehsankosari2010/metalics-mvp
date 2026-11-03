@@ -3,190 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متالیکس | شبکه تامین‌کنندگان صنعتی (Metalics Supplier Network)</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- Vazirmatn Font -->
+    <title>پنل تامین‌کنندگان | METALICS - شبکه سازندگان صنعتی</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
-    <!-- Supabase Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
     <style>
         body { font-family: 'Vazirmatn', sans-serif; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+<body class="bg-slate-50 text-slate-950 min-h-screen flex flex-col">
 
     <!-- Global Header -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-xs">
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-4 space-x-reverse">
-                <span class="text-2xl font-black tracking-tight text-blue-600">METALICS</span>
-                <span class="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full border border-blue-200">شبکه شرکای تولیدی (Xometry Model)</span>
+                <span class="text-xl font-black tracking-tight text-slate-900">METALICS</span>
+                <span class="text-xs bg-amber-50 text-amber-700 font-semibold px-2.5 py-1 rounded-md border border-amber-200">کارتابل تامین‌کنندگان (Supplier Portal)</span>
             </div>
             <nav class="hidden md:flex space-x-6 space-x-reverse text-sm font-medium">
-                <a href="index.html" class="text-slate-600 hover:text-blue-600 transition">ثبت استعلام (Customer)</a>
-                <a href="supplier.html" class="text-blue-600 font-bold">پنل تامین‌کنندگان (Supplier)</a>
-                <a href="admin.html" class="text-slate-600 hover:text-blue-600 transition">مدیریت و کارشناسی (Admin)</a>
+                <a href="index.html" class="text-slate-600 hover:text-blue-600 transition">ثبت استعلام (مشتری)</a>
+                <a href="supplier.html" class="text-blue-600 font-bold">صندوق استعلام‌ها (RFQ Inbox)</a>
+                <a href="admin.html" class="text-slate-600 hover:text-blue-600 transition">مدیریت و کارشناسی</a>
             </nav>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
-        
-        <!-- Hero Banner -->
-        <div class="bg-gradient-to-r from-blue-700 via-indigo-700 to-slate-900 rounded-2xl p-6 md:p-8 text-white shadow-xl mb-8">
-            <h1 class="text-2xl md:text-3xl font-black mb-2">عضویت در شبکه تخصصی سازندگان متالیکس</h1>
-            <p class="text-blue-100 text-sm md:text-base max-w-2xl leading-relaxed">
-                ظرفیت خالی ماشین‌آلات خود را به سفارش‌های صنعتی پربازده تبدیل کنید. پروفایل کارگاهی خود را ثبت کرده و استعلام‌های مهندسی‌شده را دریافت کنید.
-            </p>
-        </div>
-
-        <!-- Navigation Tabs -->
-        <div class="flex border-b border-slate-200 mb-6 overflow-x-auto">
-            <button onclick="switchTab('profile')" id="btn-profile" class="py-3 px-6 font-bold text-blue-600 border-b-2 border-blue-600 focus:outline-none whitespace-nowrap transition">
-                ۱. پروفایل و احراز هویت کارگاه
-            </button>
-            <button onclick="switchTab('inbox')" id="btn-inbox" class="py-3 px-6 font-medium text-slate-500 hover:text-blue-600 focus:outline-none whitespace-nowrap transition">
-                ۲. کارتابل استعلام‌ها (RFQ Job Board)
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full">
+        <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <h1 class="text-2xl font-black text-slate-900 tracking-tight">صندوق استعلام‌های صنعتی (RFQ Inbox)</h1>
+                <p class="text-sm text-slate-500 mt-1">پروژه‌های تأییدشده مهندسی جهت مناقصه و ارائه قیمت ساخت.</p>
+            </div>
+            <button onclick="loadSupplierRfqs()" class="self-start sm:self-auto bg-white hover:bg-slate-100 text-slate-700 font-bold px-4 py-2.5 rounded-xl text-xs transition border border-slate-300 shadow-xs flex items-center gap-2">
+                🔄 به‌روزرسانی استعلام‌ها
             </button>
         </div>
 
-        <!-- TAB 1: Workshop Profile Form -->
-        <div id="tab-profile" class="space-y-6">
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
-                <h2 class="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">فرم احراز و ثبت مشخصات فنی کارگاه</h2>
-                <form id="supplierProfileForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-1">نام رسمی کارگاه / شرکت</label>
-                        <input type="text" id="company_name" required class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-slate-50" placeholder="مثال: ماشین‌کاری دقیق پویان">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-1">نوع شخصیت حقوقی</label>
-                        <select id="legal_type" class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-slate-50">
-                            <option value="corporate">شرکت حقوقی (سهامی خاص / مسئولیت محدود)</option>
-                            <option value="workshop">کارگاه صنعتی / استادکار (حقیقی)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-1">شناسه ملی / کد ملی</label>
-                        <input type="text" id="national_id" required class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-slate-50" placeholder="۱۰ رقم شناسه ملی">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-1">استان و شهرک صنعتی</label>
-                        <input type="text" id="location" required class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-slate-50" placeholder="مثال: تهران - شهرک صنعتی شمس‌آباد">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-1">ظرفیت جرثقیل سقفی</label>
-                        <select id="crane_capacity" class="w-full rounded-xl border border-slate-300 px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-slate-50">
-                            <option value="none">فاقد جرثقیل سقفی</option>
-                            <option value="5ton">۵ تن</option>
-                            <option value="10ton">۱۰ تن</option>
-                            <option value="20ton_plus">۲۰ تن و بالاتر</option>
-                        </select>
-                    </div>
-                    <div class="md:col-span-2 pt-4">
-                        <button type="submit" id="submitBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3.5 rounded-xl transition shadow-md w-full md:w-auto">
-                            ثبت و ذخیره اطلاعات کارگاهی
-                        </button>
-                    </div>
-                </form>
+        <div id="supplier-error" class="hidden bg-red-50 border border-red-200 text-red-700 p-4 rounded-xl text-sm mb-6"></div>
+        <div id="supplier-success" class="hidden bg-emerald-50 border border-emerald-200 text-emerald-800 p-4 rounded-xl text-sm mb-6"></div>
+
+        <!-- RFQs List Table Container -->
+        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-right border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-600">
+                            <th class="py-4 px-6">کد رهگیری</th>
+                            <th class="py-4 px-6">عنوان پروژه</th>
+                            <th class="py-4 px-6">متریال / تعداد</th>
+                            <th class="py-4 px-6">استان مقصد</th>
+                            <th class="py-4 px-6">فایل نقشه</th>
+                            <th class="py-4 px-6 text-center">عملیات / ثبت پیشنهاد</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rfqs-table-body" class="divide-y divide-slate-100 text-sm">
+                        <tr>
+                            <td colspan="6" class="text-center py-10 text-slate-400">در حال بارگذاری استعلام‌ها...</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
-
-        <!-- TAB 2: RFQ Inbox -->
-        <div id="tab-inbox" class="hidden space-y-6">
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
-                <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-100">
-                    <div>
-                        <h2 class="text-xl font-bold text-slate-900">کارتابل استعلام‌های صنعتی (RFQ Job Board)</h2>
-                        <p class="text-xs text-slate-500 mt-1">مشاهده سفارش‌های فعال و ارسال پیشنهاد قیمت (بر اساس مدل تطبیق خودکار)</p>
-                    </div>
-                    <button onclick="loadRfqs()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl text-sm font-semibold transition">بروزرسانی لیست</button>
-                </div>
-                <div id="supplierRfqsContainer" class="space-y-4">
-                    <div class="text-center py-12 text-slate-400">در حال بارگذاری استعلام‌ها...</div>
-                </div>
-            </div>
-        </div>
-
     </main>
 
-    <!-- Application Logic -->
-    <script>
-        const SUPABASE_URL = 'https://gndxhgtgnuefmwqdzdss.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImduZHhoZ3RnbnVlZm13cWR6ZHNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMxMTAwMjUsImV4cCI6MjEwODY4NjAyNX0.BzPBoaCL3jXnx0C5c7CKynt_sme1iLKRWYvCnoUBz80';
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        function switchTab(tabName) {
-            ['profile', 'inbox'].forEach(t => {
-                document.getElementById(`tab-${t}`).classList.add('hidden');
-                document.getElementById(`btn-${t}`).className = "py-3 px-6 font-medium text-slate-500 hover:text-blue-600 focus:outline-none whitespace-nowrap transition";
-            });
-            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
-            document.getElementById(`btn-${tabName}`).className = "py-3 px-6 font-bold text-blue-600 border-b-2 border-blue-600 focus:outline-none whitespace-nowrap transition";
+    <!-- Modal for Submitting Bid -->
+    <div id="bid-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs hidden items-center justify-center z-50 p-4">
+        <div class="bg-white border border-slate-200 rounded-2xl max-w-lg w-full p-6 shadow-xl">
+            <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+                <h3 class="font-black text-slate-900 text-base">ثبت پیشنهاد قیمت (Quotation)</h3>
+                <button onclick="closeBidModal()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+            </div>
             
-            if (tabName === 'inbox') loadRfqs();
+            <form id="bid-form" class="space-y-4">
+                <input type="hidden" id="modal_rfq_id">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">مبلغ کل پیشنهاد (تومان) *</label>
+                    <input type="number" id="price_offer" required placeholder="مثال: ۲۵۰۰۰۰۰۰۰" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-600">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">زمان تحویل (روز کاری) *</label>
+                    <input type="number" id="delivery_days" required min="1" placeholder="مثال: ۱۴" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-600">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">توضیحات فنی و شرایط پرداخت</label>
+                    <textarea id="materials_note" rows="3" placeholder="توضیحات درباره استاندارد تست، نحوه حمل یا شرایط پرداخت..." class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-600"></textarea>
+                </div>
+                <div class="flex justify-end space-x-3 space-x-reverse pt-2">
+                    <button type="button" onclick="closeBidModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-5 py-2.5 rounded-xl text-xs transition border border-slate-200">انصراف</button>
+                    <button type="submit" id="btn-submit-bid" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-xl text-xs transition shadow-xs">ارسال پیشنهاد ✓</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const errorDiv = document.getElementById('supplier-error');
+        const successDiv = document.getElementById('supplier-success');
+
+        async function loadSupplierRfqs() {
+            errorDiv.classList.add('hidden');
+            const tbody = document.getElementById('rfqs-table-body');
+            tbody.innerHTML = `<tr><td colspan="6" class="text-center py-10 text-slate-400">در حال دریافت استعلام‌ها...</td></tr>`;
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('rfqs')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw new Error('خطا در دریافت لیست استعلام‌ها: ' + error.message);
+
+                if (!data || data.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" class="text-center py-10 text-slate-400">هیچ استعلام فعالی در شبکه یافت نشد.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = '';
+                data.forEach(rfq => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-slate-50 transition border-b border-slate-100';
+                    
+                    let fileLink = '<span class="text-slate-400 text-xs">بدون فایل</span>';
+                    if (rfq.file_path) {
+                        const fileUrl = supabaseClient.storage.from('rfq-files').getPublicUrl(rfq.file_path).data.publicUrl;
+                        fileLink = `<a href="${fileUrl}" target="_blank" class="text-blue-600 hover:underline text-xs font-bold bg-blue-50 px-2.5 py-1 rounded-md border border-blue-200 inline-block">دانلود فایل 📥</a>`;
+                    }
+
+                    tr.innerHTML = `
+                        <td class="py-4 px-6 font-mono font-bold text-xs text-blue-600">${rfq.tracking_code || '---'}</td>
+                        <td class="py-4 px-6 font-bold text-slate-900">${rfq.project_title || 'بدون عنوان'}</td>
+                        <td class="py-4 px-6 text-slate-600 text-xs"><span class="font-bold">${rfq.material || 'ST37'}</span> (${rfq.quantity || 1} عدد)</td>
+                        <td class="py-4 px-6 text-slate-600 text-xs">${rfq.province || '---'}</td>
+                        <td class="py-4 px-6">${fileLink}</td>
+                        <td class="py-4 px-6 text-center">
+                            <button onclick="openBidModal('${rfq.id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded-xl text-xs transition shadow-xs">
+                                ثبت پیشنهاد 🏷️
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+            } catch (err) {
+                errorDiv.textContent = err.message;
+                errorDiv.classList.remove('hidden');
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-10 text-red-500">خطا در اتصال به دیتابیس</td></tr>`;
+            }
         }
 
-        document.getElementById('supplierProfileForm').addEventListener('submit', async (e) => {
+        function openBidModal(rfqId) {
+            document.getElementById('modal_rfq_id').value = rfqId;
+            document.getElementById('bid-modal').classList.remove('hidden');
+            document.getElementById('bid-modal').classList.add('flex');
+        }
+
+        function closeBidModal() {
+            document.getElementById('bid-modal').classList.add('hidden');
+            document.getElementById('bid-modal').classList.remove('flex');
+            document.getElementById('bid-form').reset();
+        }
+
+        document.getElementById('bid-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            btn.textContent = 'در حال ثبت در شبکه...';
+            const rfqId = document.getElementById('modal_rfq_id').value;
+            const price = parseFloat(document.getElementById('price_offer').value);
+            const days = parseInt(document.getElementById('delivery_days').value);
+            const note = document.getElementById('materials_note').value;
+            const btn = document.getElementById('btn-submit-bid');
+
+            btn.textContent = 'در حال ارسال...';
             btn.disabled = true;
 
-            const { data, error } = await supabaseClient.from('suppliers').insert([{
-                company_name: document.getElementById('company_name').value,
-                legal_type: document.getElementById('legal_type').value,
-                national_id: document.getElementById('national_id').value,
-                location: document.getElementById('location').value,
-                crane_capacity: document.getElementById('crane_capacity').value
-            }]);
+            try {
+                const { error } = await supabaseClient.from('bids').insert([{
+                    order_id: rfqId,
+                    price_offer: price,
+                    delivery_days: days,
+                    materials_note: note,
+                    status: 'submitted'
+                }]);
 
-            if (error) {
-                alert('خطا در ثبت پروفایل: ' + error.message);
-                btn.textContent = 'ثبت و ذخیره اطلاعات کارگاهی';
+                if (error) throw new Error('خطا در ثبت پیشنهاد: ' + error.message);
+
+                successDiv.textContent = 'پیشنهاد قیمت شما با موفقیت در سیستم ثبت شد.';
+                successDiv.classList.remove('hidden');
+                closeBidModal();
+                setTimeout(() => successDiv.classList.add('hidden'), 4000);
+
+            } catch (err) {
+                errorDiv.textContent = err.message;
+                errorDiv.classList.remove('hidden');
+            } finally {
+                btn.textContent = 'ارسال پیشنهاد ✓';
                 btn.disabled = false;
-                return;
             }
-
-            alert('پروفایل کارگاهی شما با موفقیت در شبکه متالیکس ثبت شد و برای واحد مهندسی ارسال گردید.');
-            document.getElementById('supplierProfileForm').reset();
-            btn.textContent = 'ثبت و ذخیره اطلاعات کارگاهی';
-            btn.disabled = false;
         });
 
-        async function loadRfqs() {
-            const container = document.getElementById('supplierRfqsContainer');
-            container.innerHTML = '<div class="text-center py-12 text-slate-400">در حال دریافت استعلام‌ها از دیتابیس...</div>';
-            
-            const { data, error } = await supabaseClient.from('rfqs').select('*').order('created_at', { ascending: false });
-            
-            if (error) {
-                container.innerHTML = `<div class="p-4 bg-red-50 text-red-700 rounded-xl text-sm font-medium">خطا در بارگذاری: ${error.message}</div>`;
-                return;
-            }
-            if (!data || data.length === 0) {
-                container.innerHTML = '<div class="text-center py-12 text-slate-400 border-2 border-dashed border-slate-200 rounded-2xl">هیچ استعلام فعالی در حال حاضر در شبکه وجود ندارد.</div>';
-                return;
-            }
-
-            container.innerHTML = data.map(item => `
-                <div class="border border-slate-200 rounded-xl p-5 bg-white hover:border-blue-300 transition shadow-xs flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <div>
-                        <div class="flex items-center space-x-2 space-x-reverse mb-1">
-                            <span class="bg-blue-50 text-blue-800 text-xs font-black px-2.5 py-0.5 rounded border border-blue-100">${item.tracking_code || 'MTX-2026-XXXX'}</span>
-                            <span class="text-xs text-slate-500">${new Date(item.created_at).toLocaleDateString('fa-IR')}</span>
-                        </div>
-                        <h4 class="font-bold text-slate-900 text-lg">${item.project_title || 'پروژه صنعتی'}</h4>
-                        <p class="text-xs text-slate-600 mt-1">متریال: <span class="font-semibold">${item.material || '-'}</span> | استان مقصد: <span class="font-semibold">${item.province || '-'}</span></p>
-                    </div>
-                    <button onclick="alert('ارسال پیشنهاد قیمت برای این استعلام فعال شد.')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-sm whitespace-nowrap">
-                        ارسال پیشنهاد قیمت
-                    </button>
-                </div>
-            `).join('');
-        }
+        // Load RFQs on page load
+        window.addEventListener('DOMContentLoaded', loadSupplierRfqs);
     </script>
 </body>
 </html>
