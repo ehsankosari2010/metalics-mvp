@@ -12,14 +12,14 @@
         body { font-family: 'Vazirmatn', sans-serif; }
     </style>
 </head>
-<body class="bg-gray-50 text-slate-800 min-h-screen flex flex-col">
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
 
-    <!-- Global Header (Xometry Style Light Theme) -->
-    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <!-- Global Header (Xometry Style) -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-4 space-x-reverse">
                 <span class="text-xl font-black tracking-tight text-slate-900">METALICS</span>
-                <span class="text-xs bg-blue-50 text-blue-700 font-semibold px-2.5 py-1 rounded-md border border-blue-200">محیط مشتری (RFQ)</span>
+                <span class="text-xs bg-blue-50 text-blue-700 font-semibold px-2.5 py-1 rounded-md border border-blue-200">پروسه استعلام صنعتی (Xometry Flow)</span>
             </div>
             <nav class="hidden md:flex space-x-6 space-x-reverse text-sm font-medium">
                 <a href="index.html" class="text-blue-600 font-bold">ثبت استعلام جدید</a>
@@ -29,67 +29,175 @@
         </div>
     </header>
 
-    <!-- Main Content Container -->
-    <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full">
-        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6 sm:p-8">
-            
-            <div class="mb-8 border-b border-gray-100 pb-5">
-                <h1 class="text-2xl font-black text-slate-900 tracking-tight">فرم ثبت استعلام ساخت و ماشین‌کاری قطعات</h1>
-                <p class="text-sm text-slate-500 mt-1.5">نقشه‌ها، مدل‌های سه‌بعدی و مشخصات فنی قطعه خود را بارگذاری کنید تا در شبکه کارگاه‌های صنعتی متالیکس استعلام شود.</p>
+    <!-- Main Wizard Container -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full">
+        
+        <!-- Step Indicator Bar -->
+        <div class="mb-8 bg-white border border-slate-200 rounded-2xl p-4 shadow-xs">
+            <div class="flex items-center justify-between text-xs font-bold text-slate-500">
+                <div id="step-indicator-1" class="flex items-center text-blue-600">
+                    <span class="w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center ml-2 text-xs font-black">۱</span>
+                    مشخصات و بارگذاری فایل
+                </div>
+                <div class="h-0.5 flex-1 bg-slate-200 mx-4"></div>
+                <div id="step-indicator-2" class="flex items-center">
+                    <span class="w-7 h-7 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center ml-2 text-xs font-black">۲</span>
+                    متریال و تلرانس‌ها
+                </div>
+                <div class="h-0.5 flex-1 bg-slate-200 mx-4"></div>
+                <div id="step-indicator-3" class="flex items-center">
+                    <span class="w-7 h-7 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center ml-2 text-xs font-black">۳</span>
+                    تحویل و بازبینی نهایی
+                </div>
             </div>
+        </div>
 
+        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 sm:p-8">
             <div id="rfq-error" class="hidden bg-red-50 border border-red-200 text-red-700 p-4 rounded-xl text-sm mb-6"></div>
-            <div id="rfq-success" class="hidden bg-emerald-50 border border-emerald-200 text-emerald-800 p-5 rounded-xl text-sm mb-6"></div>
+            <div id="rfq-success" class="hidden bg-emerald-50 border border-emerald-200 text-emerald-900 p-6 rounded-xl mb-6"></div>
 
-            <form id="rfq-form" class="space-y-6">
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5">عنوان پروژه / نام قطعه *</label>
-                    <input type="text" id="project_title" required placeholder="مثال: فلنج فولادی فشار قوی PN64" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600 transition">
+            <form id="rfq-wizard-form">
+                
+                <!-- STEP 1: Basic Info & File Upload -->
+                <div id="wizard-step-1" class="space-y-6">
+                    <div>
+                        <h2 class="text-xl font-black text-slate-900 mb-1">گام اول: اطلاعات پایه و بارگذاری فایل CAD/نقشه</h2>
+                        <p class="text-xs text-slate-500">نام پروژه و فایل‌های مهندسی قطعه (STEP, PDF, DWG) را آپلود کنید.</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1.5">عنوان پروژه / نام قطعه *</label>
+                        <input type="text" id="project_title" required placeholder="مثال: فلنج فولادی فشار قوی PN64" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:ring-2 focus:ring-blue-600 outline-none transition">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1.5">بارگذاری فایل مهندسی (حداکثر ۵۰ مگابایت)</label>
+                        <input type="file" id="rfq_file" class="w-full text-xs text-slate-500 file:mr-4 file:py-3 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border border-slate-300 rounded-xl bg-white cursor-pointer">
+                    </div>
+
+                    <div class="flex justify-end pt-4">
+                        <button type="button" onclick="nextStep(2)" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-xl text-sm transition shadow-xs">
+                            مرحله بعد: انتخاب متریال ←
+                        </button>
+                    </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <!-- STEP 2: Material, Quantity & Tolerances -->
+                <div id="wizard-step-2" class="space-y-6 hidden">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1.5">متریال اصلی *</label>
-                        <select id="material" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600 transition">
-                            <option value="ST37">فولاد ساختمانی ST37</option>
-                            <option value="ST52">فولاد آلیاژی ST52</option>
-                            <option value="Hardox">ورق ضد سایش Hardox</option>
-                            <option value="Stainless304">استنلس استیل ۳۰۴</option>
-                            <option value="Aluminum">آلومینیوم آلیاژی</option>
-                            <option value="Other">سایر متریال‌ها</option>
-                        </select>
+                        <h2 class="text-xl font-black text-slate-900 mb-1">گام دوم: مشخصات متریال، تعداد و تلرانس‌ها</h2>
+                        <p class="text-xs text-slate-500">نوع آلیاژ، تعداد ساخت و فرآیندهای تکمیلی را مشخص کنید.</p>
                     </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1.5">متریال اصلی *</label>
+                            <select id="material" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:ring-2 focus:ring-blue-600 outline-none transition">
+                                <option value="ST37">فولاد ساختمانی ST37</option>
+                                <option value="ST52">فولاد آلیاژی ST52</option>
+                                <option value="Hardox">ورق ضد سایش Hardox</option>
+                                <option value="Stainless304">استنلس استیل ۳۰۴</option>
+                                <option value="Aluminum">آلومینیوم آلیاژی</option>
+                                <option value="Other">سایر متریال‌ها</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1.5">تعداد (عدد) *</label>
+                            <input type="number" id="quantity" min="1" value="1" required class="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:ring-2 focus:ring-blue-600 outline-none transition">
+                        </div>
+                    </div>
+
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1.5">تعداد (عدد) *</label>
-                        <input type="number" id="quantity" min="1" value="1" required class="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600 transition">
+                        <label class="block text-xs font-bold text-slate-700 mb-1.5">توضیحات تکمیلی و تلرانس‌های حساس (ماشین‌کاری، NDT و پوشش)</label>
+                        <textarea id="description" rows="4" placeholder="جزئیات عملیات حرارتی، تست‌های غیرمخرب، سندبلاست و گالوانیزه..." class="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:ring-2 focus:ring-blue-600 outline-none transition"></textarea>
+                    </div>
+
+                    <div class="flex justify-between pt-4">
+                        <button type="button" onclick="prevStep(1)" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-6 py-3 rounded-xl text-sm transition border border-slate-200">
+                            ← مرحله قبل
+                        </button>
+                        <button type="button" onclick="nextStep(3)" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-xl text-sm transition shadow-xs">
+                            مرحله بعد: مقصد و بررسی نهایی ←
+                        </button>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <!-- STEP 3: Delivery & Final Submit -->
+                <div id="wizard-step-3" class="space-y-6 hidden">
+                    <div>
+                        <h2 class="text-xl font-black text-slate-900 mb-1">گام سوم: استان مقصد و ثبت نهایی استعلام</h2>
+                        <p class="text-xs text-slate-500">مقصد تحویل قطعه را وارد کرده و استعلام را جهت ارزیابی کارشناسی ثبت کنید.</p>
+                    </div>
+
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1.5">استان مقصد تحویل *</label>
-                        <input type="text" id="province" required placeholder="مثال: تهران / اصفهان / فارس" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600 transition">
+                        <input type="text" id="province" required placeholder="مثال: تهران / اصفهان / فارس / کرمان" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:ring-2 focus:ring-blue-600 outline-none transition">
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1.5">بارگذاری فایل نقشه / مدل (PDF, DWG, STEP)</label>
-                        <input type="file" id="rfq_file" class="w-full text-xs text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border border-slate-300 rounded-xl bg-white">
+
+                    <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 text-xs text-blue-900 leading-relaxed">
+                        <span class="font-bold">روند بعد از ثبت:</span> پس از ثبت استعلام، کد رهگیری یکتا صادر شده و درخواست شما به کارشناس فنی متالیکس جهت بازبینی مهندسی و ارسال به حداکثر ۵ کارگاه واجدشرایط ارجاع خواهد شد.
+                    </div>
+
+                    <div class="flex justify-between pt-4">
+                        <button type="button" onclick="prevStep(2)" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-6 py-3 rounded-xl text-sm transition border border-slate-200">
+                            ← مرحله قبل
+                        </button>
+                        <button type="submit" id="btn-submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-10 py-3.5 rounded-xl text-sm transition shadow-sm">
+                            ثبت نهایی استعلام و دریافت کد رهگیری ✓
+                        </button>
                     </div>
                 </div>
 
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5">توضیحات تکمیلی و تلرانس‌های حساس</label>
-                    <textarea id="description" rows="4" placeholder="جزئیات ماشین‌کاری، نیاز به سندبلاست، تست‌های غیرمخرب (NDT) و..." class="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"></textarea>
-                </div>
-
-                <button type="submit" id="btn-submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl text-sm transition shadow-sm">
-                    ثبت نهایی استعلام و ارسال به شبکه سازندگان
-                </button>
             </form>
         </div>
     </main>
 
     <script>
-        const form = document.getElementById('rfq-form');
+        function nextStep(step) {
+            if (step === 2) {
+                const title = document.getElementById('project_title').value.trim();
+                if (!title) {
+                    alert('لطفاً عنوان پروژه را وارد کنید.');
+                    return;
+                }
+            }
+            document.getElementById('wizard-step-1').classList.add('hidden');
+            document.getElementById('wizard-step-2').classList.add('hidden');
+            document.getElementById('wizard-step-3').classList.add('hidden');
+            
+            document.getElementById(`wizard-step-${step}`).classList.remove('hidden');
+            updateIndicators(step);
+        }
+
+        function prevStep(step) {
+            document.getElementById('wizard-step-1').classList.add('hidden');
+            document.getElementById('wizard-step-2').classList.add('hidden');
+            document.getElementById('wizard-step-3').classList.add('hidden');
+            
+            document.getElementById(`wizard-step-${step}`).classList.remove('hidden');
+            updateIndicators(step);
+        }
+
+        function updateIndicators(activeStep) {
+            for (let i = 1; i <= 3; i++) {
+                const ind = document.getElementById(`step-indicator-${i}`);
+                const circle = ind.querySelector('span');
+                if (i === activeStep) {
+                    ind.classList.add('text-blue-600', 'font-bold');
+                    circle.className = 'w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center ml-2 text-xs font-black';
+                } else if (i < activeStep) {
+                    ind.classList.add('text-emerald-600');
+                    circle.className = 'w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center ml-2 text-xs font-black';
+                    circle.textContent = '✓';
+                } else {
+                    ind.classList.remove('text-blue-600', 'text-emerald-600', 'font-bold');
+                    circle.className = 'w-7 h-7 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center ml-2 text-xs font-black';
+                    circle.textContent = i;
+                }
+            }
+        }
+
+        const form = document.getElementById('rfq-wizard-form');
         const errorDiv = document.getElementById('rfq-error');
         const successDiv = document.getElementById('rfq-success');
         const submitBtn = document.getElementById('btn-submit');
@@ -98,20 +206,19 @@
             e.preventDefault();
             errorDiv.classList.add('hidden');
             successDiv.classList.add('hidden');
-            submitBtn.textContent = 'در حال آپلود فایل و ثبت استعلام...';
+            submitBtn.textContent = 'در حال ارسال و تولید کد رهگیری...';
             submitBtn.disabled = true;
 
             try {
                 let filePath = null;
                 const fileInput = document.getElementById('rfq_file');
                 
-                // 1. Upload File if selected
                 if (fileInput.files.length > 0) {
                     const file = fileInput.files[0];
                     const fileExt = file.name.split('.').pop();
-                    const fileName = `${Date.now()}_${Math.random().toString(36.substring(2, 7))}.${fileExt}`;
+                    const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
                     
-                    const { data: uploadData, error: uploadError } = await supabaseClient.storage
+                    const { error: uploadError } = await supabaseClient.storage
                         .from('rfq-files')
                         .upload(fileName, file);
 
@@ -119,7 +226,6 @@
                     filePath = fileName;
                 }
 
-                // 2. Insert into RFQs table (tracking_code is generated automatically by DB default trigger/sequence)
                 const { data, error } = await supabaseClient.from('rfqs').insert([{
                     project_title: document.getElementById('project_title').value,
                     material: document.getElementById('material').value,
@@ -136,18 +242,31 @@
                 const trackingCode = createdRfq.tracking_code || 'ثبت شد';
 
                 successDiv.innerHTML = `
-                    <p class="font-bold text-base mb-1">استعلام شما با موفقیت ثبت شد!</p>
-                    <p class="text-slate-700">کد رهگیری اختصاصی: <span class="font-mono font-bold text-blue-700 bg-white px-2 py-0.5 rounded border border-blue-200">${trackingCode}</span></p>
-                    <p class="text-xs text-slate-500 mt-2">کارشناسان متالیکس به زودی استعلام شما را بررسی و قیمت پیشنهادی را اعلام خواهند کرد.</p>
+                    <div class="flex items-center space-x-3 space-x-reverse mb-3">
+                        <span class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg font-bold">✓</span>
+                        <div>
+                            <h3 class="text-base font-black text-emerald-900">استعلام شما با موفقیت در شبکه متالیکس ثبت شد</h3>
+                            <p class="text-xs text-emerald-700">کد رهگیری اختصاصی سفارش شما:</p>
+                        </div>
+                    </div>
+                    <div class="bg-white border border-emerald-200 rounded-xl p-4 text-center my-3">
+                        <span class="font-mono text-xl font-black text-blue-600 tracking-wider">${trackingCode}</span>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        این کد را یادداشت کنید. درخواست شما جهت ارزیابی مهندسی و ارسال به سازندگان برتر وارد صف کارشناسی شد.
+                    </p>
                 `;
                 successDiv.classList.remove('hidden');
                 form.reset();
+                updateIndicators(1);
+                document.getElementById('wizard-step-3').classList.add('hidden');
+                document.getElementById('wizard-step-1').classList.remove('hidden');
 
             } catch (err) {
                 errorDiv.textContent = err.message;
                 errorDiv.classList.remove('hidden');
             } finally {
-                submitBtn.textContent = 'ثبت نهایی استعلام و ارسال به شبکه سازندگان';
+                submitBtn.textContent = 'ثبت نهایی استعلام و دریافت کد رهگیری ✓';
                 submitBtn.disabled = false;
             }
         });
